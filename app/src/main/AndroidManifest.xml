@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Pulsa"
         tools:targetApi="31">
         <activity
+            android:name=".NewPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostActivity"
             android:exported="false" />
         <activity

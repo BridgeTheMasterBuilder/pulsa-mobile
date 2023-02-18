@@ -50,8 +50,11 @@ class MainActivity : AppCompatActivity() {
             i.putExtra("text", text)
             i.putExtra("sub", sub)
             startActivity(i)
+        }
 
-
+        binding.newpostbtn.setOnClickListener {
+            val i = Intent(this, NewPostActivity::class.java)
+            startActivity(i)
         }
     }
 }
