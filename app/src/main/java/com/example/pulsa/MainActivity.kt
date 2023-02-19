@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         posts = PostService().posts
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
-        binding.recyclerView.layoutManager = layoutManager
         adapter = FrontPageAdapter(posts){ post -> adapterOnClick(post)}
         binding.recyclerView.adapter = adapter
 
