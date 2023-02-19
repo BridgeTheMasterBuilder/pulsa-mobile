@@ -13,14 +13,12 @@ class PostActivity : AppCompatActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val title = intent.getStringExtra("title")
-        val text = intent.getStringExtra("text")
-        val sub = intent.getStringExtra("sub")
+        val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
         binding.postpageImage.setImageResource(image)
-        binding.postpageText.text = text
-        binding.postpageTitle.text = title
+        binding.postpageText.text = post?.content?.text
+        binding.postpageTitle.text = post?.title
 
     }
 }

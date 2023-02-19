@@ -13,11 +13,13 @@
         android:text="@string/newPostButton"
         android:layout_alignParentBottom="true"/>
 
-    <ListView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/listview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/newpostbtn"
-    tools:listitem="@layout/list_item">
-    </ListView>
+        android:orientation="vertical"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/list_item" />
+
 </RelativeLayout>

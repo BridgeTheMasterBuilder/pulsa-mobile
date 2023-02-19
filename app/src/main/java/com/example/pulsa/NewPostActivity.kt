@@ -1,5 +1,6 @@
 package com.example.pulsa
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,15 +18,13 @@ class NewPostActivity : AppCompatActivity() {
         binding.postbutton.setOnClickListener {
             val title = binding.newposttitle.text.toString()
             val text = binding.newposttext.text.toString()
-            val i = Intent(this, PostActivity::class.java)
 
-            i.putExtra("title", title)
-            i.putExtra("text", text)
-            i.putExtra("sub", "FringeSub")
+            val intent = Intent(this, PostActivity::class.java)
+            val post = Post(title,Content(text, "test", "test"), "test")
 
-            startActivity(i)
+            intent.putExtra("post", post)
+            setResult(Activity.RESULT_OK, intent)
+            startActivity(intent)
         }
-
-
     }
 }

@@ -1,31 +1,36 @@
 package com.example.pulsa
 
-import android.app.Activity
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
-import org.w3c.dom.Text
+import androidx.recyclerview.widget.RecyclerView
+import com.example.pulsa.databinding.ListItemBinding
 
-class FrontPageAdapter(private val context: Activity, private val arrayList : ArrayList<Post> ) :
-                        ArrayAdapter<Post>(context, R.layout.list_item, arrayList)
-{
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.list_item, null)
 
-        val imageView : ImageView = view.findViewById(R.id.post_image)
-        val postTitle : TextView = view.findViewById(R.id.post_title)
-        val postText : TextView = view.findViewById(R.id.post_text)
-        val subId : TextView = view.findViewById(R.id.sub_id)
+class FrontPageAdapter(private var items: ArrayList<Post>, private val onClick: (Post) -> Unit) : RecyclerView.Adapter<FrontPageAdapter.ViewHolder>() {
+    class ViewHolder(itemBinding: ListItemBinding, val onClick: (Post) -> Unit) : RecyclerView.ViewHolder(itemBinding.root) {
+        private val title = itemBinding.postTitle
+        private val text = itemBinding.postText
+        private val sub = itemBinding.subId
+        private val img = itemBinding.postImage
 
-        imageView.setImageResource(R.drawable.pulsa)
-        postTitle.text = arrayList[position].title
-        postText.text = arrayList[position].content.text
-        subId.text = arrayList[position].sub
-
-        return view
+        fun bind(item: Post) {
+            title.text = item.title
+            text.text = item.content.text
+            sub.text = item.sub
+            img.setImageResource(R.drawable.pulsa)
+            itemView.setOnClickListener { onClick(item) }
+        }
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemBinding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(itemBinding, onClick)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount() = items.size
 }
