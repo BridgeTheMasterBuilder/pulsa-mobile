@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: FrontPageAdapter
-    private lateinit var posts: ArrayList<Post>
+    private lateinit var posts: MutableList<Post>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
