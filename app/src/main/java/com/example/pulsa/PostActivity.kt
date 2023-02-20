@@ -15,16 +15,25 @@ class PostActivity : AppCompatActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = intent.getParcelableExtra<Post>("post")
+        val post = intent?.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
-        if (post != null)
+        println(post?.title)
+        println(post?.content?.text)
+
+
+        if (post != null) {
             replies = post.replies
+            println(replies.size);
+        }
+
         adapter = PostPageAdapter(replies)
+        binding.recyclerView.adapter = adapter
+
 
         binding.postpageImage.setImageResource(image)
         binding.postpageText.text = post?.content?.text
         binding.postpageTitle.text = post?.title
-        binding.recyclerView.adapter = adapter
+
     }
 }

@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,35 +20,39 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/pulsa"/>
+                android:src="@drawable/pulsa" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:orientation="vertical">
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/post_title"
-                   android:text="TheTitle"
-                   android:textColor="@color/black"
-                   android:textSize="26sp"
-                   android:textStyle="bold"/>
+
                 <TextView
+                    android:id="@+id/post_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="TheTitle"
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/post_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="thetextofthepost"/>
+                    android:text="thetextofthepost" />
 
             </LinearLayout>
+
             <TextView
+                android:id="@+id/sub_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/sub_id"
-                android:padding="15dp"
                 android:layout_alignParentRight="true"
-                android:text="theSub"/>
+                android:padding="15dp"
+                android:text="theSub" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
