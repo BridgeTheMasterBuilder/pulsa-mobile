@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pulsa.databinding.ListItemBinding
 
 
-class FrontPageAdapter(private var items: ArrayList<Post>, private val onClick: (Post) -> Unit) :
+class FrontPageAdapter(private var items: MutableList<Post>, private val onClick: (Post) -> Unit) :
     RecyclerView.Adapter<FrontPageAdapter.ViewHolder>() {
     class ViewHolder(itemBinding: ListItemBinding, val onClick: (Post) -> Unit) :
         RecyclerView.ViewHolder(itemBinding.root) {
@@ -18,8 +18,8 @@ class FrontPageAdapter(private var items: ArrayList<Post>, private val onClick: 
 
         fun bind(item: Post) {
             title.text = item.title
-            text.text = item.content.text
-            sub.text = item.sub
+            text.text = item.content?.text
+            sub.text = item.sub?.name
             img.setImageResource(R.drawable.pulsa)
             itemView.setOnClickListener { onClick(item) }
         }

@@ -1,12 +1,18 @@
 package com.example.pulsa
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+import java.time.LocalDateTime
 
 @Parcelize
-data class Post(
-    var title: String,
-    var content: Content,
-    var sub: String,
-    var replies: ArrayList<Reply>
-) : Parcelable
+class Post(
+    val post_id: Int? = null,
+    val title: String? = null,
+    override val content: Content? = null,
+    override val creator: User? = null,
+    override val sub: Sub? = null,
+    override val Vote: Int? = null,
+    override val voted: MutableList<Voter>? = null,
+    override val replies: MutableList<Reply>? = null,
+    override val created: LocalDateTime? = null,
+    override val updated: LocalDateTime? = null
+) : Message(content, creator, sub, Vote, voted, replies, created, updated)

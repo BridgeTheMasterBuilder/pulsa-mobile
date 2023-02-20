@@ -16,9 +16,6 @@
             android:name=".NewPostActivity"
             android:exported="false" />
         <activity
-            android:name=".NewReplyActivity"
-            android:exported="false" />
-        <activity
             android:name=".PostActivity"
             android:exported="false" />
         <activity

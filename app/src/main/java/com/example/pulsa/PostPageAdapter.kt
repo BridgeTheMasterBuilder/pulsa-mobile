@@ -4,24 +4,24 @@ package com.example.pulsa
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pulsa.databinding.ReplyBinding
+import com.example.pulsa.databinding.ListItemBinding
 
 
-class PostPageAdapter(private var items: ArrayList<Reply>) :
+class PostPageAdapter(private var items: MutableList<Reply>) :
     RecyclerView.Adapter<PostPageAdapter.ViewHolder>() {
-    class ViewHolder(itemBinding: ReplyBinding) :
+    class ViewHolder(itemBinding: ListItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        private val text = itemBinding.textView
+        private val text = itemBinding.postText
 
         fun bind(item: Reply) {
-            text.text = item.content.text
+            text.text = item.content?.text
 //            itemView.setOnClickListener { onClick(item) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding =
-            ReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(itemBinding)
     }
 

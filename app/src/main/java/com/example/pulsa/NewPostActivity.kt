@@ -17,9 +17,21 @@ class NewPostActivity : AppCompatActivity() {
         binding.postbutton.setOnClickListener {
             val title = binding.newposttitle.text.toString()
             val text = binding.newposttext.text.toString()
+            val user = User(null, "Anonymous", null, "Anonymous")
 
             val intent = Intent(this, PostActivity::class.java)
-            val post = Post(title, Content(text, "test", "test"), "test", ArrayList(listOf()))
+            val post = Post(
+                100,
+                title,
+                Content(
+                    20,
+                    text,
+                    "test",
+                    "test",
+                    "recording",
+                ),
+                user
+            )
 
             intent.putExtra("post", post)
             setResult(Activity.RESULT_OK, intent)
