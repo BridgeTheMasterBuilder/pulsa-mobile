@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Reply(var content: Content, var sub: String) : Parcelable
+data class Reply(var content: Content) : Parcelable

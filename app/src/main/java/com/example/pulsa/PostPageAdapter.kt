@@ -7,28 +7,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pulsa.databinding.ListItemBinding
 
 
-class FrontPageAdapter(private var items: ArrayList<Post>, private val onClick: (Post) -> Unit) :
-    RecyclerView.Adapter<FrontPageAdapter.ViewHolder>() {
-    class ViewHolder(itemBinding: ListItemBinding, val onClick: (Post) -> Unit) :
+class PostPageAdapter(private var items: ArrayList<Reply>) :
+    RecyclerView.Adapter<PostPageAdapter.ViewHolder>() {
+    class ViewHolder(itemBinding: ListItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        private val title = itemBinding.postTitle
         private val text = itemBinding.postText
-        private val sub = itemBinding.subId
-        private val img = itemBinding.postImage
 
-        fun bind(item: Post) {
-            title.text = item.title
+        fun bind(item: Reply) {
             text.text = item.content.text
-            sub.text = item.sub
-            img.setImageResource(R.drawable.pulsa)
-            itemView.setOnClickListener { onClick(item) }
+//            itemView.setOnClickListener { onClick(item) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding =
             ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(itemBinding, onClick)
+        return ViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
