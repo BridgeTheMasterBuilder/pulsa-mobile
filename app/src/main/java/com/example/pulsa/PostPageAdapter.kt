@@ -8,9 +8,9 @@ import com.example.pulsa.databinding.ReplyBinding
 
 
 class PostPageAdapter(private var items: ArrayList<Reply>) :
-        RecyclerView.Adapter<PostPageAdapter.ViewHolder>() {
+    RecyclerView.Adapter<PostPageAdapter.ViewHolder>() {
     class ViewHolder(itemBinding: ReplyBinding) :
-            RecyclerView.ViewHolder(itemBinding.root) {
+        RecyclerView.ViewHolder(itemBinding.root) {
         private val text = itemBinding.textView
 
         fun bind(item: Reply) {
@@ -21,7 +21,7 @@ class PostPageAdapter(private var items: ArrayList<Reply>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding =
-                ReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(itemBinding)
     }
 

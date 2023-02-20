@@ -1,6 +1,9 @@
 package com.example.pulsa
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pulsa.databinding.ActivityPostBinding
 
@@ -15,25 +18,31 @@ class PostActivity : AppCompatActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = intent?.getParcelableExtra<Post>("post")
+        val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
-        println(post?.title)
-        println(post?.content?.text)
-
-
-        if (post != null) {
+        if (post != null)
             replies = post.replies
-            println(replies.size);
-        }
 
         adapter = PostPageAdapter(replies)
-        binding.recyclerView.adapter = adapter
-
 
         binding.postpageImage.setImageResource(image)
         binding.postpageText.text = post?.content?.text
         binding.postpageTitle.text = post?.title
+        binding.recyclerView.adapter = adapter
 
+        val resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val reply: Reply? = result.data?.getParcelableExtra("reply")
+                    if (reply != null) replies.add(reply)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+        binding.replybtn.setOnClickListener {
+            val intent = Intent(this, NewReplyActivity::class.java)
+            resultLauncher.launch(intent)
+        }
     }
 }

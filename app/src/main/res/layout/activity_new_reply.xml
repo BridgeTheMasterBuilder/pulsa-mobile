@@ -6,30 +6,19 @@
     tools:context=".NewPostActivity">
 
     <EditText
-        android:id="@+id/newposttitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Title"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:id="@+id/newposttext"
+        android:id="@+id/newreplytext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
         android:hint="text"
-        android:layout_below="@id/newposttitle"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Post"
-        android:layout_below="@id/newposttext"
+        android:layout_below="@id/newreplytext"
         android:layout_centerHorizontal="true"
         android:id="@+id/postbutton" />
 

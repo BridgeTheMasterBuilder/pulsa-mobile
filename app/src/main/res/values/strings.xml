@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Pulsa</string>
     <string name="newPostButton">Create New Post</string>
+    <string name="replyButton">Create Reply</string>
 </resources>
