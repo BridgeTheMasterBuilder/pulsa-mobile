@@ -24,7 +24,7 @@ class PostActivity : AppCompatActivity() {
         if (post != null)
             replies = post.replies!!
 
-        adapter = PostPageAdapter(replies)
+        adapter = PostPageAdapter(replies) { reply -> adapterOnClick(reply) }
 
         binding.postpageImage.setImageResource(image)
         binding.postpageText.text = post?.content?.text
@@ -44,5 +44,11 @@ class PostActivity : AppCompatActivity() {
             val intent = Intent(this, NewReplyActivity::class.java)
             resultLauncher.launch(intent)
         }
+    }
+
+    fun adapterOnClick(reply: Reply) {
+//        val intent = Intent(this, PostActivity::class.java)
+//        intent.putExtra("post", post)
+//        startActivity(intent)
     }
 }
