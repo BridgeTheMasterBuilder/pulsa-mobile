@@ -30,12 +30,7 @@ class MainActivity : AppCompatActivity() {
         val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val post: Post? = result.data?.getParcelableExtra("post")
-                println("items are ${adapter.itemCount}")
                 post?.let { adapter.addItem(post) }
-                if (post != null) println("POST ER TIL!")
-                else println("POST ER NULL")
-                println("items now are ${adapter.itemCount}")
-
             }
         }
 
