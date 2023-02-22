@@ -35,6 +35,7 @@ class NewPostActivity : AppCompatActivity() {
 
             intent.putExtra("post", post)
             setResult(Activity.RESULT_OK, intent)
+
             startActivity(intent)
         }
     }

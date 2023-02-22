@@ -10,7 +10,7 @@ import com.example.pulsa.databinding.ActivityPostBinding
 class PostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostBinding
-    private lateinit var adapter: PostPageAdapter
+    private lateinit var adapter: GenericRecyclerAdapter<Reply>
     private lateinit var replies: MutableList<Reply>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,22 +21,30 @@ class PostActivity : AppCompatActivity() {
         val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
-        if (post != null)
-            replies = post.replies!!
-
-        adapter = PostPageAdapter(replies)
-
-        binding.postpageImage.setImageResource(image)
-        binding.postpageText.text = post?.content?.text
-        binding.postpageTitle.text = post?.title
-        binding.recyclerView.adapter = adapter
+        post?.let() {
+            it.replies?.let {
+                replies = it
+                adapter = GenericRecyclerAdapter<Reply>(replies, null, R.layout.reply)
+                binding.recyclerView.adapter = adapter
+            } ?: run {
+                replies = ArrayList<Reply>()
+                adapter = GenericRecyclerAdapter<Reply>(
+                    replies,
+                    null,
+                    R.layout.reply
+                )
+                binding.recyclerView.adapter = adapter
+            }
+            binding.postpageImage.setImageResource(image)
+            binding.postpageTitle.text = it.title
+            binding.postpageText.text = it.content?.text
+        }
 
         val resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val reply: Reply? = result.data?.getParcelableExtra("reply")
-                    if (reply != null) replies.add(reply)
-                    adapter.notifyDataSetChanged()
+                    reply?.let { adapter.addItem(reply) }
                 }
             }
 
