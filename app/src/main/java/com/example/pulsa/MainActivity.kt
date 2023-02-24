@@ -10,7 +10,7 @@ import com.example.pulsa.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: FrontPageAdapter
+    private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
 
 
@@ -20,14 +20,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         posts = PostService().posts
-        adapter = FrontPageAdapter(posts) { post -> adapterOnClick(post) }
+        adapter = GenericRecyclerAdapter<Post>(
+            posts,
+            { post -> adapterOnClick(post) },
+            R.layout.list_item
+        )
         binding.recyclerView.adapter = adapter
 
         val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val post: Post? = result.data?.getParcelableExtra("post")
-                if (post != null) posts.add(post)
-                adapter.notifyDataSetChanged()
+                post?.let { adapter.addItem(post) }
             }
         }
 
