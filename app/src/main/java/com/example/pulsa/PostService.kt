@@ -36,6 +36,12 @@ data class PostService(
                 Content(
                     4,
                     "Foo"
+                ),
+                replies = mutableListOf(
+                    Reply(
+                        5,
+                        Content(5, "Bar")
+                    )
                 )
             )
         )

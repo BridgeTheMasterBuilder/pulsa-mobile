@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -43,12 +41,6 @@
                     android:text="@{listItem.content.text}" />
 
             </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager='       LinearLayoutManager'
-                tools:listitem="@layout/reply" />
 
         </LinearLayout>
     </LinearLayout>

@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-class GenericRecyclerAdapter<T : Any>(
+open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,
     private val onClick: ((T) -> Unit)?,
     @LayoutRes val layoutId: Int
@@ -41,6 +41,7 @@ class GenericRecyclerAdapter<T : Any>(
             parent,
             false
         )
+
         onClick?.let { return GenericViewHolder(binding, onClick) }
         return GenericViewHolder(binding, null)
     }
