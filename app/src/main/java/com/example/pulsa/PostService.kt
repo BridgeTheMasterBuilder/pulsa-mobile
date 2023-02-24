@@ -20,7 +20,7 @@ data class PostService(
         null,
         null,
         null
-        ),
+    ),
     val reply1: Reply = Reply(
         1,
         Content(
@@ -29,6 +29,15 @@ data class PostService(
             "mynd",
             "audio",
             "record"
+        ),
+        replies = mutableListOf(
+            Reply(
+                4,
+                Content(
+                    4,
+                    "Foo"
+                )
+            )
         )
     ),
     val reply2: Reply = Reply(
