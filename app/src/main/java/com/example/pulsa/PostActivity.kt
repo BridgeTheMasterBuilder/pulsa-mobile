@@ -58,14 +58,15 @@ class PostActivity : AppCompatActivity() {
                 adapter = TreeViewAdapter(factory)
                 binding.recyclerView.adapter = adapter
                 roots = createReplyTree(replies)
+
+                adapter.updateTreeNodes(roots)
+                adapter.expandAll()
             }
             binding.postpageImage.setImageResource(image)
             binding.postpageTitle.text = it.title
             binding.postpageText.text = it.content?.text
         }
 
-        adapter.updateTreeNodes(roots)
-        adapter.expandAll()
     }
 
     class ReplyViewHolder(itemView: View) : TreeViewHolder(itemView) {
