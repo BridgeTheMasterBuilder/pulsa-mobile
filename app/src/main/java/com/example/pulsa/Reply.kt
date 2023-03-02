@@ -13,5 +13,5 @@ class Reply(
     override val voted: MutableList<Voter>? = null,
     override val replies: MutableList<Reply>? = null,
     override val created: LocalDateTime? = null,
-    override val updated: LocalDateTime? = null
+    override val updated: LocalDateTime? = null,
 ) : Message(content, creator, sub, Vote, voted, replies, created, updated)

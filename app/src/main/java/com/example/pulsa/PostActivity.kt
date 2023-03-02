@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,14 @@ class PostActivity : AppCompatActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        val intent = Intent(this, NewReplyActivity::class.java)
+//
+//        val reply1 = intent.getParcelableExtra<Reply>("reply")
+//
+//        reply1?.let {
+//            print(reply1)
+//        }
+
         val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
@@ -96,6 +105,17 @@ class PostActivity : AppCompatActivity() {
             val reply = node.value as Reply
 
             text.text = reply.content?.text
+
+            itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
+
+                val intent = Intent(itemView.context, NewReplyActivity::class.java)
+                itemView.context.startActivity(intent)
+//                val reply = intent.getParcelableExtra<Reply>("reply")
+//                reply?.let {
+//                    assert(true)
+//                    node.addChild(TreeNode(reply, R.layout.reply))
+//                }
+            }
         }
     }
 }

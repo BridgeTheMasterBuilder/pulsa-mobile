@@ -13,7 +13,6 @@ class NewReplyActivity : AppCompatActivity() {
         binding = ActivityNewReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.postbutton.setOnClickListener {
             val text = binding.newreplytext.text.toString()
             val user = User(
@@ -32,7 +31,7 @@ class NewReplyActivity : AppCompatActivity() {
                     text,
                     "test",
                     "test",
-                "recording",
+                    "recording",
                     null,
                     null
                 ),
