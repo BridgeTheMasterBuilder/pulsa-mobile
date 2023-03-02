@@ -1,8 +1,11 @@
 package com.example.pulsa
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
@@ -67,6 +70,21 @@ class PostActivity : AppCompatActivity() {
             binding.postpageText.text = it.content?.text
         }
 
+        val resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val reply: Reply? = result.data?.getParcelableExtra("reply")
+                    reply?.let {
+                        roots.add(TreeNode(reply, R.layout.reply));
+                        adapter.updateTreeNodes(roots)
+                    }
+                }
+            }
+
+        binding.replybtn.setOnClickListener {
+            val intent = Intent(this, NewReplyActivity::class.java)
+            resultLauncher.launch(intent)
+        }
     }
 
     class ReplyViewHolder(itemView: View) : TreeViewHolder(itemView) {
