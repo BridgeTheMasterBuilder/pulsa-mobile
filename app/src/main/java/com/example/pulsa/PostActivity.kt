@@ -75,6 +75,23 @@ class PostActivity : AppCompatActivity() {
         return null
     }
 
+    fun expandAll(roots: MutableList<TreeNode>) {
+        fun expand(root: TreeNode) {
+            for (child in root.children) {
+                child.isExpanded = true
+
+                expand(child)
+            }
+
+        }
+
+        for (root in roots) {
+            root.isExpanded = true
+
+            expand(root)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
@@ -114,7 +131,8 @@ class PostActivity : AppCompatActivity() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val reply: Reply? = result.data?.getParcelableExtra("reply")
                     reply?.let {
-                        roots.add(TreeNode(reply, R.layout.reply));
+                        replies.add(reply)
+//                        roots.add(TreeNode(reply, R.layout.reply));
                     }
                     val reply_reply: Reply? = result.data?.getParcelableExtra("replyReply")
                     reply_reply?.let {
@@ -123,9 +141,22 @@ class PostActivity : AppCompatActivity() {
                         id?.let {
                             val node = findNodeById(roots, it)
 
-                            node?.addChild(TreeNode(reply_reply, R.layout.reply))
+                            var replies = (node?.value as Reply).replies
+
+                            if (replies != null) {
+                                (node?.value as Reply).replies?.add(reply_reply)
+                            } else {
+                                (node?.value as Reply).replies = mutableListOf(reply_reply)
+                            }
+//                            node?.addChild(TreeNode(reply_reply, R.layout.reply))
                         }
                     }
+//                    adapter.clearTreeNodes()
+////                    adapter.treeNodes = roots
+//                    adapter.updateTreeNodes(roots)
+//                    adapter.expandAll()
+                    roots = createReplyTree(replies)
+
                     adapter.updateTreeNodes(roots)
                     adapter.expandAll()
                 }
