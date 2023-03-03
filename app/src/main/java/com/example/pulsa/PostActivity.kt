@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.amrdeveloper.treeview.TreeNode
@@ -20,6 +21,7 @@ class PostActivity : AppCompatActivity() {
     private lateinit var replies: MutableList<Reply>
     private lateinit var factory: TreeViewHolderFactory
     private lateinit var roots: MutableList<TreeNode>
+    private lateinit var launcher: ActivityResultLauncher<Intent>
 
     private fun createReplyTree(replies: MutableList<Reply>): MutableList<TreeNode> {
         fun aux(child: TreeNode, replies: MutableList<Reply>) {
@@ -47,6 +49,32 @@ class PostActivity : AppCompatActivity() {
         return roots
     }
 
+    fun findNodeById(roots: MutableList<TreeNode>, id: Long): TreeNode? {
+        fun aux(root: TreeNode, id: Long): TreeNode? {
+            if ((root.value as Reply).reply_id == id)
+                return root
+            else if (root.children.size > 0) {
+                for (child in root.children) {
+                    val result = aux(child, id)
+
+                    if (result != null) {
+                        return result
+                    }
+                }
+
+                return null
+            } else return null
+        }
+
+        for (root in roots) {
+            val result = aux(root, id)
+
+            if (result != null) return result
+        }
+
+        return null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
@@ -63,10 +91,12 @@ class PostActivity : AppCompatActivity() {
         val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
+        val activity = this
+
         post?.let {
             it.replies?.run {
                 replies = it.replies
-                factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view) }
+                factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, activity) }
                 adapter = TreeViewAdapter(factory)
                 binding.recyclerView.adapter = adapter
                 roots = createReplyTree(replies)
@@ -85,10 +115,23 @@ class PostActivity : AppCompatActivity() {
                     val reply: Reply? = result.data?.getParcelableExtra("reply")
                     reply?.let {
                         roots.add(TreeNode(reply, R.layout.reply));
-                        adapter.updateTreeNodes(roots)
                     }
+                    val reply_reply: Reply? = result.data?.getParcelableExtra("replyReply")
+                    reply_reply?.let {
+                        val id: Long? = result.data?.getLongExtra("replyId", -1)
+
+                        id?.let {
+                            val node = findNodeById(roots, it)
+
+                            node?.addChild(TreeNode(reply_reply, R.layout.reply))
+                        }
+                    }
+                    adapter.updateTreeNodes(roots)
+                    adapter.expandAll()
                 }
             }
+
+        launcher = resultLauncher
 
         binding.replybtn.setOnClickListener {
             val intent = Intent(this, NewReplyActivity::class.java)
@@ -96,8 +139,9 @@ class PostActivity : AppCompatActivity() {
         }
     }
 
-    class ReplyViewHolder(itemView: View) : TreeViewHolder(itemView) {
+    class ReplyViewHolder(itemView: View, activity: PostActivity) : TreeViewHolder(itemView) {
         private var text = itemView.findViewById<TextView>(R.id.textView)
+        private var activity = activity
 
         override fun bindTreeNode(node: TreeNode) {
             super.bindTreeNode(node)
@@ -107,14 +151,9 @@ class PostActivity : AppCompatActivity() {
             text.text = reply.content?.text
 
             itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
-
-                val intent = Intent(itemView.context, NewReplyActivity::class.java)
-                itemView.context.startActivity(intent)
-//                val reply = intent.getParcelableExtra<Reply>("reply")
-//                reply?.let {
-//                    assert(true)
-//                    node.addChild(TreeNode(reply, R.layout.reply))
-//                }
+                val intent = Intent(activity, NewReplyActivity::class.java)
+                intent.putExtra("replyId", (node.value as Reply).reply_id)
+                activity.launcher.launch(intent)
             }
         }
     }

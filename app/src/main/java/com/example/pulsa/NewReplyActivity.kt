@@ -1,7 +1,6 @@
 package com.example.pulsa
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pulsa.databinding.ActivityNewReplyBinding
@@ -23,7 +22,8 @@ class NewReplyActivity : AppCompatActivity() {
                 "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png"
             )
 
-            val intent = Intent(this, PostActivity::class.java)
+//            val intent = Intent(this, PostActivity::class.java)
+            val intent = getIntent()
             val reply = Reply(
                 35,
                 Content(
@@ -44,7 +44,12 @@ class NewReplyActivity : AppCompatActivity() {
                 null
             )
 
-            intent.putExtra("reply", reply)
+            if (intent.getLongExtra("replyId", -1) != -1L) {
+                intent.putExtra("replyReply", reply)
+            } else {
+                intent.putExtra("reply", reply)
+            }
+
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
