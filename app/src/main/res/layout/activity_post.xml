@@ -39,8 +39,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:translationY="350dp"
+        android:layout_height="360dp"
+        android:translationY="325dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/reply">
 
