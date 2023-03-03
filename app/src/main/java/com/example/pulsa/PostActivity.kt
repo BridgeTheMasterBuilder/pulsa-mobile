@@ -97,14 +97,6 @@ class PostActivity : AppCompatActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val intent = Intent(this, NewReplyActivity::class.java)
-//
-//        val reply1 = intent.getParcelableExtra<Reply>("reply")
-//
-//        reply1?.let {
-//            print(reply1)
-//        }
-
         val post = intent.getParcelableExtra<Post>("post")
         val image = R.drawable.pulsa
 
@@ -132,7 +124,6 @@ class PostActivity : AppCompatActivity() {
                     val reply: Reply? = result.data?.getParcelableExtra("reply")
                     reply?.let {
                         replies.add(reply)
-//                        roots.add(TreeNode(reply, R.layout.reply));
                     }
                     val reply_reply: Reply? = result.data?.getParcelableExtra("replyReply")
                     reply_reply?.let {
@@ -148,13 +139,8 @@ class PostActivity : AppCompatActivity() {
                             } else {
                                 (node?.value as Reply).replies = mutableListOf(reply_reply)
                             }
-//                            node?.addChild(TreeNode(reply_reply, R.layout.reply))
                         }
                     }
-//                    adapter.clearTreeNodes()
-////                    adapter.treeNodes = roots
-//                    adapter.updateTreeNodes(roots)
-//                    adapter.expandAll()
                     roots = createReplyTree(replies)
 
                     adapter.updateTreeNodes(roots)
