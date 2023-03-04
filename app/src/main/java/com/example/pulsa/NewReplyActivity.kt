@@ -2,10 +2,9 @@ package com.example.pulsa
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.pulsa.databinding.ActivityNewReplyBinding
 
-class NewReplyActivity : AppCompatActivity() {
+class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

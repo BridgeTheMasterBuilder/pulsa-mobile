@@ -8,14 +8,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
 import com.amrdeveloper.treeview.TreeViewHolderFactory
 import com.example.pulsa.databinding.ActivityPostBinding
 
-class PostActivity : AppCompatActivity() {
+class PostActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityPostBinding
     private lateinit var adapter: TreeViewAdapter
     private lateinit var replies: MutableList<Reply>
