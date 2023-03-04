@@ -13,13 +13,14 @@ class FrontPageAdapter(private var items: MutableList<Post>, private val onClick
         RecyclerView.ViewHolder(itemBinding.root) {
         private val title = itemBinding.postTitle
         private val text = itemBinding.postText
-        private val sub = itemBinding.subId
+
+        // private val sub = itemBinding.subId
         private val img = itemBinding.postImage
 
         fun bind(item: Post) {
             title.text = item.title
             text.text = item.content?.text
-            sub.text = item.sub?.name
+            // sub.text = item.sub?.name
             img.setImageResource(R.drawable.pulsa)
             itemView.setOnClickListener { onClick(item) }
         }
