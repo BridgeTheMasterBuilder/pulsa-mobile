@@ -1,8 +1,8 @@
 package com.example.pulsa
 
+import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,17 +16,18 @@ open class BaseLayoutActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var drawerLayout: DrawerLayout
 
-
-    override fun setContentView(view: View?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         binding = BaseLayoutBinding.inflate(layoutInflater)
-        val container: FrameLayout = binding.myToolbar.activityContainer
-        container.addView(view)
-        super.setContentView(binding.root)
-        setSupportActionBar(binding.myToolbar.toolbar)
-
         drawerLayout = binding.drawerLayout
+        setSupportActionBar(binding.myToolbar.toolbar)
         setupNavMenu()
         setupUserMenu()
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun setContentView(view: View?) {
+        binding.myToolbar.activityContainer.addView(view)
+        super.setContentView(binding.root)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
