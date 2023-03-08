@@ -1,5 +1,7 @@
 package com.example.pulsa
 
+import java.time.LocalDateTime
+
 data class PostService(
     val sub: Sub = Sub(
         1,
@@ -16,10 +18,10 @@ data class PostService(
         "Anonymous",
         "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
         "anon@anon.anon",
-        null,
-        null,
-        null,
-        null
+        mutableListOf(),
+        mutableListOf(),
+        LocalDateTime.now(),
+        LocalDateTime.now()
     ),
     val reply1: Reply = Reply(
         1,
@@ -30,21 +32,40 @@ data class PostService(
             "audio",
             "record"
         ),
-        replies = mutableListOf(
+        user,
+        sub,
+        0,
+        mutableListOf(),
+        mutableListOf(
             Reply(
                 4,
                 Content(
                     4,
                     "Foo"
                 ),
-                replies = mutableListOf(
+                user,
+                sub,
+                0,
+                mutableListOf(),
+                mutableListOf(
                     Reply(
                         5,
-                        Content(5, "Bar")
+                        Content(5, "Bar"),
+                        user,
+                        sub,
+                        0,
+                        mutableListOf(),
+                        mutableListOf(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
                     )
-                )
+                ),
+                LocalDateTime.now(),
+                LocalDateTime.now()
             )
-        )
+        ),
+        LocalDateTime.now(),
+        LocalDateTime.now()
     ),
     val reply2: Reply = Reply(
         2,
@@ -54,7 +75,14 @@ data class PostService(
             "mynd",
             "audio",
             "record"
-        )
+        ),
+        user,
+        sub,
+        0,
+        mutableListOf(),
+        mutableListOf(),
+        LocalDateTime.now(),
+        LocalDateTime.now()
     ),
     val reply3: Reply = Reply(
         3,
@@ -64,7 +92,14 @@ data class PostService(
             "mynd",
             "audio",
             "record"
-        )
+        ),
+        user,
+        sub,
+        0,
+        mutableListOf(),
+        mutableListOf(),
+        LocalDateTime.now(),
+        LocalDateTime.now()
     ),
     val replies: MutableList<Reply> = mutableListOf(reply1, reply2, reply3),
     val posts: MutableList<Post> = mutableListOf(
@@ -81,10 +116,10 @@ data class PostService(
             user,
             sub,
             1,
-            null,
+            mutableListOf(),
             replies,
-            null,
-            null
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ),
         Post(
             4,
@@ -99,10 +134,10 @@ data class PostService(
             user,
             sub,
             1,
-            null,
+            mutableListOf(),
             replies,
-            null,
-            null
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ),
         Post(
             5,
@@ -117,10 +152,10 @@ data class PostService(
             user,
             sub,
             1,
-            null,
+            mutableListOf(),
             replies,
-            null,
-            null
+            LocalDateTime.now(),
+            LocalDateTime.now()
         )
     )
 )

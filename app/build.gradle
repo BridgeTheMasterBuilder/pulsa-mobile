@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace 'com.example.pulsa'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.pulsa"
-        minSdk 21
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"

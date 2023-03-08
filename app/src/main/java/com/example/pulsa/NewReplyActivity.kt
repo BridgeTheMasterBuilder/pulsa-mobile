@@ -3,6 +3,7 @@ package com.example.pulsa
 import android.app.Activity
 import android.os.Bundle
 import com.example.pulsa.databinding.ActivityNewReplyBinding
+import java.time.LocalDateTime
 
 class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
@@ -31,16 +32,16 @@ class NewReplyActivity : BaseLayoutActivity() {
                     "test",
                     "test",
                     "recording",
-                    null,
-                    null
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
                 ),
                 user,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                Sub(),
+                0,
+                mutableListOf(),
+                mutableListOf(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
             )
 
             if (intent.getLongExtra("replyId", -1) != -1L) {
