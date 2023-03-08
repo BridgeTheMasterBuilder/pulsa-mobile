@@ -7,7 +7,7 @@ data class PostService(
         1,
         "Subbið Sub",
         "subbisub",
-        null,
+        mutableListOf(),
         "submynd",
         1,
     ),
@@ -30,7 +30,10 @@ data class PostService(
             "reply 1",
             "mynd",
             "audio",
-            "record"
+            "record",
+            LocalDateTime.now(),
+            LocalDateTime.now()
+
         ),
         user,
         sub,
@@ -41,7 +44,12 @@ data class PostService(
                 4,
                 Content(
                     4,
-                    "Foo"
+                    "Foo",
+                    "",
+                    "",
+                    "",
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
                 ),
                 user,
                 sub,
@@ -50,7 +58,7 @@ data class PostService(
                 mutableListOf(
                     Reply(
                         5,
-                        Content(5, "Bar"),
+                        Content(5, "Bar", "", "", "", LocalDateTime.now(), LocalDateTime.now()),
                         user,
                         sub,
                         0,
@@ -74,7 +82,9 @@ data class PostService(
             "reply 2",
             "mynd",
             "audio",
-            "record"
+            "record",
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ),
         user,
         sub,
@@ -91,7 +101,9 @@ data class PostService(
             "reply 3",
             "mynd",
             "audio",
-            "record"
+            "record",
+            LocalDateTime.now(),
+            LocalDateTime.now()
         ),
         user,
         sub,
@@ -111,7 +123,9 @@ data class PostService(
                 "Hægri vinstri upp og niður",
                 "suð",
                 "blóm",
-                "record"
+                "record",
+                LocalDateTime.now(),
+                LocalDateTime.now()
             ),
             user,
             sub,
@@ -129,7 +143,9 @@ data class PostService(
                 "Derp vinstri upp og niður",
                 "suð",
                 "blóm",
-                "record"
+                "record",
+                LocalDateTime.now(),
+                LocalDateTime.now()
             ),
             user,
             sub,
@@ -147,7 +163,9 @@ data class PostService(
                 "Hehehehe vinstri upp og niður",
                 "suð",
                 "blóm",
-                "record"
+                "record",
+                LocalDateTime.now(),
+                LocalDateTime.now()
             ),
             user,
             sub,

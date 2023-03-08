@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.example.pulsa.databinding.ActivityNewPostBinding
+import java.time.LocalDateTime
 
 class NewPostActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewPostBinding
@@ -16,7 +17,18 @@ class NewPostActivity : BaseLayoutActivity() {
         binding.postbutton.setOnClickListener {
             val title = binding.newposttitle.text.toString()
             val text = binding.newposttext.text.toString()
-            val user = User(null, "Anonymous", null, "Anonymous")
+            val user = User(
+                -1,
+                "Anonymous",
+                "",
+                "Anonymous",
+                "",
+                "",
+                mutableListOf(),
+                mutableListOf(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+            )
 
             val intent = Intent(this, PostActivity::class.java)
             val post = Post(
@@ -28,8 +40,16 @@ class NewPostActivity : BaseLayoutActivity() {
                     "test",
                     "test",
                     "recording",
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
                 ),
-                user
+                user,
+                Sub(-1, "", "", mutableListOf(), "", 0),
+                0,
+                mutableListOf(),
+                mutableListOf(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
             )
 
             intent.putExtra("post", post)

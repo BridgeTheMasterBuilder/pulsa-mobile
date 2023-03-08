@@ -17,13 +17,17 @@ class NewReplyActivity : BaseLayoutActivity() {
             val user = User(
                 1,
                 "Anonymous",
-                null,
+                "",
                 "Anonymous",
-                "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png"
+                "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
+                "",
+                mutableListOf(),
+                mutableListOf(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
             )
 
-//            val intent = Intent(this, PostActivity::class.java)
-            val intent = getIntent()
+            val intent = intent
             val reply = Reply(
                 35,
                 Content(
@@ -36,7 +40,7 @@ class NewReplyActivity : BaseLayoutActivity() {
                     LocalDateTime.now()
                 ),
                 user,
-                Sub(),
+                intent.getParcelableExtra("sub")!!,
                 0,
                 mutableListOf(),
                 mutableListOf(),
@@ -44,8 +48,8 @@ class NewReplyActivity : BaseLayoutActivity() {
                 LocalDateTime.now()
             )
 
-            if (intent.getLongExtra("replyId", -1) != -1L) {
-                intent.putExtra("replyReply", reply)
+            if (intent.getLongExtra("replyId", NO_REPLY) != NO_REPLY) {
+                intent.putExtra("nestedReply", reply)
             } else {
                 intent.putExtra("reply", reply)
             }

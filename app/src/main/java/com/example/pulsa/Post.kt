@@ -5,14 +5,14 @@ import java.time.LocalDateTime
 
 @Parcelize
 class Post(
-    val post_id: Int? = null,
-    val title: String? = null,
-    override val content: Content? = null,
-    override val creator: User? = null,
-    override val sub: Sub? = null,
-    override val Vote: Int? = null,
-    override val voted: MutableList<Voter>? = null,
-    override val replies: MutableList<Reply>? = null,
-    override val created: LocalDateTime? = null,
-    override val updated: LocalDateTime? = null
+    val post_id: Int,
+    val title: String,
+    override val content: Content,
+    override val creator: User,
+    override val sub: Sub,
+    override val Vote: Int,
+    override val voted: MutableList<Voter>,
+    override val replies: MutableList<Reply>,
+    override val created: LocalDateTime,
+    override val updated: LocalDateTime
 ) : Message(content, creator, sub, Vote, voted, replies, created, updated)

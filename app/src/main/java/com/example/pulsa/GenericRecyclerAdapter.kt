@@ -54,7 +54,7 @@ open class GenericRecyclerAdapter<T : Any>(
 
     class GenericViewHolder<T>(
         private val binding: ViewDataBinding,
-        val onClick: ((T) -> Unit)?
+        private val onClick: ((T) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
 

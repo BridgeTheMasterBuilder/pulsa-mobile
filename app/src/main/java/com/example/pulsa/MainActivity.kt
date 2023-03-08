@@ -7,20 +7,17 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import com.example.pulsa.databinding.ActivityMainBinding
 
 class MainActivity : BaseLayoutActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         posts = PostService().posts
-        adapter = GenericRecyclerAdapter<Post>(
+        adapter = GenericRecyclerAdapter(
             posts,
             { post -> adapterOnClick(post) },
             R.layout.list_item
@@ -29,8 +26,8 @@ class MainActivity : BaseLayoutActivity() {
 
         val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val post: Post? = result.data?.getParcelableExtra("post")
-                post?.let { adapter.addItem(post) }
+                val post: Post = result.data?.getParcelableExtra("post")!!
+                adapter.addItem(post)
             }
         }
 
@@ -40,7 +37,7 @@ class MainActivity : BaseLayoutActivity() {
         }
     }
 
-    fun adapterOnClick(post: Post) {
+    private fun adapterOnClick(post: Post) {
         val intent = Intent(this, PostActivity::class.java)
         intent.putExtra("post", post)
         startActivity(intent)
