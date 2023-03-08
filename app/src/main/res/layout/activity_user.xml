@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".UserActivity">
+
+
+    <Button
+        android:id="@+id/editaccountbtn"
+        android:text="Edit Account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_margin="2dp" />
+
+    <Button
+        android:id="@+id/postsbtn"
+        android:text="View Posts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/editaccountbtn"
+        android:layout_margin="2dp" />
+
+    <Button
+        android:id="@+id/repliesbtn"
+        android:text="View Replies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/postsbtn"
+        android:layout_margin="2dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

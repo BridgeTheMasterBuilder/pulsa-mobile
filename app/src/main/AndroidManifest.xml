@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Pulsa"
         tools:targetApi="31">
         <activity
+            android:name=".UserActivity"
+            android:exported="false" />
+        <activity
             android:name=".BaseLayoutActivity"
             android:exported="false" />
         <activity
