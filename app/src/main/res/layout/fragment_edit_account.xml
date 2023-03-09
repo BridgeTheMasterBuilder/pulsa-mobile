@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/purple_200"
+    tools:context=".EditAccountFragment">
+
+    <TextView
+        android:id="@+id/editaccounttitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:shadowColor="#000000"
+        android:shadowDx="7"
+        android:shadowDy="5"
+        android:shadowRadius="10"
+        android:text="Account Details"
+        android:textColor="@color/purple_500"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/editaccountimage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/editaccountimage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/pulsa"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toTopOf="@id/editaccsavebtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editaccounttitle" />
+
+    <Button
+        android:id="@+id/editaccimgbtn"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:text="Change Image"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/editaccountimage"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editaccrealname" />
+
+    <EditText
+        android:id="@+id/editaccrealname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Real Name"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/editaccimgbtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editaccusername" />
+
+    <EditText
+        android:id="@+id/editaccusername"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:hint="Username"
+        app:layout_constraintTop_toBottomOf="@id/editaccrealname"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editaccemail" />
+
+    <EditText
+        android:id="@+id/editaccemail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:hint="e-Mail"
+        app:layout_constraintTop_toBottomOf="@id/editaccusername"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editaccpassword" />
+
+    <EditText
+        android:id="@+id/editaccpassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:hint="Password"
+        app:layout_constraintTop_toBottomOf="@id/editaccemail"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/editaccsavebtn" />
+
+    <Button
+        android:id="@+id/editaccsavebtn"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:text="Save"
+        app:layout_constraintTop_toBottomOf="@id/editaccpassword"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
