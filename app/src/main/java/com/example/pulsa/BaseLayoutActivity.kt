@@ -1,5 +1,6 @@
 package com.example.pulsa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -75,6 +76,19 @@ open class BaseLayoutActivity : AppCompatActivity() {
                 GravityCompat.END
             )
             else binding.drawerLayout.openDrawer(GravityCompat.END)
+        }
+        binding.navViewUser.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.login -> {
+                    val i = Intent(this, LoginActivity::class.java)
+                    startActivity(i)
+                }
+                R.id.register -> {
+                    val i = Intent(this, RegisterActivity::class.java)
+                    startActivity(i)
+                }
+            }
+            true
         }
     }
 }

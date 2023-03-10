@@ -3,7 +3,7 @@ package com.example.pulsa
 import java.time.LocalDateTime
 
 data class UserService(
-    val users: MutableList<User> = mutableListOf(
+    var users: MutableList<User> = mutableListOf(
         User(
             69,
             "admin",

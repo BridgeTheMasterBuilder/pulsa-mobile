@@ -14,10 +14,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val username = binding.loginusername
-        val password = binding.loginpassword
+        var username = binding.loginusername
+        var password = binding.loginpassword
         users = UserService().users
         val sp = getSharedPreferences("LOGIN", MODE_PRIVATE)
+        for (user in users) {
+            println("----------------------" + user.userName)
+        }
         binding.loginpagebutton.setOnClickListener {
             if (username.toString().isNotBlank() &&
                 password.toString().isNotBlank()
@@ -31,11 +34,16 @@ class LoginActivity : AppCompatActivity() {
                             val i = Intent(this, MainActivity::class.java)
                             startActivity(i)
                         } else {
-                            Toast.makeText(this, "Username/Password Invalid", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                this,
+                                "Username/Password Invalid lol",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                     } else {
-                        Toast.makeText(this, "Username/Password Invalid", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Username/Password Invalid kek", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } else {

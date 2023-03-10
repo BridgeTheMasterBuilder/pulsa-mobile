@@ -17,10 +17,10 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         users = UserService().users
-        val realname = binding.registerrealname
-        val username = binding.registerusername
-        val email = binding.registeremail
-        val password = binding.registerpassword
+        var realname = binding.registerrealname
+        var username = binding.registerusername
+        var email = binding.registeremail
+        var password = binding.registerpassword
         binding.registerpagebutton.setOnClickListener {
             if (realname.toString().isNotBlank() &&
                 username.toString().isNotBlank() &&
@@ -28,10 +28,10 @@ class RegisterActivity : AppCompatActivity() {
                 password.toString().isNotBlank()
             ) {
                 for (user in users) {
-                    if (user.userName == username.toString()) {
+                    if (user.userName.equals(username.toString())) {
                         Toast.makeText(this, "Username unavailable", Toast.LENGTH_SHORT).show()
                         break
-                    } else if (user.email == email.toString()) {
+                    } else if (user.email.equals(email.toString())) {
                         Toast.makeText(this, "e-Mail unavailable", Toast.LENGTH_SHORT).show()
                         break
                     } else {
@@ -49,6 +49,9 @@ class RegisterActivity : AppCompatActivity() {
                             LocalDateTime.now()
                         )
                         users.add(newuser)
+                        for (user in users) {
+                            println("++++++++++++++++++++++" + user.userName.toString())
+                        }
                         val i = Intent(this, LoginActivity::class.java)
                         startActivity(i)
                     }
