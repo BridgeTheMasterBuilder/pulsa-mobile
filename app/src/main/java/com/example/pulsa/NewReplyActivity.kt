@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.pulsa.databinding.ActivityNewReplyBinding
@@ -33,7 +34,9 @@ class NewReplyActivity : BaseLayoutActivity() {
         binding = ActivityNewReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        fileName = "${externalCacheDir?.absolutePath}/temp.3gp"
+        binding.imageView.visibility = View.INVISIBLE
+        fileName =
+            "${externalCacheDir?.absolutePath}/temp.3gp"
 
         binding.recordbutton.setOnClickListener {
             recordButtonOnClick()
@@ -200,6 +203,8 @@ class NewReplyActivity : BaseLayoutActivity() {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 val image = data?.data
+
+                binding.imageView.visibility = View.VISIBLE
 
                 binding.imageView.setImageURI(image)
             } else if (requestCode == SELECT_AUDIO) {
