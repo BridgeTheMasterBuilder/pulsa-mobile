@@ -16,6 +16,7 @@ import java.time.LocalDateTime
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val SELECT_PICTURE = 200
+private const val SELECT_AUDIO = 2
 
 class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
@@ -35,53 +36,11 @@ class NewReplyActivity : BaseLayoutActivity() {
         fileName = "${externalCacheDir?.absolutePath}/temp.3gp"
 
         binding.recordbutton.setOnClickListener {
-
-            if (recording) {
-                recording = !recording
-                mediaRecorder.stop()
-                mediaRecorder.release()
-
-                mediaPlayer = MediaPlayer().apply {
-                    try {
-                        setDataSource(fileName)
-                        prepare()
-                    } catch (e: IOException) {
-                        // todo
-                        System.err.println("oops")
-                    }
-                }
-            } else if (permissionGranted) {
-                recording = !recording
-                mediaRecorder.start()
-            } else
-                ActivityCompat.requestPermissions(
-                    this,
-                    permissions,
-                    REQUEST_RECORD_AUDIO_PERMISSION
-                )
+            recordButtonOnClick()
         }
 
         binding.playbutton.setOnClickListener {
-            Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show()
-            if (recording) {
-                mediaRecorder.stop()
-                mediaRecorder.release()
-
-                mediaPlayer = MediaPlayer().apply {
-                    try {
-                        setDataSource(fileName)
-                        prepare()
-                    } catch (e: IOException) {
-                        // todo
-                        System.err.println("oops")
-                    }
-                }
-            } else if (playing)
-                mediaPlayer.stop()
-
-            playing = !playing
-
-            mediaPlayer.start()
+            playButtonOnClick()
         }
 
         binding.imagebutton.setOnClickListener {
@@ -89,73 +48,61 @@ class NewReplyActivity : BaseLayoutActivity() {
             i.type = "image/*"
             i.action = Intent.ACTION_GET_CONTENT
 
-            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+            startActivityForResult(Intent.createChooser(i, "Select picture"), SELECT_PICTURE)
+        }
+
+        binding.audiobutton.setOnClickListener {
+            val i = Intent()
+            i.type = "audio/*"
+            i.action = Intent.ACTION_GET_CONTENT
+
+            startActivityForResult(Intent.createChooser(i, "Select audio file"), SELECT_AUDIO)
         }
 
         binding.postbutton.setOnClickListener {
-            val text = binding.newreplytext.text.toString()
-            val user = User(
-                1,
-                "Anonymous",
-                "",
-                "Anonymous",
-                "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
-                "",
-                mutableListOf(),
-                mutableListOf(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-            )
-
-            val intent = intent
-            val reply = Reply(
-                35,
-                Content(
-                    36,
-                    text,
-                    "test",
-                    "test",
-                    "recording",
-                    LocalDateTime.now(),
-                    LocalDateTime.now()
-                ),
-                user,
-                intent.getParcelableExtra("sub")!!,
-                0,
-                mutableListOf(),
-                mutableListOf(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-            )
-
-            if (intent.getLongExtra("replyId", NO_REPLY) != NO_REPLY) {
-                intent.putExtra("nestedReply", reply)
-            } else {
-                intent.putExtra("reply", reply)
-            }
-
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+            postButtonOnClick()
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            onPermissionsGranted()
+    private fun recordButtonOnClick() {
+        if (recording) {
+            recording = !recording
+            mediaRecorder.stop()
+            mediaRecorder.release()
+
+            initMediaPlayer()
+        } else if (permissionGranted) {
+            recording = !recording
+            mediaRecorder.start()
+        } else
+            ActivityCompat.requestPermissions(
+                this,
+                permissions,
+                REQUEST_RECORD_AUDIO_PERMISSION
+            )
     }
 
-    private fun onPermissionsGranted() {
-        Toast.makeText(
-            this,
-            "success!",
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun playButtonOnClick() {
+        if (!this::mediaPlayer.isInitialized) {
+            Toast.makeText(this, "No audio file uploaded", Toast.LENGTH_SHORT).show()
+            return
+        }
 
+        if (recording) {
+            recording = false
+            mediaRecorder.stop()
+            mediaRecorder.release()
+
+            initMediaPlayer()
+        } else if (playing)
+            mediaPlayer.stop()
+
+        playing = !playing
+
+        mediaPlayer.start()
+    }
+
+    private fun initMediaRecorder() {
         mediaRecorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
@@ -175,13 +122,110 @@ class NewReplyActivity : BaseLayoutActivity() {
         }
     }
 
+    private fun initMediaPlayer() {
+        mediaPlayer = MediaPlayer().apply {
+            try {
+                setDataSource(fileName)
+                prepare()
+            } catch (e: IOException) {
+                // todo
+                System.err.println("oops")
+            }
+        }
+    }
+
+    private fun postButtonOnClick() {
+        val text = binding.newreplytext.text.toString()
+        val user = User(
+            1,
+            "Anonymous",
+            "",
+            "Anonymous",
+            "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
+            "",
+            mutableListOf(),
+            mutableListOf(),
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        )
+
+        val intent = intent
+        val reply = Reply(
+            35,
+            Content(
+                36,
+                text,
+                "test",
+                "test",
+                "recording",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+            ),
+            user,
+            intent.getParcelableExtra("sub")!!,
+            0,
+            mutableListOf(),
+            mutableListOf(),
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        )
+
+        if (intent.getLongExtra("replyId", NO_REPLY) != NO_REPLY) {
+            intent.putExtra("nestedReply", reply)
+        } else {
+            intent.putExtra("reply", reply)
+        }
+
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            onPermissionsGranted()
+    }
+
+    private fun onPermissionsGranted() {
+        initMediaRecorder()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
-            val image = data?.data
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                val image = data?.data
 
-            binding.imageView.setImageURI(image)
+                binding.imageView.setImageURI(image)
+            } else if (requestCode == SELECT_AUDIO) {
+                val audio = data?.data
+
+                val ctx = this
+
+                audio?.let {
+                    mediaPlayer = MediaPlayer().apply {
+                        try {
+                            setDataSource(ctx, it)
+                            prepare()
+                        } catch (e: IOException) {
+                            // todo
+                            System.err.println("oops")
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (this::mediaRecorder.isInitialized) mediaRecorder.stop()
+        if (this::mediaPlayer.isInitialized) mediaPlayer.stop()
     }
 }

@@ -23,18 +23,26 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/audiobutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Attach audio file" />
+
+        <Button
             android:id="@+id/recordbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Record audio" />
 
-        <Button
-            android:id="@+id/playbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="▶️"
-            tools:layout_toRightOf="@id/recordbutton" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/playbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="▶️"
+        tools:layout_toRightOf="@id/recordbutton" />
 
     <Button
         android:id="@+id/imagebutton"
