@@ -2,6 +2,8 @@ package com.example.pulsa
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
@@ -11,7 +13,9 @@ import com.example.pulsa.databinding.ActivityNewReplyBinding
 import java.io.IOException
 import java.time.LocalDateTime
 
+
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+private const val SELECT_PICTURE = 200
 
 class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
@@ -80,6 +84,14 @@ class NewReplyActivity : BaseLayoutActivity() {
             mediaPlayer.start()
         }
 
+        binding.imagebutton.setOnClickListener {
+            val i = Intent()
+            i.type = "image/*"
+            i.action = Intent.ACTION_GET_CONTENT
+
+            startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE)
+        }
+
         binding.postbutton.setOnClickListener {
             val text = binding.newreplytext.text.toString()
             val user = User(
@@ -133,13 +145,8 @@ class NewReplyActivity : BaseLayoutActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) onPermissionsGranted()
-//        permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
-//            grantResults[0] == PackageManager.PERMISSION_GRANTED
-//        } else {
-//            false
-//        }
-//        if (!permissionToRecordAccepted) finish()
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            onPermissionsGranted()
     }
 
     private fun onPermissionsGranted() {
@@ -166,7 +173,15 @@ class NewReplyActivity : BaseLayoutActivity() {
 
             start()
         }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
+            val image = data?.data
+
+            binding.imageView.setImageURI(image)
+        }
     }
 }

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".NewPostActivity">
 
     <EditText
@@ -10,33 +13,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
         android:hint="text"
-        android:layout_centerHorizontal="true" />
+        android:inputType="text" />
 
-    <Button
-        android:id="@+id/recordbutton"
+    <LinearLayout
+        android:id="@+id/record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newreplytext"
-        android:layout_centerHorizontal="true"
-        android:text="Record audio" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/recordbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record audio" />
+
+        <Button
+            android:id="@+id/playbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="▶️"
+            tools:layout_toRightOf="@id/recordbutton" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/playbutton"
+        android:id="@+id/imagebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/newreplytext"
-        android:text="▶️"
-        tools:layout_toRightOf="@id/recordbutton" />
+        android:text="Attach image" />
 
     <Button
         android:id="@+id/postbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recordbutton"
-        android:layout_centerHorizontal="true"
         android:text="Post" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        tools:visibility="invisible" />
 
-</RelativeLayout>
+</LinearLayout>
