@@ -54,8 +54,9 @@ class NewPostActivity : BaseLayoutActivity() {
 
             intent.putExtra("post", post)
             setResult(Activity.RESULT_OK, intent)
-
+            finish()
             startActivity(intent)
+
         }
     }
 }
