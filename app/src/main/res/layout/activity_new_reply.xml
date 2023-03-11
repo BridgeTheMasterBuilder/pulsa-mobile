@@ -15,12 +15,28 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:id="@+id/recordbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
         android:layout_below="@id/newreplytext"
         android:layout_centerHorizontal="true"
-        android:id="@+id/postbutton" />
+        android:text="Record audio" />
+
+    <Button
+        android:id="@+id/playbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newreplytext"
+        android:text="▶️"
+        tools:layout_toRightOf="@id/recordbutton" />
+
+    <Button
+        android:id="@+id/postbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recordbutton"
+        android:layout_centerHorizontal="true"
+        android:text="Post" />
 
 
 </RelativeLayout>
