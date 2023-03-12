@@ -70,13 +70,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupUserMenu() {
-        binding.myToolbar.userMenu.setOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) binding.drawerLayout.closeDrawer(
-                GravityCompat.END
-            )
-            else binding.drawerLayout.openDrawer(GravityCompat.END)
-        }
+    fun setDefaultNav() {
         binding.navViewUser.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.login -> {
@@ -90,5 +84,41 @@ open class BaseLayoutActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    private fun setupUserMenu() {
+        binding.myToolbar.userMenu.setOnClickListener {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) binding.drawerLayout.closeDrawer(
+                GravityCompat.END
+            )
+            else binding.drawerLayout.openDrawer(GravityCompat.END)
+        }
+
+        if (LoggedIn.getLoggedIn()) {
+            binding.navViewUser.menu.clear()
+            binding.navViewUser.inflateMenu(R.menu.nav_drawer_loggedin)
+            binding.navViewUser.setNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.editAccount -> {
+                        val i = Intent(this, UserActivity::class.java)
+                        startActivity(i)
+                    }
+                    R.id.logout -> {
+                        LoggedIn.setLoggedIn(false)
+                        binding.navViewUser.let {
+                            it.menu.clear()
+                            it.inflateMenu(R.menu.nav_drawer_user)
+                            setDefaultNav()
+                        }
+                        startActivity(Intent(this, MainActivity::class.java))
+
+                    }
+                }
+                true
+            }
+        } else {
+            setDefaultNav()
+        }
+
     }
 }
