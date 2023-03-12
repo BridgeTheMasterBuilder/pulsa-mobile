@@ -27,11 +27,13 @@ class LoginActivity : AppCompatActivity() {
                 for (user in UserList.users) {
                     println("username: ${user.userName}       password:${user.password}")
                     println("username: ${username.text.toString()}       password:${password.text.toString()}")
+                    println("User of list: ${user.userName}  --- Entered: ${username.text.toString()} ----> Equals?${user.userName == username.text.toString()}")
                     if (user.userName == username.text.toString()) {
                         if (user.password == password.text.toString()) {
                             LoggedIn.setLoggedIn(true)
                             LoggedIn.setUser(user)
                             val i = Intent(this, MainActivity::class.java)
+                            finish()
                             startActivity(i)
                         } else {
                             Toast.makeText(
