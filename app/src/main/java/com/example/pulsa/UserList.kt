@@ -2,8 +2,8 @@ package com.example.pulsa
 
 import java.time.LocalDateTime
 
-data class UserService(
-    var users: MutableList<User> = mutableListOf(
+object UserList {
+    var users: MutableList<User> = mutableListOf<User>(
         User(
             69,
             "admin",
@@ -17,5 +17,10 @@ data class UserService(
             LocalDateTime.now()
         )
     )
+        private set
 
-)
+    fun addUser(user: User) {
+        users.add(user)
+    }
+
+}

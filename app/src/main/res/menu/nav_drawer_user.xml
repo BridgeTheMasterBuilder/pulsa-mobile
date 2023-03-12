@@ -7,5 +7,4 @@
     <item
         android:id="@+id/register"
         android:title="Register" />
-
 </menu>

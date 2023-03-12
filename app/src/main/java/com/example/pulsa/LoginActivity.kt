@@ -9,29 +9,31 @@ import com.example.pulsa.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var users: MutableList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var username = binding.loginusername
         var password = binding.loginpassword
-        users = UserService().users
-        val sp = getSharedPreferences("LOGIN", MODE_PRIVATE)
-        for (user in users) {
+
+
+        for (user in UserList.users) {
             println("----------------------" + user.userName)
         }
         binding.loginpagebutton.setOnClickListener {
             if (username.toString().isNotBlank() &&
                 password.toString().isNotBlank()
             ) {
-                for (user in users) {
-                    if (user.userName == username.toString()) {
-                        if (user.password == password.toString()) {
-                            val editor = sp.edit()
-                            editor.putString("USER", username.toString())
-                            editor.apply()
+                for (user in UserList.users) {
+                    println("username: ${user.userName}       password:${user.password}")
+                    println("username: ${username.text.toString()}       password:${password.text.toString()}")
+                    println("User of list: ${user.userName}  --- Entered: ${username.text.toString()} ----> Equals?${user.userName == username.text.toString()}")
+                    if (user.userName == username.text.toString()) {
+                        if (user.password == password.text.toString()) {
+                            LoggedIn.setLoggedIn(true)
+                            LoggedIn.setUser(user)
                             val i = Intent(this, MainActivity::class.java)
+                            finish()
                             startActivity(i)
                         } else {
                             Toast.makeText(
