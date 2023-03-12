@@ -7,8 +7,4 @@
     <item
         android:id="@+id/register"
         android:title="Register" />
-
-    <item
-        android:id="@+id/editacc"
-        android:title="Edit Account" />
 </menu>

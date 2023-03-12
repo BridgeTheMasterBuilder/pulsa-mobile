@@ -81,10 +81,6 @@ open class BaseLayoutActivity : AppCompatActivity() {
                     val i = Intent(this, RegisterActivity::class.java)
                     startActivity(i)
                 }
-                R.id.editacc -> {
-                    val i = Intent(this, UserActivity::class.java)
-                    startActivity(i)
-                }
             }
             true
         }
