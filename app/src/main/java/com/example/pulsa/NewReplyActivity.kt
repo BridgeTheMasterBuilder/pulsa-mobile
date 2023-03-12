@@ -28,6 +28,7 @@ class NewReplyActivity : BaseLayoutActivity() {
     private var recording = false
     private var playing = false
     private var permissionGranted = false
+    private var imagePath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,7 +159,7 @@ class NewReplyActivity : BaseLayoutActivity() {
             Content(
                 36,
                 text,
-                "test",
+                imagePath,
                 "test",
                 "recording",
                 LocalDateTime.now(),
@@ -204,9 +205,15 @@ class NewReplyActivity : BaseLayoutActivity() {
             if (requestCode == SELECT_PICTURE) {
                 val image = data?.data
 
-                binding.imageView.visibility = View.VISIBLE
+                image?.let {
+                    imagePath = it.toString()
 
-                binding.imageView.setImageURI(image)
+                    binding.imageView.visibility = View.VISIBLE
+
+                    binding.imageView.setImageURI(it)
+                }
+
+
             } else if (requestCode == SELECT_AUDIO) {
                 val audio = data?.data
 

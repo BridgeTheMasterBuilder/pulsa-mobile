@@ -8,7 +8,7 @@ data class PostService(
         "Subbið Sub",
         "subbisub",
         mutableListOf(),
-        "submynd",
+        "sub",
         1,
     ),
     val user: User = User(
@@ -28,7 +28,7 @@ data class PostService(
         Content(
             1,
             "reply 1",
-            "mynd",
+            "",
             "audio",
             "record",
             LocalDateTime.now(),
@@ -80,7 +80,7 @@ data class PostService(
         Content(
             2,
             "reply 2",
-            "mynd",
+            "",
             "audio",
             "record",
             LocalDateTime.now(),
@@ -99,7 +99,7 @@ data class PostService(
         Content(
             3,
             "reply 3",
-            "mynd",
+            "",
             "audio",
             "record",
             LocalDateTime.now(),

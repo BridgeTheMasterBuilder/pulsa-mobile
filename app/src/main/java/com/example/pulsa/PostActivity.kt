@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -129,13 +130,20 @@ class PostActivity : BaseLayoutActivity() {
     class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
         TreeViewHolder(itemView) {
         private var text = itemView.findViewById<TextView>(R.id.textView)
+        private var image = itemView.findViewById<ImageView>(R.id.imageAttachment)
 
         override fun bindTreeNode(node: TreeNode) {
             super.bindTreeNode(node)
 
             val reply = node.value as Reply
+            image.visibility = View.GONE
 
             text.text = reply.content.text
+//            if (reply.content.image != "") {
+//                Toast.makeText(activity, "${reply.content.image}", Toast.LENGTH_SHORT).show()
+//                image.setImageURI(Uri.parse(reply.content.image))
+//                image.visibility = View.VISIBLE
+//            }
 
             itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
                 val intent = Intent(activity, NewReplyActivity::class.java)
