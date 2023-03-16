@@ -123,6 +123,7 @@ class PostActivity : BaseLayoutActivity() {
 
         binding.replybtn.setOnClickListener {
             val intent = Intent(this, NewReplyActivity::class.java)
+            intent.putExtra("sub", this.post.sub)
             resultLauncher.launch(intent)
         }
     }
