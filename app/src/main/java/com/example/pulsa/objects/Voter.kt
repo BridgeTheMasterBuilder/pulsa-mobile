@@ -1,4 +1,4 @@
-package com.example.pulsa
+package com.example.pulsa.objects
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

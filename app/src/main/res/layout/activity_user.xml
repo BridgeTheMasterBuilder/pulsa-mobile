@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/purple_200"
-    tools:context=".UserActivity">
+    tools:context=".activities.UserActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonlayout"
@@ -55,6 +55,6 @@
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:name="com.example.pulsa.EditAccountFragment"
+        android:name="com.example.pulsa.fragments.EditAccountFragment"
         tools:layout="@layout/fragment_edit_account" />
 </androidx.constraintlayout.widget.ConstraintLayout>

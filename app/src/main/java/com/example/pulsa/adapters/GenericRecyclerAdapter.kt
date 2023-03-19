@@ -1,4 +1,4 @@
-package com.example.pulsa
+package com.example.pulsa.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pulsa.BR
 
 open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,

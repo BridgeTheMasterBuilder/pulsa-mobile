@@ -1,4 +1,4 @@
-package com.example.pulsa
+package com.example.pulsa.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -13,7 +13,11 @@ import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
 import com.amrdeveloper.treeview.TreeViewHolderFactory
+import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
+import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Reply
+import com.example.pulsa.utils.DownloadImageTask
 
 const val NO_REPLY = -1L
 
@@ -80,7 +84,8 @@ class PostActivity : BaseLayoutActivity() {
         setContentView(binding.root)
 
         val post: Post = intent.getParcelableExtra("post")!!
-        val image = R.drawable.pulsa
+        val image = post.content.image
+        DownloadImageTask(findViewById(binding.postpageImage.id)).execute(image)
 
         this.post = post
         replies = post.replies
@@ -92,7 +97,6 @@ class PostActivity : BaseLayoutActivity() {
         adapter.updateTreeNodes(roots)
         adapter.expandAll()
 
-        binding.postpageImage.setImageResource(image)
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
 

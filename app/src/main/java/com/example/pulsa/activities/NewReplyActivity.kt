@@ -1,4 +1,4 @@
-package com.example.pulsa
+package com.example.pulsa.activities
 
 import android.Manifest
 import android.app.Activity
@@ -11,6 +11,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.pulsa.databinding.ActivityNewReplyBinding
+import com.example.pulsa.objects.Content
+import com.example.pulsa.objects.Reply
+import com.example.pulsa.objects.User
 import java.io.IOException
 import java.time.LocalDateTime
 
@@ -198,6 +201,7 @@ class NewReplyActivity : BaseLayoutActivity() {
         initMediaRecorder()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

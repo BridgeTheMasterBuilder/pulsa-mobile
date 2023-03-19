@@ -6,7 +6,7 @@
 
         <variable
             name="listItem"
-            type="com.example.pulsa.Post" />
+            type="com.example.pulsa.objects.Post" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
