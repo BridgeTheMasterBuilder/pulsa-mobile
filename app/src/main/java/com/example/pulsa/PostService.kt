@@ -1,6 +1,5 @@
-package com.example.pulsa.services
+package com.example.pulsa
 
-import com.example.pulsa.objects.*
 import java.time.LocalDateTime
 
 data class PostService(

@@ -1,4 +1,4 @@
-package com.example.pulsa.objects
+package com.example.pulsa
 
 import android.os.Parcelable
 import java.time.LocalDateTime

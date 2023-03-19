@@ -1,13 +1,9 @@
-package com.example.pulsa.activities
+package com.example.pulsa
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.example.pulsa.databinding.ActivityNewPostBinding
-import com.example.pulsa.objects.Content
-import com.example.pulsa.objects.Post
-import com.example.pulsa.objects.Sub
-import com.example.pulsa.objects.User
 import java.time.LocalDateTime
 
 class NewPostActivity : BaseLayoutActivity() {

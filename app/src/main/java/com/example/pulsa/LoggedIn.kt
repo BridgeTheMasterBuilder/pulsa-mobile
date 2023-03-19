@@ -1,6 +1,4 @@
-package com.example.pulsa.utils
-
-import com.example.pulsa.objects.User
+package com.example.pulsa
 
 object LoggedIn {
     private var loggedIn = false
@@ -15,10 +13,10 @@ object LoggedIn {
     }
 
     fun setUser(user: User) {
-        LoggedIn.user = user
+        this.user = user
     }
 
     fun getUser(): User {
-        return user
+        return this.user
     }
 }
