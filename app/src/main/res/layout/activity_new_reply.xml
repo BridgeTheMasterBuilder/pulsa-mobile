@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".NewPostActivity">
+    tools:context=".activities.NewPostActivity">
 
     <EditText
         android:id="@+id/newreplytext"

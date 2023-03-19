@@ -1,4 +1,4 @@
-package com.example.pulsa
+package com.example.pulsa.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -13,7 +13,10 @@ import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
 import com.amrdeveloper.treeview.TreeViewHolderFactory
+import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
+import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Reply
 
 const val NO_REPLY = -1L
 
