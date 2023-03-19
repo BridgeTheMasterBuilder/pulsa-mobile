@@ -7,7 +7,7 @@
 
         <variable
             name="listItem"
-            type="com.example.pulsa.objects.Reply" />
+            type="com.example.pulsa.Reply" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

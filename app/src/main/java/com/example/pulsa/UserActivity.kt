@@ -1,12 +1,8 @@
-package com.example.pulsa.activities
+package com.example.pulsa
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.pulsa.fragments.AccountPostsFragment
-import com.example.pulsa.fragments.AccountRepliesFragment
-import com.example.pulsa.fragments.EditAccountFragment
-import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityUserBinding
 
 class UserActivity : AppCompatActivity() {

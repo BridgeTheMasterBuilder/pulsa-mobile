@@ -1,6 +1,5 @@
-package com.example.pulsa.utils
+package com.example.pulsa
 
-import com.example.pulsa.objects.User
 import java.time.LocalDateTime
 
 object UserList {

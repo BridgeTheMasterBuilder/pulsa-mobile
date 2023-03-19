@@ -1,12 +1,10 @@
-package com.example.pulsa.activities
+package com.example.pulsa
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pulsa.utils.UserList
 import com.example.pulsa.databinding.ActivityRegisterBinding
-import com.example.pulsa.objects.User
 import java.time.LocalDateTime
 
 class RegisterActivity : AppCompatActivity() {

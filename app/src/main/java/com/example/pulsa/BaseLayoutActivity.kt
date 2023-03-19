@@ -1,4 +1,4 @@
-package com.example.pulsa.activities
+package com.example.pulsa
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,8 +9,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.pulsa.utils.LoggedIn
-import com.example.pulsa.R
 import com.example.pulsa.databinding.BaseLayoutBinding
 
 open class BaseLayoutActivity : AppCompatActivity() {
