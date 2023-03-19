@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import com.example.pulsa.databinding.ActivityMainBinding
+import com.example.pulsa.networking.NetworkManager
 
 class MainActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,6 +19,9 @@ class MainActivity : BaseLayoutActivity() {
         setContentView(binding.root)
 
         posts = PostService().posts
+
+        val response = Thread(BackgroundFetcher()).start()
+
         adapter = GenericRecyclerAdapter(
             posts,
             { post -> adapterOnClick(post) },
@@ -49,6 +53,13 @@ class MainActivity : BaseLayoutActivity() {
         val intent = Intent(this, PostActivity::class.java)
         intent.putExtra("post", post)
         startActivity(intent)
+    }
+
+    inner class BackgroundFetcher : Runnable {
+        override public fun run() {
+            val posts2 = NetworkManager().getPosts()
+            println(posts2)
+        }
     }
 
 }
