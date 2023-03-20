@@ -1,9 +1,7 @@
 package com.example.pulsa.networking
 
 import android.util.Log
-import com.example.pulsa.activities.MainActivity
-import com.example.pulsa.objects.Post
-import com.google.gson.Gson
+import com.example.pulsa.activities.BaseLayoutActivity
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
@@ -18,9 +16,9 @@ class NetworkManager {
     private val client: OkHttpClient = OkHttpClient()
     private lateinit var message: String
 
-    public fun getPosts(activity: MainActivity) {
+    public fun get(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
         val request: Request = Request.Builder()
-            .url(URL)
+            .url(URL + map["url"])
             .build()
 
         val call = client.newCall(request)
@@ -42,16 +40,14 @@ class NetworkManager {
                             json, typeOfT, context -> LocalDateTime.parse(json.asString)
                     })
                     .create()
-                val postsType = object : TypeToken<List<Post>>(){}.type
-                val posts = gson.fromJson<MutableList<Post>?>(response.body?.string(), postsType)
-                    .toMutableList()
+                val type = (map["type"] as TypeToken<*>)
+                val content = gson.fromJson(response.body?.string(), type)
                 if (response.isSuccessful) {
-                    activity.runOnUiThread{activity.displayPosts(posts)}
+                    activity.runOnUiThread{activity.resolveGet(content)}
                 } else {
                     println(message)
                 }
             }
         })
-        println("Called")
     }
 }

@@ -123,4 +123,8 @@ open class BaseLayoutActivity : AppCompatActivity() {
         }
 
     }
+
+    public open fun resolveGet(content: Any) {
+        return
+    }
 }

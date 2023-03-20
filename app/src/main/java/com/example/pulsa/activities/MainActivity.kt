@@ -11,6 +11,7 @@ import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityMainBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -19,7 +20,10 @@ class MainActivity : BaseLayoutActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runOnUiThread{ NetworkManager().getPosts(this) }
+        var map: HashMap<String, Any> = HashMap()
+        map["type"] = object: TypeToken<List<Post>>(){}
+        map["url"] = "/"
+        runOnUiThread{ NetworkManager().get(this, map) }
 
         val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -44,8 +48,8 @@ class MainActivity : BaseLayoutActivity() {
         }
     }
 
-    public fun displayPosts(postResponse: MutableList<Post>) {
-        posts = postResponse
+    override fun resolveGet(content: Any) {
+        posts = content as MutableList<Post>
 
         adapter = GenericRecyclerAdapter(
             posts,
