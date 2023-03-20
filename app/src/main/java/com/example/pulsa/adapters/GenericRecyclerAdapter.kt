@@ -7,6 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pulsa.BR
+import com.example.pulsa.objects.Post
+import com.example.pulsa.utils.DownloadImageTaskPost
 
 open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,
@@ -61,6 +63,7 @@ open class GenericRecyclerAdapter<T : Any>(
 
         fun bind(item: T) {
             binding.setVariable(BR.listItem, item)
+            DownloadImageTaskPost(binding, item as Post).execute(item.content.image)
             onClick?.run { itemView.setOnClickListener { onClick.invoke(item) } }
         }
     }
