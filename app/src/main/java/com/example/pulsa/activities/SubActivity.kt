@@ -1,3 +1,4 @@
+/*
 package com.example.pulsa.activities
 
 import android.app.Activity
@@ -13,8 +14,8 @@ import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.google.gson.reflect.TypeToken
 
-class MainActivity : BaseLayoutActivity() {
-    private lateinit var binding: ActivityMainBinding
+class SubActivity : BaseLayoutActivity() {
+    private lateinit var binding: ActivitySubBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
 
@@ -22,7 +23,7 @@ class MainActivity : BaseLayoutActivity() {
         super.onCreate(savedInstanceState)
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object: TypeToken<List<Post>>(){}
-        map["url"] = "/"
+        map["url"] = "/p/" + slug + "/"
         runOnUiThread{ NetworkManager().get(this, map) }
 
         val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
@@ -32,7 +33,7 @@ class MainActivity : BaseLayoutActivity() {
             }
         }
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySubBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -42,7 +43,7 @@ class MainActivity : BaseLayoutActivity() {
         })
 
         binding.newpostbtn.setOnClickListener {
-            val intent = Intent(this, SubIndexActivity::class.java)
+            val intent = Intent(this, NewPostActivity::class.java)
 
             resultLauncher.launch(intent)
         }
@@ -71,3 +72,4 @@ class MainActivity : BaseLayoutActivity() {
         println("Failed to load posts")
     }
 }
+*/

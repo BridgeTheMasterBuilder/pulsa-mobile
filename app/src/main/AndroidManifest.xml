@@ -14,9 +14,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Pulsa"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.SubIndexActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sub_index"
+            android:theme="@style/Theme.Pulsa.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false" />
