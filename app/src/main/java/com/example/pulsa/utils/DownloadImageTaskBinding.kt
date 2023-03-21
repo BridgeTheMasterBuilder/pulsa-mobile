@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
+import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.example.pulsa.databinding.ListItemBinding
 import com.example.pulsa.objects.Post
@@ -38,5 +39,8 @@ class DownloadImageTaskPost(binding: ViewDataBinding, item: Post) :
     override fun onPostExecute(result: Bitmap?) {
         val postImage = (binding as ListItemBinding).postImage
         postImage.setImageBitmap(result)
+        result ?.let {
+            postImage.visibility = View.VISIBLE
+        }
     }
 }

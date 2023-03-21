@@ -44,6 +44,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:contentDescription="image"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,16:9"
             app:layout_constraintEnd_toEndOf="parent"

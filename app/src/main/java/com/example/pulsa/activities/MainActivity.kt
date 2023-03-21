@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import com.example.pulsa.adapters.GenericRecyclerAdapter
-import com.example.pulsa.services.PostService
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityMainBinding
 import com.example.pulsa.networking.NetworkManager
