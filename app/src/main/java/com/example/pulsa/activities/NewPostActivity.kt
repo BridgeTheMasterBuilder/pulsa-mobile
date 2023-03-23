@@ -2,14 +2,12 @@ package com.example.pulsa.activities
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.OpenableColumns
 import android.view.View
 import androidx.core.app.ActivityCompat
@@ -17,10 +15,8 @@ import com.blankj.utilcode.util.UriUtils
 import com.example.pulsa.databinding.ActivityNewPostBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.*
-import java.io.File
+import com.google.gson.reflect.TypeToken
 import java.io.IOException
-import java.io.InputStream
-import kotlin.io.path.writeBytes
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val SELECT_PICTURE = 200
@@ -46,6 +42,8 @@ class NewPostActivity : BaseLayoutActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        verifyStoragePermissions(this);
 
         recordingPath = "${externalCacheDir?.absolutePath}/tempRecording.3gp"
         audioPath = "${externalCacheDir?.absolutePath}/tempAudio.3gp"
@@ -127,6 +125,25 @@ class NewPostActivity : BaseLayoutActivity() {
             startActivity(intent)
 
         }*/
+    }
+
+    private fun verifyStoragePermissions(activity: NewPostActivity) {
+        val permission =
+            ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            );
+        var permissions: Array<String> = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                permissions,
+                1
+            );
+        }
     }
 
     private fun recordButtonOnClick() {
@@ -211,8 +228,10 @@ class NewPostActivity : BaseLayoutActivity() {
         val sub = intent.getParcelableExtra<Sub>("sub")!!
 
         map["slug"] = sub.slug
+        map["type"] = object : TypeToken<Post>() {}
         map["title"] = binding.newposttitle.text.toString()
         map["text"] = binding.newposttext.text.toString()
+        map["url"] = "/p/${sub.slug}/newPost"
         map["image"] = UriUtils.uri2File(imageUri)
         map["audio"] = UriUtils.uri2File(audioUri)
         map["recording"] = UriUtils.uri2File(audioUri)
@@ -224,7 +243,7 @@ class NewPostActivity : BaseLayoutActivity() {
         runOnUiThread { NetworkManager().post(this, map) }
     }
 
-    fun get_filename_by_uri(uri : Uri) : String{
+    fun get_filename_by_uri(uri: Uri): String {
         contentResolver.query(uri, null, null, null, null).use { cursor ->
             cursor?.let {
                 val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -259,7 +278,8 @@ class NewPostActivity : BaseLayoutActivity() {
             SELECT_PICTURE -> {
                 data?.data?.let { image ->
                     imageUri = image
-                    imagePath = image.toString()
+                    imagePath =
+                        "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1666386282/xov6nkbsxf3hmhuqb3jn.png"
                     binding.imageView.visibility = View.VISIBLE
                     binding.imageView.apply {
                         visibility = View.VISIBLE
@@ -296,6 +316,8 @@ class NewPostActivity : BaseLayoutActivity() {
 
     override fun resolvePost(content: Any) {
         post = content as Post
+        println("WOOP WOOP")
+        println(post.title)
         val intent = intent
         intent.putExtra("post", post)
         setResult(Activity.RESULT_OK, intent)

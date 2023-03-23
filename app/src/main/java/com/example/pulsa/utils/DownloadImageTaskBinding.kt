@@ -4,9 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
-import android.view.View
 import androidx.databinding.ViewDataBinding
-import com.example.pulsa.databinding.ListItemBinding
 import com.example.pulsa.objects.Post
 import java.io.InputStream
 import java.net.URL
@@ -35,12 +33,12 @@ class DownloadImageTaskPost(binding: ViewDataBinding, item: Post) :
         return mIcon11
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onPostExecute(result: Bitmap?) {
-        val postImage = (binding as ListItemBinding).postImage
-        postImage.setImageBitmap(result)
-        result ?.let {
-            postImage.visibility = View.VISIBLE
-        }
-    }
+    // @Deprecated("Deprecated in Java")
+    // override fun onPostExecute(result: Bitmap?) {
+    //     val postImage = (binding as ListItemBinding).postImage
+    //     postImage.setImageBitmap(result)
+    //     result ?.let {
+    //         postImage.visibility = View.VISIBLE
+    //     }
+    // }
 }

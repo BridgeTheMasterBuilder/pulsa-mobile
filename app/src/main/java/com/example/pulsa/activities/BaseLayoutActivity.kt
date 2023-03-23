@@ -9,9 +9,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.pulsa.utils.LoggedIn
 import com.example.pulsa.R
 import com.example.pulsa.databinding.BaseLayoutBinding
+import com.example.pulsa.utils.LoggedIn
 
 open class BaseLayoutActivity : AppCompatActivity() {
 
@@ -51,6 +51,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
 
         binding.navViewMenu.setNavigationItemSelectedListener {
+            val intent = Intent(this, NewPostActivity::class.java)
             when (it.itemId) {
                 R.id.item1 -> Toast.makeText(
                     applicationContext,

@@ -85,12 +85,12 @@
         android:visibility="gone" />
 
     <Button
+        android:id="@+id/submitbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:id="@+id/submitbutton" />
+        android:text="Submit" />
 
 
 </RelativeLayout>

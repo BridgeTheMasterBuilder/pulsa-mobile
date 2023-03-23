@@ -1,6 +1,5 @@
 package com.example.pulsa.networking
 
-import android.content.ContentResolver
 import android.util.Log
 import com.example.pulsa.activities.BaseLayoutActivity
 import com.google.gson.GsonBuilder
@@ -16,15 +15,18 @@ import java.time.LocalDateTime
 
 class NetworkManager {
     private val LOG = "OkHttp"
-    private val URL = "https://pulsa-rest-production.up.railway.app/api/v1"
+    private val URL = "http://10.0.2.2:8080/api/v1"
+
+    // private val URL = "https://pulsa-rest-production.up.railway.app/api/v1"
     private val client: OkHttpClient = OkHttpClient()
     private lateinit var message: String
 
     fun get(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
+        println("url is ${URL + map["url"]}")
         val request: Request = Request.Builder()
             .url(URL + map["url"])
             .build()
-
+        println("req: " + request)
         val call = client.newCall(request)
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -38,14 +40,14 @@ class NetworkManager {
 
                 val gson = GsonBuilder().registerTypeAdapter(
                     LocalDateTime::class.java,
-                    JsonDeserializer<Any?> {
-                            json, typeOfT, context -> LocalDateTime.parse(json.asString)
+                    JsonDeserializer<Any?> { json, typeOfT, context ->
+                        LocalDateTime.parse(json.asString)
                     })
                     .create()
                 val type = (map["type"] as TypeToken<*>)
                 val content = gson.fromJson(response.body?.string(), type)
                 if (response.isSuccessful) {
-                    activity.runOnUiThread{activity.resolveGet(content)}
+                    activity.runOnUiThread { activity.resolveGet(content) }
                 } else {
                     println(message)
                 }
@@ -58,13 +60,21 @@ class NetworkManager {
             .addFormDataPart("title", map["title"] as String)
             .addFormDataPart("text", map["text"] as String)
             .addFormDataPart("slug", map["slug"] as String)
-            .addFormDataPart("image", "image1.jpg",
-                (map["image"] as File).asRequestBody((map["imageType"] as String).toMediaTypeOrNull()))
-            .addFormDataPart("recording", "recording1.mp3",
-                (map["recording"] as File).asRequestBody((map["recordingType"] as String).toMediaTypeOrNull()))
-            .addFormDataPart("audio", "audio1.mp3",
-                (map["audio"] as File).asRequestBody((map["audioType"] as String).toMediaTypeOrNull()))
+            .addFormDataPart(
+                "image", "image1.jpg",
+                (map["image"] as File).asRequestBody((map["imageType"] as String).toMediaTypeOrNull())
+            )
+            .addFormDataPart(
+                "recording", "recording1.mp3",
+                (map["recording"] as File).asRequestBody((map["recordingType"] as String).toMediaTypeOrNull())
+            )
+            .addFormDataPart(
+                "audio", "audio1.mp3",
+                (map["audio"] as File).asRequestBody((map["audioType"] as String).toMediaTypeOrNull())
+            )
             .build()
+        println("request url: ${URL + map["url"]}")
+        println("Request body: ${requestBody}")
         val request: Request = Request.Builder()
             .url(URL + map["url"])
             .post(requestBody)
@@ -83,14 +93,15 @@ class NetworkManager {
 
                 val gson = GsonBuilder().registerTypeAdapter(
                     LocalDateTime::class.java,
-                    JsonDeserializer<Any?> {
-                            json, typeOfT, context -> LocalDateTime.parse(json.asString)
+                    JsonDeserializer<Any?> { json, typeOfT, context ->
+                        LocalDateTime.parse(json.asString)
                     })
                     .create()
                 val type = (map["type"] as TypeToken<*>)
                 val content = gson.fromJson(response.body?.string(), type)
                 if (response.isSuccessful) {
-                    activity.runOnUiThread{activity.resolvePost(content)}
+                    println("response sucess")
+                    activity.runOnUiThread { activity.resolvePost(content) }
                 } else {
                     println(message)
                 }
