@@ -22,11 +22,9 @@ class NetworkManager {
     private lateinit var message: String
 
     fun get(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
-        println("url is ${URL + map["url"]}")
         val request: Request = Request.Builder()
             .url(URL + map["url"])
             .build()
-        println("req: " + request)
         val call = client.newCall(request)
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -56,23 +54,39 @@ class NetworkManager {
     }
 
     fun post(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
-        val requestBody: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("title", map["title"] as String)
-            .addFormDataPart("text", map["text"] as String)
-            .addFormDataPart("slug", map["slug"] as String)
-            .addFormDataPart(
-                "image", "image1.jpg",
-                (map["image"] as File).asRequestBody((map["imageType"] as String).toMediaTypeOrNull())
-            )
-            .addFormDataPart(
-                "recording", "recording1.mp3",
-                (map["recording"] as File).asRequestBody((map["recordingType"] as String).toMediaTypeOrNull())
-            )
-            .addFormDataPart(
-                "audio", "audio1.mp3",
-                (map["audio"] as File).asRequestBody((map["audioType"] as String).toMediaTypeOrNull())
-            )
-            .build()
+        val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+
+        map["title"]?.let { requestBodyBuilder.addFormDataPart("title", it as String) }
+        map["text"]?.let { requestBodyBuilder.addFormDataPart("text", it as String) }
+        (map["image"] as? File)?.let {
+            map["imageType"]?.let { imageType ->
+                requestBodyBuilder.addFormDataPart(
+                    "image",
+                    "image1.jpg",
+                    it.asRequestBody((imageType as String).toMediaTypeOrNull())
+                )
+            }
+        }
+        (map["recording"] as? File)?.let {
+            map["recordingType"]?.let { recordingType ->
+                requestBodyBuilder.addFormDataPart(
+                    "recording",
+                    "recording1.mp3",
+                    it.asRequestBody((recordingType as String).toMediaTypeOrNull())
+                )
+            }
+        }
+        (map["audio"] as? File)?.let {
+            map["audioType"]?.let { audioType ->
+                requestBodyBuilder.addFormDataPart(
+                    "audio",
+                    "audio1.mp3",
+                    it.asRequestBody((audioType as String).toMediaTypeOrNull()))
+            }
+        }
+
+        val requestBody = requestBodyBuilder.build()
+
         println("request url: ${URL + map["url"]}")
         println("Request body: ${requestBody}")
         val request: Request = Request.Builder()

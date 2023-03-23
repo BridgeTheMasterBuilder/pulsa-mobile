@@ -46,27 +46,30 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/audiobutton"
         android:layout_centerHorizontal="true"
-        android:text="Record audio" />
+        android:text="Record audio"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/playaudiobutton"
         style="@style/Widget.Material3.Button.Icon"
+        android:tag="playing"
         android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/newposttext"
         android:layout_toRightOf="@id/audiobutton"
         android:visibility="gone"
-        app:icon="@android:drawable/ic_media_play" />
+        app:icon="@drawable/icons8_play_96" />
 
     <Button
         android:id="@+id/playrecordingbutton"
         style="@style/Widget.Material3.Button.Icon"
+        android:tag="playing"
         android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/audiobutton"
         android:layout_toRightOf="@id/recordbutton"
         android:visibility="gone"
-        app:icon="@android:drawable/ic_media_play" />
+        app:icon="@drawable/icons8_play_96" />
 
     <Button
         android:id="@+id/imagebutton"
@@ -90,7 +93,26 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:text="Submit" />
+        android:text="Submit"
+        android:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/loadingrecording"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/audiobutton"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/submitting"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/submitbutton"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

@@ -1,6 +1,9 @@
 package com.example.pulsa.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +14,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.pulsa.BR
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
+import com.example.pulsa.utils.glideRequestListener
+import okhttp3.HttpUrl.Companion.toHttpUrl
+
 
 open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,
@@ -70,6 +79,7 @@ open class GenericRecyclerAdapter<T : Any>(
         if (URLUtil.isValidUrl(image))
             Glide.with(context)
                 .load(image)
+                .addListener(glideRequestListener)
                 .into(holder.imageView)
                 .view.visibility = View.VISIBLE
     }

@@ -20,6 +20,7 @@ import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
+import com.example.pulsa.utils.glideRequestListener
 
 const val NO_REPLY = -1L
 
@@ -89,6 +90,7 @@ class PostActivity : BaseLayoutActivity() {
         if (URLUtil.isValidUrl(post.content.image))
             Glide.with(this)
                 .load(post.content.image)
+                .listener(glideRequestListener)
                 .into(findViewById(binding.postpageImage.id))
                 .view.visibility = View.VISIBLE
 
@@ -154,6 +156,7 @@ class PostActivity : BaseLayoutActivity() {
                 if (URLUtil.isValidUrl(reply.content.image))
                     Glide.with(this.activity)
                         .load(reply.content.image)
+                        .listener(glideRequestListener)
                         .into(image)
                         .view.visibility = View.VISIBLE
             }
