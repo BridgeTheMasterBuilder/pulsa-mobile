@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="listItem"
+            name="postItem"
             type="com.example.pulsa.objects.Post" />
     </data>
 
@@ -21,8 +21,8 @@
             android:id="@+id/post_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="List Item"
-            android:text="@{listItem.title}"
+            android:hint="Post Item"
+            android:text="@{postItem.title}"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -34,12 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{listItem.content.text}"
+            android:text="@{postItem.content.text}"
             app:layout_constraintTop_toBottomOf="@+id/post_title"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
-            android:id="@+id/post_image"
+            android:id="@+id/image"
+            android:tag="image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -51,8 +52,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_text"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/pulsa" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--

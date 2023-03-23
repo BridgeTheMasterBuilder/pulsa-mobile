@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,29 +10,87 @@
         android:id="@+id/newposttitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Title"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="text"
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/newposttext"
+        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_below="@id/newposttitle"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="text"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
+    <Button
+        android:id="@+id/audiobutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="text"
-        android:layout_below="@id/newposttitle"
-        android:layout_centerHorizontal="true" />
+        android:layout_weight="1"
+        android:layout_below="@id/newposttext"
+        android:layout_centerHorizontal="true"
+        android:text="Attach audio file" />
+
+    <Button
+        android:id="@+id/recordbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/audiobutton"
+        android:layout_centerHorizontal="true"
+        android:text="Record audio" />
+
+    <Button
+        android:id="@+id/playaudiobutton"
+        style="@style/Widget.Material3.Button.Icon"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newposttext"
+        android:layout_toRightOf="@id/audiobutton"
+        android:visibility="gone"
+        app:icon="@android:drawable/ic_media_play" />
+
+    <Button
+        android:id="@+id/playrecordingbutton"
+        style="@style/Widget.Material3.Button.Icon"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/audiobutton"
+        android:layout_toRightOf="@id/recordbutton"
+        android:visibility="gone"
+        app:icon="@android:drawable/ic_media_play" />
+
+    <Button
+        android:id="@+id/imagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recordbutton"
+        android:layout_centerHorizontal="true"
+        android:text="Attach image" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imagebutton"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
-        android:layout_below="@id/newposttext"
+        android:text="Submit"
+        android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:id="@+id/postbutton" />
+        android:id="@+id/submitbutton" />
 
 
 </RelativeLayout>

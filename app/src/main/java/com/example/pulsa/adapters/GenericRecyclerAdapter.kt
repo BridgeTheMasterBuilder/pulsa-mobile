@@ -1,20 +1,27 @@
 package com.example.pulsa.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
+import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pulsa.BR
 import com.example.pulsa.objects.Post
-import com.example.pulsa.utils.DownloadImageTaskPost
+import com.example.pulsa.objects.Sub
 
 open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,
     private val onClick: ((T) -> Unit)?,
     @LayoutRes val layoutId: Int
 ) : RecyclerView.Adapter<GenericRecyclerAdapter.GenericViewHolder<T>>() {
+
+    private lateinit var context: Context
 
     fun swapList(list: MutableList<T>) {
         this.items.clear()
@@ -38,21 +45,33 @@ open class GenericRecyclerAdapter<T : Any>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder<T> {
+        context = parent.context
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context),
+            LayoutInflater.from(context),
             layoutId,
             parent,
             false
         )
 
-        onClick?.let { return GenericViewHolder(binding, onClick) }
-        return GenericViewHolder(binding, null)
+        return GenericViewHolder(binding, onClick)
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: GenericViewHolder<T>, position: Int) {
         holder.bind(items[position])
+
+        val image = when(val item = items[position]) {
+            is Post -> item.content.image
+            is Sub -> item.image
+            else -> ""
+        }
+
+        if (URLUtil.isValidUrl(image))
+            Glide.with(context)
+                .load(image)
+                .into(holder.imageView)
+                .view.visibility = View.VISIBLE
     }
 
     class GenericViewHolder<T>(
@@ -60,11 +79,16 @@ open class GenericRecyclerAdapter<T : Any>(
         private val onClick: ((T) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        val imageView: ImageView = binding.root.findViewWithTag("image")
 
         fun bind(item: T) {
-            binding.setVariable(BR.listItem, item)
-            DownloadImageTaskPost(binding, item as Post).execute(item.content.image)
-            onClick?.run { itemView.setOnClickListener { onClick.invoke(item) } }
+            when (item) {
+                is Post -> binding.setVariable(BR.postItem, item)
+                is Sub -> binding.setVariable(BR.subItem, item)
+            }
+            onClick?.let { listener ->
+                itemView.setOnClickListener { listener(item) }
+            }
         }
     }
 }

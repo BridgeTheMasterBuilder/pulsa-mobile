@@ -1,17 +1,16 @@
-/*
 package com.example.pulsa.activities
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.pulsa.adapters.GenericRecyclerAdapter
-import com.example.pulsa.services.PostService
 import com.example.pulsa.R
-import com.example.pulsa.databinding.ActivityMainBinding
+import com.example.pulsa.databinding.ActivitySubBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Sub
 import com.google.gson.reflect.TypeToken
 
 class SubActivity : BaseLayoutActivity() {
@@ -21,17 +20,12 @@ class SubActivity : BaseLayoutActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sub: Sub = intent.getParcelableExtra("sub")!!
+        val slug = sub.slug
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object: TypeToken<List<Post>>(){}
-        map["url"] = "/p/" + slug + "/"
+        map["url"] = "/p/${slug}/"
         runOnUiThread{ NetworkManager().get(this, map) }
-
-        val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val post: Post = result.data?.getParcelableExtra("post")!!
-                adapter.addItem(post)
-            }
-        }
 
         binding = ActivitySubBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,9 +36,16 @@ class SubActivity : BaseLayoutActivity() {
             }
         })
 
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val post: Post = result.data?.getParcelableExtra("post")!!
+                adapter.addItem(post)
+            }
+        }
+
         binding.newpostbtn.setOnClickListener {
             val intent = Intent(this, NewPostActivity::class.java)
-
+            intent.putExtra("sub", sub)
             resultLauncher.launch(intent)
         }
     }
@@ -55,7 +56,7 @@ class SubActivity : BaseLayoutActivity() {
         adapter = GenericRecyclerAdapter(
             posts,
             { post -> adapterOnClick(post) },
-            R.layout.list_item
+            R.layout.post_item
         )
         binding.recyclerView.adapter = adapter
     }
@@ -72,4 +73,3 @@ class SubActivity : BaseLayoutActivity() {
         println("Failed to load posts")
     }
 }
-*/

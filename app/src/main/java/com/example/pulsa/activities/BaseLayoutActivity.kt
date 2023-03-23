@@ -127,4 +127,8 @@ open class BaseLayoutActivity : AppCompatActivity() {
     public open fun resolveGet(content: Any) {
         return
     }
+
+    public open fun resolvePost(content: Any) {
+        return
+    }
 }

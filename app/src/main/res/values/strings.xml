@@ -3,6 +3,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="newPostButton">Create New Post</string>
+    <string name="allSubsButton">See All Subs</string>
     <string name="replyButton">Create Reply</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_sub_index">SubIndexActivity</string>
@@ -97,4 +98,5 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_scrolling">SubIndexActivity</string>
+    <string name="title_activity_sub">SubActivity</string>
 </resources>

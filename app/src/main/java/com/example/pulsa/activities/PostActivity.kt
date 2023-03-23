@@ -4,20 +4,22 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
 import com.amrdeveloper.treeview.TreeViewHolderFactory
+import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
-import com.example.pulsa.utils.DownloadImageTask
 
 const val NO_REPLY = -1L
 
@@ -84,8 +86,11 @@ class PostActivity : BaseLayoutActivity() {
         setContentView(binding.root)
 
         val post: Post = intent.getParcelableExtra("post")!!
-        val image = post.content.image
-        DownloadImageTask(findViewById(binding.postpageImage.id)).execute(image)
+        if (URLUtil.isValidUrl(post.content.image))
+            Glide.with(this)
+                .load(post.content.image)
+                .into(findViewById(binding.postpageImage.id))
+                .view.visibility = View.VISIBLE
 
         this.post = post
         replies = post.replies
@@ -144,11 +149,14 @@ class PostActivity : BaseLayoutActivity() {
             image.visibility = View.GONE
 
             text.text = reply.content.text
-//            if (reply.content.image != "") {
-//                Toast.makeText(activity, "${reply.content.image}", Toast.LENGTH_SHORT).show()
-//                image.setImageURI(Uri.parse(reply.content.image))
-//                image.visibility = View.VISIBLE
-//            }
+            if (reply.content.image != "") {
+                Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
+                if (URLUtil.isValidUrl(reply.content.image))
+                    Glide.with(this.activity)
+                        .load(reply.content.image)
+                        .into(image)
+                        .view.visibility = View.VISIBLE
+            }
 
             itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
                 val intent = Intent(activity, NewReplyActivity::class.java)
