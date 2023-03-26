@@ -14,7 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.UriUtils
-import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityNewPostBinding
 import com.example.pulsa.networking.NetworkManager
@@ -23,7 +22,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.IOException
-import java.sql.Blob
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val SELECT_PICTURE = 200
@@ -170,8 +168,9 @@ class NewPostActivity : BaseLayoutActivity() {
             setOutputFile(recordingPath)
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
-            try { prepare() }
-            catch (e: IOException) {
+            try {
+                prepare()
+            } catch (e: IOException) {
                 val log = "MediaRecorder, $recordingPath"
                 val message = e.message.toString()
                 Log.e(log, message)
@@ -251,7 +250,7 @@ class NewPostActivity : BaseLayoutActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        println("ACTIVITY RESULT LAUNCHER ACTIVATED IN NEWPOSTACTIVITY")
         if (resultCode != RESULT_OK) return
 
         when (requestCode) {

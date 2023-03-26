@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pulsa.utils.UserList
 import com.example.pulsa.databinding.ActivityRegisterBinding
 import com.example.pulsa.objects.User
+import com.example.pulsa.utils.UserList
 import java.time.LocalDateTime
 
 class RegisterActivity : AppCompatActivity() {
@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
                 password.toString().isNotBlank()
             ) {
                 for (user in UserList.users) {
-                    if (user.userName.equals(username.toString())) {
+                    if (user.username.equals(username.toString())) {
                         Toast.makeText(this, "Username unavailable", Toast.LENGTH_SHORT).show()
                         break
                     } else if (user.email.equals(email.toString())) {
@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
                         )
                         UserList.users.add(newuser)
                         for (user in UserList.users) {
-                            println("++++++++++++++++++++++" + user.userName.toString())
+                            println("++++++++++++++++++++++" + user.username.toString())
                         }
 
                         val i = Intent(this, LoginActivity::class.java)

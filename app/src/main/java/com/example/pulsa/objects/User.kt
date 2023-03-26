@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Parcelize
 data class User(
     var user_id: Long,
-    var userName: String,
+    var username: String,
     var password: String,
     var realName: String,
     var avatar: String,

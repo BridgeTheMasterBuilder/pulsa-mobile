@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pulsa.databinding.ActivityLoginBinding
 import com.example.pulsa.utils.LoggedIn
 import com.example.pulsa.utils.UserList
-import com.example.pulsa.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
@@ -20,17 +20,17 @@ class LoginActivity : AppCompatActivity() {
 
 
         for (user in UserList.users) {
-            println("----------------------" + user.userName)
+            println("----------------------" + user.username)
         }
         binding.loginpagebutton.setOnClickListener {
             if (username.toString().isNotBlank() &&
                 password.toString().isNotBlank()
             ) {
                 for (user in UserList.users) {
-                    println("username: ${user.userName}       password:${user.password}")
+                    println("username: ${user.username}       password:${user.password}")
                     println("username: ${username.text.toString()}       password:${password.text.toString()}")
-                    println("User of list: ${user.userName}  --- Entered: ${username.text.toString()} ----> Equals?${user.userName == username.text.toString()}")
-                    if (user.userName == username.text.toString()) {
+                    println("User of list: ${user.username}  --- Entered: ${username.text.toString()} ----> Equals?${user.username == username.text.toString()}")
+                    if (user.username == username.text.toString()) {
                         if (user.password == password.text.toString()) {
                             LoggedIn.setLoggedIn(true)
                             LoggedIn.setUser(user)

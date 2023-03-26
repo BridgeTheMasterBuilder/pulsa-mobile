@@ -6,16 +6,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.blankj.utilcode.util.UriUtils
 import com.example.pulsa.databinding.ActivityNewReplyBinding
-import com.example.pulsa.objects.Content
-import com.example.pulsa.objects.Reply
-import com.example.pulsa.objects.User
+import com.example.pulsa.networking.NetworkManager
+import com.example.pulsa.objects.*
+import com.google.gson.reflect.TypeToken
 import java.io.IOException
-import java.time.LocalDateTime
 
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -26,6 +27,8 @@ class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
     private lateinit var mediaRecorder: MediaRecorder
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var reply: Reply
+    private lateinit var imageUri: Uri
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private lateinit var fileName: String
     private var recording = false
@@ -142,49 +145,21 @@ class NewReplyActivity : BaseLayoutActivity() {
     }
 
     private fun postButtonOnClick() {
-        val text = binding.newreplytext.text.toString()
-        val user = User(
-            1,
-            "Anonymous",
-            "",
-            "Anonymous",
-            "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
-            "",
-            mutableListOf(),
-            mutableListOf(),
-            LocalDateTime.now(),
-            LocalDateTime.now()
-        )
+        val map: HashMap<String, Any> = HashMap()
 
-        val intent = intent
-        val reply = Reply(
-            35,
-            Content(
-                36,
-                text,
-                imagePath,
-                "test",
-                "recording",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-            ),
-            user,
-            intent.getParcelableExtra("sub")!!,
-            0,
-            mutableListOf(),
-            mutableListOf(),
-            LocalDateTime.now(),
-            LocalDateTime.now()
-        )
+        val post = intent.getParcelableExtra<Post>("post")!!
+        println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
+        println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
+        map["url"] = "/p/${post.sub.slug}/${post.postId}"
+        map["type"] = object : TypeToken<Reply>() {}
+        map["text"] = binding.newreplytext.text.toString()
 
-        if (intent.getLongExtra("replyId", NO_REPLY) != NO_REPLY) {
-            intent.putExtra("nestedReply", reply)
-        } else {
-            intent.putExtra("reply", reply)
+        if (this::imageUri.isInitialized) {
+            map["image"] = UriUtils.uri2File(imageUri)
+            map["imageType"] = this.contentResolver.getType(imageUri).toString()
         }
 
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        runOnUiThread { NetworkManager().post(this, map) }
     }
 
     override fun onRequestPermissionsResult(
@@ -204,14 +179,14 @@ class NewReplyActivity : BaseLayoutActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        println("ACTIVITY RESULT LAUNCHER ACTIVATED IN NEWPOSTACTIVITY")
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 val image = data?.data
 
                 image?.let {
                     imagePath = it.toString()
-
+                    imageUri = image
                     binding.imageView.visibility = View.VISIBLE
 
                     binding.imageView.setImageURI(it)
@@ -243,5 +218,15 @@ class NewReplyActivity : BaseLayoutActivity() {
 
         if (this::mediaRecorder.isInitialized) mediaRecorder.stop()
         if (this::mediaPlayer.isInitialized) mediaPlayer.stop()
+    }
+
+    override fun resolvePost(content: Any) {
+        reply = content as Reply
+        val intent = intent
+        val pos = intent.putExtra("reply", reply)
+        println("SETTING RESULT AFTER GETTING REPLY")
+        setResult(Activity.RESULT_OK, intent)
+        println("RESULT SET NOW CALLING FINISH")
+        finish()
     }
 }

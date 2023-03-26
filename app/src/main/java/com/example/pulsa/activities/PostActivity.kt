@@ -28,6 +28,7 @@ class PostActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityPostBinding
     private lateinit var adapter: TreeViewAdapter
     private lateinit var post: Post
+    private var postPosition = 0;
     private lateinit var replies: MutableList<Reply>
     private lateinit var factory: TreeViewHolderFactory
     private lateinit var roots: MutableList<TreeNode>
@@ -57,7 +58,7 @@ class PostActivity : BaseLayoutActivity() {
 
     private fun findNodeById(roots: MutableList<TreeNode>, id: Long): TreeNode? {
         fun aux(root: TreeNode, id: Long): TreeNode? {
-            if ((root.value as Reply).reply_id == id)
+            if ((root.value as Reply).replyId == id)
                 return root
             else if (root.children.size > 0) {
                 for (child in root.children) {
@@ -95,6 +96,7 @@ class PostActivity : BaseLayoutActivity() {
                 .view.visibility = View.VISIBLE
 
         this.post = post
+        postPosition = intent.getIntExtra("pos", -1)
         replies = post.replies
         factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
         adapter = TreeViewAdapter(factory)
@@ -110,9 +112,12 @@ class PostActivity : BaseLayoutActivity() {
         val resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    val reply: Reply? = result.data?.getParcelableExtra("reply")
-
-                    reply?.let { replies.add(reply) }
+                    val reply: Reply? = result.data?.getParcelableExtra("reply")!!
+                    println("Recieving reply ${reply?.content?.text}")
+                    reply?.let { it ->
+                        replies.add(reply)
+                        post.replies.add(reply)
+                    }
 
                     val nestedReply: Reply? = result.data?.getParcelableExtra("nestedReply")
 
@@ -122,11 +127,30 @@ class PostActivity : BaseLayoutActivity() {
                         val replies = (node?.value as Reply).replies
 
                         replies.add(nestedReply)
+                        println("nestedReply added to replies")
                     }
 
+
+                    println("replies array updated on post")
+                    post.replies.forEach { it ->
+                        println("${it.replyId}: ${it.content.text}")
+                    }
+
+                    println("New replies array content")
+                    post.replies.forEach { it ->
+                        println("${it.replyId}: ${it.content.text}")
+                    }
                     roots = createReplyTree(replies)
                     adapter.updateTreeNodes(roots)
                     adapter.expandAll()
+
+                    println("post with new reply added in intent as extra")
+                    val intent = intent
+                    intent.putExtra("postWithReply", post)
+                    intent.putExtra("pos", postPosition)
+                    println("added to result")
+                    setResult(Activity.RESULT_OK, intent)
+                    println("Success setting result ok")
                 }
             }
 
@@ -134,8 +158,9 @@ class PostActivity : BaseLayoutActivity() {
 
         binding.replybtn.setOnClickListener {
             val intent = Intent(this, NewReplyActivity::class.java)
-            intent.putExtra("sub", this.post.sub)
+            intent.putExtra("post", this.post)
             resultLauncher.launch(intent)
+
         }
     }
 
@@ -164,7 +189,7 @@ class PostActivity : BaseLayoutActivity() {
             itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
                 val intent = Intent(activity, NewReplyActivity::class.java)
                 intent.putExtra("sub", activity.post.sub)
-                intent.putExtra("replyId", (node.value as Reply).reply_id)
+                intent.putExtra("replyId", (node.value as Reply).replyId)
                 activity.launcher.launch(intent)
             }
         }

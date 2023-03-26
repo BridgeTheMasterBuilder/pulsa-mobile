@@ -19,9 +19,9 @@ class SubIndexActivity : BaseLayoutActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var map: HashMap<String, Any> = HashMap()
-        map["type"] = object: TypeToken<List<Sub>>(){}
+        map["type"] = object : TypeToken<List<Sub>>() {}
         map["url"] = "/p/"
-        runOnUiThread{ NetworkManager().get(this, map) }
+        runOnUiThread { NetworkManager().get(this, map) }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -38,15 +38,16 @@ class SubIndexActivity : BaseLayoutActivity() {
 
         adapter = GenericRecyclerAdapter(
             subs,
-            { sub -> adapterOnClick(sub) },
+            { sub, position -> adapterOnClick(sub, position) },
             R.layout.sub_item
         )
         binding.recyclerView.adapter = adapter
     }
 
-    private fun adapterOnClick(sub: Sub) {
+    private fun adapterOnClick(sub: Sub, position: Int) {
         val intent = Intent(this, SubActivity::class.java)
         intent.putExtra("sub", sub)
+        intent.putExtra("pos", position)
         startActivity(intent)
     }
 

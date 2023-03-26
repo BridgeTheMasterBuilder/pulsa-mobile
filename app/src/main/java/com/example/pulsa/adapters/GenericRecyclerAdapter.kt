@@ -20,7 +20,7 @@ import com.example.pulsa.utils.glideRequestListener
 
 open class GenericRecyclerAdapter<T : Any>(
     private var items: MutableList<T>,
-    private val onClick: ((T) -> Unit)?,
+    private val onClick: ((T, Int) -> Unit)?,
     @LayoutRes val layoutId: Int
 ) : RecyclerView.Adapter<GenericRecyclerAdapter.GenericViewHolder<T>>() {
 
@@ -62,9 +62,8 @@ open class GenericRecyclerAdapter<T : Any>(
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: GenericViewHolder<T>, position: Int) {
-        holder.bind(items[position])
-
-        val image = when(val item = items[position]) {
+        holder.bind(items[position], position)
+        val image = when (val item = items[position]) {
             is Post -> item.content.image
             is Sub -> item.image
             else -> ""
@@ -87,18 +86,18 @@ open class GenericRecyclerAdapter<T : Any>(
 
     class GenericViewHolder<T>(
         private val binding: ViewDataBinding,
-        private val onClick: ((T) -> Unit)?
+        private val onClick: ((T, position: Int) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         val imageView: ImageView = binding.root.findViewWithTag("image")
 
-        fun bind(item: T) {
+        fun bind(item: T, position: Int) {
             when (item) {
                 is Post -> binding.setVariable(BR.postItem, item)
                 is Sub -> binding.setVariable(BR.subItem, item)
             }
             onClick?.let { listener ->
-                itemView.setOnClickListener { listener(item) }
+                itemView.setOnClickListener { listener(item, position) }
             }
         }
     }
