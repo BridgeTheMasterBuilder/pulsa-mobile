@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.pulsa.BR
+import com.example.pulsa.databinding.PostItemBindingImpl
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
 import com.example.pulsa.utils.glideRequestListener
@@ -69,6 +70,26 @@ open class GenericRecyclerAdapter<T : Any>(
             else -> ""
         }
 
+        val avatar = when (val item = items[position]) {
+            is Post -> item.creator.avatar
+            else -> ""
+        }
+
+        if (URLUtil.isValidUrl(avatar)) {
+            val circularProgressDrawable = CircularProgressDrawable(context)
+            circularProgressDrawable.strokeWidth = 3f
+            circularProgressDrawable.centerRadius = 18f
+            circularProgressDrawable.start()
+
+            holder.avatar?.let {
+                Glide.with(context)
+                    .load(avatar)
+                    .placeholder(circularProgressDrawable)
+                    .listener(glideRequestListener)
+                    .into(it)
+            }
+        }
+
         if (URLUtil.isValidUrl(image)) {
             val circularProgressDrawable = CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 15f
@@ -90,12 +111,18 @@ open class GenericRecyclerAdapter<T : Any>(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         val imageView: ImageView = binding.root.findViewWithTag("image")
+        var avatar: ImageView? = null
 
         fun bind(item: T, position: Int) {
             when (item) {
                 is Post -> binding.setVariable(BR.postItem, item)
                 is Sub -> binding.setVariable(BR.subItem, item)
             }
+
+            if (binding is PostItemBindingImpl) {
+                avatar = binding.root.findViewWithTag("avatar")
+            }
+
             onClick?.let { listener ->
                 itemView.setOnClickListener { listener(item, position) }
             }

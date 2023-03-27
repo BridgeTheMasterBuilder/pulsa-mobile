@@ -127,9 +127,7 @@ class NewReplyActivity : BaseLayoutActivity() {
         reply = content as Reply
         val intent = intent
         val pos = intent.putExtra("reply", reply)
-        println("SETTING RESULT AFTER GETTING REPLY")
         setResult(Activity.RESULT_OK, intent)
-        println("RESULT SET NOW CALLING FINISH")
         finish()
     }
 

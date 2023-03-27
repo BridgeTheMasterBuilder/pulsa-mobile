@@ -19,8 +19,6 @@ import java.io.File
 import java.io.IOException
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
-private const val SELECT_PICTURE = 200
-private const val SELECT_AUDIO = 2
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOP = R.drawable.icons8_stop_96
 private const val MEDIA_PLAYING = "playing"
