@@ -25,7 +25,7 @@ class MainActivity : BaseLayoutActivity() {
                 this,
                 hashMapOf(
                     "type" to object : TypeToken<List<Post>>() {},
-                    "url" to "/"
+                    "url" to ""
                 )
             )
         }
@@ -66,7 +66,7 @@ class MainActivity : BaseLayoutActivity() {
                     posts[pos] = post
                 }
                 println("post size after added to adapter:${posts.size}")
-                
+
             }
         }
 

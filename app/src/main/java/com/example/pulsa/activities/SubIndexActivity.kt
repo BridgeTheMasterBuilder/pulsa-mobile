@@ -20,7 +20,7 @@ class SubIndexActivity : BaseLayoutActivity() {
         super.onCreate(savedInstanceState)
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object : TypeToken<List<Sub>>() {}
-        map["url"] = "/p/"
+        map["url"] = "p/"
         runOnUiThread { NetworkManager().get(this, map) }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

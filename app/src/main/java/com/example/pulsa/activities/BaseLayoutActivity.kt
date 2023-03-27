@@ -78,10 +78,12 @@ open class BaseLayoutActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.login -> {
                     val i = Intent(this, LoginActivity::class.java)
+                    closeUserMenu()
                     startActivity(i)
                 }
                 R.id.register -> {
                     val i = Intent(this, RegisterActivity::class.java)
+                    closeUserMenu()
                     startActivity(i)
                 }
             }
@@ -89,11 +91,13 @@ open class BaseLayoutActivity : AppCompatActivity() {
         }
     }
 
+    private fun closeUserMenu() {
+        binding.drawerLayout.closeDrawer(GravityCompat.END)
+    }
+
     private fun setupUserMenu() {
         binding.myToolbar.userMenu.setOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) binding.drawerLayout.closeDrawer(
-                GravityCompat.END
-            )
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) closeUserMenu()
             else binding.drawerLayout.openDrawer(GravityCompat.END)
         }
 

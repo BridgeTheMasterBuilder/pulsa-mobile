@@ -24,7 +24,7 @@ class SubActivity : BaseLayoutActivity() {
         val slug = sub.slug
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object : TypeToken<List<Post>>() {}
-        map["url"] = "/p/${slug}/"
+        map["url"] = "p/${slug}/"
         runOnUiThread { NetworkManager().get(this, map) }
 
         binding = ActivitySubBinding.inflate(layoutInflater)

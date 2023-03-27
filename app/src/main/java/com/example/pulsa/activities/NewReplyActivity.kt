@@ -150,7 +150,7 @@ class NewReplyActivity : BaseLayoutActivity() {
         val post = intent.getParcelableExtra<Post>("post")!!
         println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
         println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
-        map["url"] = "/p/${post.sub.slug}/${post.postId}"
+        map["url"] = "p/${post.sub.slug}/${post.postId}"
         map["type"] = object : TypeToken<Reply>() {}
         map["text"] = binding.newreplytext.text.toString()
 

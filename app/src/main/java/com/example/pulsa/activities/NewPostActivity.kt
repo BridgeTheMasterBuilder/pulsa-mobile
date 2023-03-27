@@ -208,7 +208,7 @@ class NewPostActivity : BaseLayoutActivity() {
 
         val sub = intent.getParcelableExtra<Sub>("sub")!!
 
-        map["url"] = "/p/${sub.slug}/newPost"
+        map["url"] = "p/${sub.slug}/newPost"
         map["type"] = object : TypeToken<Post>() {}
         map["title"] = binding.newposttitle.text.toString()
         map["text"] = binding.newposttext.text.toString()

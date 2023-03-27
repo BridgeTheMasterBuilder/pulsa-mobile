@@ -1,58 +1,77 @@
 package com.example.pulsa.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.pulsa.databinding.ActivityLoginBinding
+import com.example.pulsa.networking.NetworkManager
+import com.example.pulsa.objects.User
 import com.example.pulsa.utils.LoggedIn
-import com.example.pulsa.utils.UserList
+import com.google.gson.reflect.TypeToken
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseLayoutActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var username = binding.loginusername
-        var password = binding.loginpassword
+
+        binding.loginpagebutton.setOnClickListener { loginButtonOnclick() }
 
 
-        for (user in UserList.users) {
-            println("----------------------" + user.username)
-        }
-        binding.loginpagebutton.setOnClickListener {
-            if (username.toString().isNotBlank() &&
-                password.toString().isNotBlank()
-            ) {
-                for (user in UserList.users) {
-                    println("username: ${user.username}       password:${user.password}")
-                    println("username: ${username.text.toString()}       password:${password.text.toString()}")
-                    println("User of list: ${user.username}  --- Entered: ${username.text.toString()} ----> Equals?${user.username == username.text.toString()}")
-                    if (user.username == username.text.toString()) {
-                        if (user.password == password.text.toString()) {
-                            LoggedIn.setLoggedIn(true)
-                            LoggedIn.setUser(user)
-                            val i = Intent(this, MainActivity::class.java)
-                            finish()
-                            startActivity(i)
-                        } else {
-                            Toast.makeText(
-                                this,
-                                "Username/Password Invalid lol",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                    } else {
-                        Toast.makeText(this, "Username/Password Invalid kek", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // for (user in UserList.users) {
+        //     println("----------------------" + user.username)
+        // }
+        // binding.loginpagebutton.setOnClickListener {
+        //     if (username.toString().isNotBlank() &&
+        //         password.toString().isNotBlank()
+        //     ) {
+        //         for (user in UserList.users) {
+        //             println("username: ${user.username}       password:${user.password}")
+        //             println("username: ${username.text.toString()}       password:${password.text.toString()}")
+        //             println("User of list: ${user.username}  --- Entered: ${username.text.toString()} ----> Equals?${user.username == username.text.toString()}")
+        //             if (user.username == username.text.toString()) {
+        //                 if (user.password == password.text.toString()) {
+        //                     LoggedIn.setLoggedIn(true)
+        //                     LoggedIn.setUser(user)
+        //                     val i = Intent(this, MainActivity::class.java)
+        //                     finish()
+        //                     startActivity(i)
+        //                 } else {
+        //                     Toast.makeText(
+        //                         this,
+        //                         "Username/Password Invalid lol",
+        //                         Toast.LENGTH_SHORT
+        //                     )
+        //                         .show()
+        //                 }
+        //             } else {
+        //                 Toast.makeText(this, "Username/Password Invalid kek", Toast.LENGTH_SHORT)
+        //                     .show()
+        //             }
+        //         }
+        //     } else {
+        //         Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+        //     }
+        // }
+    }
+
+    private fun loginButtonOnclick() {
+        val map: HashMap<String, Any> = HashMap()
+
+        map["username"] = binding.loginusername.text.toString()
+        map["password"] = binding.loginpassword.text.toString()
+        map["url"] = "login"
+        map["type"] = object : TypeToken<User>() {}
+        runOnUiThread { NetworkManager().post(this, map) }
+    }
+
+    override fun resolvePost(content: Any) {
+        user = content as User
+        println("---------------------USER INFO---------------------")
+        println("Id:${user.user_id}")
+        println("Username:${user.username}")
+        println("Authorization:${LoggedIn.getJwtToken()}")
+        finish()
     }
 }

@@ -2,6 +2,7 @@ package com.example.pulsa.networking
 
 import android.util.Log
 import com.example.pulsa.activities.BaseLayoutActivity
+import com.example.pulsa.utils.LoggedIn
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
@@ -15,9 +16,9 @@ import java.time.LocalDateTime
 
 class NetworkManager {
     private val LOG = "OkHttp"
-    private val URL = "http://10.0.2.2:8080/api/v1"
+    private val URL = "http://10.0.2.2:8080/api/v1/"
 
-    // private val URL = "https://pulsa-rest-production.up.railway.app/api/v1"
+    // private val URL = "https://pulsa-rest-production.up.railway.app/api/v1/"
     private val client: OkHttpClient = OkHttpClient()
     private lateinit var message: String
 
@@ -56,6 +57,7 @@ class NetworkManager {
     fun post(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
         val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
 
+        // Post and replies
         map["title"]?.let { requestBodyBuilder.addFormDataPart("title", it as String) }
         map["text"]?.let { requestBodyBuilder.addFormDataPart("text", it as String) }
         (map["image"] as? File)?.let {
@@ -81,9 +83,16 @@ class NetworkManager {
                 requestBodyBuilder.addFormDataPart(
                     "audio",
                     "audio1.mp3",
-                    it.asRequestBody((audioType as String).toMediaTypeOrNull()))
+                    it.asRequestBody((audioType as String).toMediaTypeOrNull())
+                )
             }
         }
+
+        // Users
+        map["real name"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
+        map["username"]?.let { requestBodyBuilder.addFormDataPart("username", it as String) }
+        map["email"]?.let { requestBodyBuilder.addFormDataPart("email", it as String) }
+        map["password"]?.let { requestBodyBuilder.addFormDataPart("password", it as String) }
 
         val requestBody = requestBodyBuilder.build()
 
@@ -113,8 +122,17 @@ class NetworkManager {
                     .create()
                 val type = (map["type"] as TypeToken<*>)
                 val content = gson.fromJson(response.body?.string(), type)
+                println("---------------------Response Headers---------------------")
+                response.headers.forEach { it ->
+                    println("First:${it.first}    Second:${it.second}")
+                }
                 if (response.isSuccessful) {
-                    println("response sucess")
+                    // Jwt token
+                    if (response.headers.get("Authorization") != null) LoggedIn.setJwtToken(
+                        response.headers?.get(
+                            "Authorization"
+                        )!!
+                    )
                     activity.runOnUiThread { activity.resolvePost(content) }
                 } else {
                     println(message)

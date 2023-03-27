@@ -1,94 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pulsa"
     tools:context=".activities.RegisterActivity">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/registerpagetext"
-        android:textSize="50dp"
-        android:text="Join The Pulsiverse"
-        android:textColor="@color/purple_500"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="50dp"
+        android:gravity="center"
         android:shadowColor="#000000"
         android:shadowDx="10"
         android:shadowDy="10"
         android:shadowRadius="10"
-        android:layout_margin="50dp"
+        android:text="Join The Pulsiverse"
+        android:textColor="@color/purple_500"
+        android:textSize="50dp"
         android:textStyle="bold"
-        android:gravity="center" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/registerrealname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/registerpagetext"
-        android:layout_margin="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:drawableLeft="@drawable/baseline_self_improvement_24"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/purple_200"
+        android:drawableLeft="@drawable/baseline_self_improvement_24"
         android:gravity="center"
         android:hint="Real Name"
         android:inputType="textPersonName"
-        android:padding="20dp" />
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerpagetext" />
 
     <EditText
         android:id="@+id/registerusername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/registerrealname"
-        android:layout_margin="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:drawableLeft="@drawable/baseline_person_24"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/purple_200"
+        android:drawableLeft="@drawable/baseline_person_24"
         android:gravity="center"
         android:hint="Username"
         android:inputType="text"
-        android:padding="20dp" />
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerrealname" />
 
     <EditText
         android:id="@+id/registeremail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:layout_below="@+id/registerusername"
-        android:gravity="center"
-        android:drawableLeft="@drawable/baseline_email_24"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/purple_200"
-        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/baseline_email_24"
+        android:gravity="center"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         android:padding="20dp"
-        android:hint="e-Mail" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerusername" />
 
     <EditText
         android:id="@+id/registerpassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_below="@+id/registeremail"
-        android:gravity="center"
-        android:drawableLeft="@drawable/baseline_info_24"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/purple_200"
-        android:layout_margin="10dp"
+        android:drawableLeft="@drawable/baseline_info_24"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPassword"
         android:padding="20dp"
-        android:hint="Password" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registeremail" />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/registerpagebutton"
-        android:text="REGISTER"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/registerpassword"
-        android:layout_margin="50dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="32dp"
+        android:text="REGISTER"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerpassword" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
