@@ -1,6 +1,5 @@
 package com.example.pulsa.activities
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,157 +8,129 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.blankj.utilcode.util.UriUtils
+import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityNewReplyBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.*
+import com.example.pulsa.utils.MediaUtils
+import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
-import java.io.IOException
 
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val SELECT_PICTURE = 200
 private const val SELECT_AUDIO = 2
+private const val MEDIA_STOP = R.drawable.icons8_stop_96
 
 class NewReplyActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityNewReplyBinding
+    private lateinit var rPlayToggle: MaterialButton
+    private lateinit var aPlayToggle: MaterialButton
     private lateinit var mediaRecorder: MediaRecorder
-    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var reply: Reply
+    private lateinit var audioUri: Uri
     private lateinit var imageUri: Uri
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
-    private lateinit var fileName: String
-    private var recording = false
-    private var playing = false
-    private var permissionGranted = false
-    private var imagePath = ""
+
+    private var recordingPath = ""
+    private var audioPlayer: MediaPlayer? = null
+    private var mediaUtils: MediaUtils = MediaUtils()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.imageView.visibility = View.INVISIBLE
-        fileName =
-            "${externalCacheDir?.absolutePath}/temp.3gp"
+        mediaUtils.verifyStoragePermissions(this);
 
-        binding.recordbutton.setOnClickListener {
-            recordButtonOnClick()
-        }
+        recordingPath = "${externalCacheDir?.absolutePath}/tempRecording.3gp"
+        rPlayToggle = (binding.playrecordingbutton as MaterialButton)
+        aPlayToggle = (binding.playaudiobutton as MaterialButton)
 
-        binding.playbutton.setOnClickListener {
-            playButtonOnClick()
-        }
 
         binding.imagebutton.setOnClickListener {
-            val i = Intent()
-            i.type = "image/*"
-            i.action = Intent.ACTION_GET_CONTENT
-
+            val i = Intent().apply {
+                type = "image/*"
+                action = Intent.ACTION_GET_CONTENT
+            }
             startActivityForResult(Intent.createChooser(i, "Select picture"), SELECT_PICTURE)
         }
 
         binding.audiobutton.setOnClickListener {
-            val i = Intent()
-            i.type = "audio/*"
-            i.action = Intent.ACTION_GET_CONTENT
-
+            val i = Intent().apply {
+                type = "audio/*"
+                action = Intent.ACTION_GET_CONTENT
+            }
             startActivityForResult(Intent.createChooser(i, "Select audio file"), SELECT_AUDIO)
         }
 
-        binding.postbutton.setOnClickListener {
-            postButtonOnClick()
-        }
-    }
-
-    private fun recordButtonOnClick() {
-        if (recording) {
-            recording = !recording
-            mediaRecorder.stop()
-            mediaRecorder.release()
-
-            initMediaPlayer()
-        } else if (permissionGranted) {
-            recording = !recording
-            mediaRecorder.start()
-        } else
-            ActivityCompat.requestPermissions(
+        binding.recordbutton.setOnClickListener {
+            mediaUtils.record(
+                binding.recordbutton,
+                binding.loadingrecording,
                 this,
-                permissions,
-                REQUEST_RECORD_AUDIO_PERMISSION
+                recordingPath
             )
-    }
-
-    private fun playButtonOnClick() {
-        if (!this::mediaPlayer.isInitialized) {
-            Toast.makeText(this, "No audio file uploaded", Toast.LENGTH_SHORT).show()
-            return
         }
 
-        if (recording) {
-            recording = false
-            mediaRecorder.stop()
-            mediaRecorder.release()
+        binding.playrecordingbutton.setOnClickListener {
+            mediaUtils.playRecording(
+                this,
+                rPlayToggle,
+                binding.recordbutton,
+                recordingPath
+            )
+        }
 
-            initMediaPlayer()
-        } else if (playing)
-            mediaPlayer.stop()
+        binding.playaudiobutton.setOnClickListener {
+            mediaUtils.playAudio(
+                aPlayToggle,
+                audioUri,
+                this)
+        }
 
-        playing = !playing
-
-        mediaPlayer.start()
-    }
-
-    private fun initMediaRecorder() {
-        mediaRecorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setOutputFile(fileName)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
-            try {
-                prepare()
-            } catch (e: IOException) {
-                // todo
-                System.err.println("oops")
-            }
-
-            recording = true
-
-            start()
+        binding.submitbutton.setOnClickListener {
+            submitButtonOnClick()
         }
     }
 
-    private fun initMediaPlayer() {
-        mediaPlayer = MediaPlayer().apply {
-            try {
-                setDataSource(fileName)
-                prepare()
-            } catch (e: IOException) {
-                // todo
-                System.err.println("oops")
-            }
-        }
-    }
+    private fun submitButtonOnClick() {
+        binding.submitbutton.visibility = View.INVISIBLE
+        binding.submitting.visibility = View.VISIBLE
 
-    private fun postButtonOnClick() {
         val map: HashMap<String, Any> = HashMap()
 
         val post = intent.getParcelableExtra<Post>("post")!!
-        println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
-        println("post:${post}  sub slug:${post.sub.slug}  post ID:${post.postId}")
+
         map["url"] = "p/${post.sub.slug}/${post.postId}"
-        map["type"] = object : TypeToken<Reply>() {}
+        map["type"] = object : TypeToken<Post>() {}
         map["text"] = binding.newreplytext.text.toString()
 
         if (this::imageUri.isInitialized) {
             map["image"] = UriUtils.uri2File(imageUri)
             map["imageType"] = this.contentResolver.getType(imageUri).toString()
         }
+        if (this::audioUri.isInitialized) {
+            map["audio"] = UriUtils.uri2File(audioUri)
+            map["audioType"] = this.contentResolver.getType(audioUri).toString()
+        }
+        if (mediaUtils.recordingUri !== null) {
+            map["recording"] = UriUtils.uri2File(mediaUtils.recordingUri)
+            map["recordingType"] = "video/3gpp"
+        }
+        map["token"] = ""
 
         runOnUiThread { NetworkManager().post(this, map) }
+    }
+
+    override fun resolvePost(content: Any) {
+        reply = content as Reply
+        val intent = intent
+        val pos = intent.putExtra("reply", reply)
+        println("SETTING RESULT AFTER GETTING REPLY")
+        setResult(Activity.RESULT_OK, intent)
+        println("RESULT SET NOW CALLING FINISH")
+        finish()
     }
 
     override fun onRequestPermissionsResult(
@@ -173,41 +144,35 @@ class NewReplyActivity : BaseLayoutActivity() {
     }
 
     private fun onPermissionsGranted() {
-        initMediaRecorder()
+        mediaRecorder = mediaUtils.initMediaRecorder(recordingPath)
+        mediaUtils.mediaRecorder = mediaRecorder
+        rPlayToggle.setIconResource(MEDIA_STOP)
+        binding.playrecordingbutton.visibility = View.VISIBLE
+        binding.loadingrecording.visibility = View.INVISIBLE
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("ACTIVITY RESULT LAUNCHER ACTIVATED IN NEWPOSTACTIVITY")
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                val image = data?.data
+        if (resultCode != RESULT_OK) return
 
-                image?.let {
-                    imagePath = it.toString()
+        when (requestCode) {
+            SELECT_PICTURE -> {
+                data?.data?.let { image ->
                     imageUri = image
                     binding.imageView.visibility = View.VISIBLE
-
-                    binding.imageView.setImageURI(it)
-                }
-
-
-            } else if (requestCode == SELECT_AUDIO) {
-                val audio = data?.data
-
-                val ctx = this
-
-                audio?.let {
-                    mediaPlayer = MediaPlayer().apply {
-                        try {
-                            setDataSource(ctx, it)
-                            prepare()
-                        } catch (e: IOException) {
-                            // todo
-                            System.err.println("oops")
-                        }
+                    binding.imageView.apply {
+                        visibility = View.VISIBLE
+                        setImageURI(image)
                     }
+                }
+            }
+            SELECT_AUDIO -> {
+                data?.data?.let { audio ->
+                    audioUri = audio
+                    binding.playaudiobutton.visibility = View.VISIBLE
+                    audioPlayer = mediaUtils.initMediaPlayer(audioUri, aPlayToggle, this)
+                    mediaUtils.audioPlayer = audioPlayer as MediaPlayer
                 }
             }
         }
@@ -216,17 +181,7 @@ class NewReplyActivity : BaseLayoutActivity() {
     override fun onStop() {
         super.onStop()
 
-        if (this::mediaRecorder.isInitialized) mediaRecorder.stop()
-        if (this::mediaPlayer.isInitialized) mediaPlayer.stop()
-    }
-
-    override fun resolvePost(content: Any) {
-        reply = content as Reply
-        val intent = intent
-        val pos = intent.putExtra("reply", reply)
-        println("SETTING RESULT AFTER GETTING REPLY")
-        setResult(Activity.RESULT_OK, intent)
-        println("RESULT SET NOW CALLING FINISH")
-        finish()
+        mediaUtils.audioPlayer?.stop()
+        mediaUtils.recordingPlayer?.stop()
     }
 }
