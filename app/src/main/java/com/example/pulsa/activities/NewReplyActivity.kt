@@ -41,6 +41,8 @@ class NewReplyActivity : BaseLayoutActivity() {
         binding = ActivityNewReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        reply = intent.getParcelableExtra<Reply>("reply")!!
+
         mediaUtils.verifyStoragePermissions(this);
 
         recordingPath = "${externalCacheDir?.absolutePath}/tempRecording.3gp"
@@ -138,12 +140,12 @@ class NewReplyActivity : BaseLayoutActivity() {
     override fun resolvePost(content: Any) {
         val intent = intent
         if (content is Map<*, *>) {
-            reply = content["reply"] as Reply
-            intent.putExtra("nestedReply", reply)
+            val nestedReply = content["reply"] as Reply
+            intent.putExtra("nestedReply", nestedReply)
         } else {
             reply = content as Reply
-            intent.putExtra("reply", reply)
         }
+        intent.putExtra("reply", reply)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
