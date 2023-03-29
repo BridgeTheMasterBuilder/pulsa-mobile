@@ -123,10 +123,16 @@ class NetworkManager {
                 val content = gson.fromJson(response.body?.string(), type)
 
                 if (response.isSuccessful) {
+                    // Jwt token
                     response.headers["Authorization"]?.let {
                         activity.intent.putExtra("token", it)
                     }
-                    activity.runOnUiThread { activity.resolvePost(content) }
+
+                    if (map.containsKey("nestedReply")) {
+                        activity.runOnUiThread { activity.resolvePost(mapOf("reply" to content)) }
+                    } else {
+                        activity.runOnUiThread { activity.resolvePost(content) }
+                    }
                 } else {
                     println(message)
                 }

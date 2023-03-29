@@ -41,7 +41,8 @@ class MainActivity : BaseLayoutActivity() {
                     override fun handleOnBackPressed() {
                         recyclerView.smoothScrollToPosition(0)
                     }
-                })
+                }
+            )
         }
 
 

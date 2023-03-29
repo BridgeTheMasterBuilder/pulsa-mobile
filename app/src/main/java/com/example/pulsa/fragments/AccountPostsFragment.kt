@@ -6,22 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.pulsa.R
+import com.example.pulsa.activities.UserActivity
+import com.example.pulsa.adapters.GenericRecyclerAdapter
+import com.example.pulsa.databinding.FragmentAccountPostsBinding
+import com.example.pulsa.objects.Post
 
 
 class AccountPostsFragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var binding: FragmentAccountPostsBinding
+    private lateinit var adapter: GenericRecyclerAdapter<Post>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account_posts, container, false)
+        binding = FragmentAccountPostsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        val posts: ArrayList<Post> = arguments?.getParcelableArrayList("posts")!!
+        adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
+        binding.recyclerView.adapter = adapter
+        return view
     }
 
+    private fun adapterOnClick(post: Post, position: Int) {
+        (activity as UserActivity).startPostActivity(post, position)
+    }
 
 }

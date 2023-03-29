@@ -23,12 +23,6 @@ class SubIndexActivity : BaseLayoutActivity() {
         map["url"] = "p/"
         runOnUiThread { NetworkManager().get(this, map) }
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                binding.recyclerView.smoothScrollToPosition(0)
-            }
-        })
-
         binding = ActivitySubIndexBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

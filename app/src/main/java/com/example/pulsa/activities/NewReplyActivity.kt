@@ -102,8 +102,20 @@ class NewReplyActivity : BaseLayoutActivity() {
 
         val post = intent.getParcelableExtra<Post>("post")!!
 
-        map["url"] = "p/${post.sub.slug}/${post.postId}"
-        map["type"] = object : TypeToken<Post>() {}
+        val reply = if (intent.hasExtra("reply")) {
+            intent.getParcelableExtra<Reply>("reply")
+        } else {
+            null
+        }
+
+        if (reply != null) {
+            map["url"] = "p/${post.sub.slug}/${post.postId}/${reply.replyId}"
+            map["nestedReply"] = true
+        } else {
+            map["url"] = "p/${post.sub.slug}/${post.postId}"
+        }
+
+        map["type"] = object : TypeToken<Reply>() {}
         map["text"] = binding.newreplytext.text.toString()
 
         if (this::imageUri.isInitialized) {
@@ -124,12 +136,15 @@ class NewReplyActivity : BaseLayoutActivity() {
     }
 
     override fun resolvePost(content: Any) {
-        reply = content as Reply
         val intent = intent
-        val pos = intent.putExtra("reply", reply)
-        println("SETTING RESULT AFTER GETTING REPLY")
+        if (content is Map<*, *>) {
+            reply = content["reply"] as Reply
+            intent.putExtra("nestedReply", reply)
+        } else {
+            reply = content as Reply
+            intent.putExtra("reply", reply)
+        }
         setResult(Activity.RESULT_OK, intent)
-        println("RESULT SET NOW CALLING FINISH")
         finish()
     }
 

@@ -190,6 +190,8 @@ class PostActivity : BaseLayoutActivity() {
                 val intent = Intent(activity, NewReplyActivity::class.java)
                 intent.putExtra("sub", activity.post.sub)
                 intent.putExtra("replyId", (node.value as Reply).replyId)
+                intent.putExtra("reply", (node.value as Reply))
+                intent.putExtra("post", activity.post)
                 activity.launcher.launch(intent)
             }
         }
