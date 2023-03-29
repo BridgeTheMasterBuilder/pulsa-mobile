@@ -12,8 +12,10 @@ data class User(
     var realName: String,
     var avatar: String,
     var email: String,
+    var roles: MutableList<String>,
     var subs: MutableList<Sub>,
     var posts: MutableList<Post>,
+    var replies: MutableList<Reply>,
     var created: LocalDateTime,
     var updated: LocalDateTime
 ) : Parcelable
