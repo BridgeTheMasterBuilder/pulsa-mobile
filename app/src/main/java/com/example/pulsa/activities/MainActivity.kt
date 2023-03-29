@@ -56,18 +56,41 @@ class MainActivity : BaseLayoutActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 println("IN MAIN ACTIVITY AGAIN")
-                val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
                 var pos = result.data?.extras?.getInt("pos")!!
-                println("size of replies after adding reply to post:${post.replies.size}")
-                println("Position in array${pos}")
-                println("DID I RECIEVE POST?: ${post?.title}")
-                println("post size before added to adapter:${posts.size}")
-                post?.let { it ->
-                    adapter.updateItem(post, pos)
-                    posts[pos] = post
-                }
-                println("post size after added to adapter:${posts.size}")
 
+                if (result.data?.extras?.getBoolean("nextPost", false)!!) {
+                    var position = pos
+                    var post = posts[pos]
+
+                    if (position + 1 < posts.size) {
+                        position += 1
+                        post = posts[position]
+                    }
+
+                    adapterOnClick(post, position)
+                } else if (result.data?.extras?.getBoolean("prevPost", false)!!) {
+                    var position = pos
+                    var post = posts[pos]
+
+                    if (position > 0) {
+                        position -= 1
+                        post = posts[position]
+                    }
+
+                    adapterOnClick(post, position)
+                } else {
+                    val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
+
+                    println("size of replies after adding reply to post:${post.replies.size}")
+                    println("Position in array${pos}")
+                    println("DID I RECIEVE POST?: ${post?.title}")
+                    println("post size before added to adapter:${posts.size}")
+                    post?.let { it ->
+                        adapter.updateItem(post, pos)
+                        posts[pos] = post
+                    }
+                    println("post size after added to adapter:${posts.size}")
+                }
             }
         }
 

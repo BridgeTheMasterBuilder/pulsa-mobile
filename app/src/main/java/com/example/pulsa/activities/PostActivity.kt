@@ -3,6 +3,8 @@ package com.example.pulsa.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.URLUtil
 import android.widget.Button
@@ -11,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.GestureDetectorCompat
 import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
@@ -24,7 +27,7 @@ import com.example.pulsa.utils.glideRequestListener
 
 const val NO_REPLY = -1L
 
-class PostActivity : BaseLayoutActivity() {
+class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
     private lateinit var adapter: TreeViewAdapter
     private lateinit var post: Post
@@ -33,6 +36,7 @@ class PostActivity : BaseLayoutActivity() {
     private lateinit var factory: TreeViewHolderFactory
     private lateinit var roots: MutableList<TreeNode>
     private lateinit var launcher: ActivityResultLauncher<Intent>
+    private lateinit var mDetector: GestureDetectorCompat
 
     private fun createReplyTree(replies: MutableList<Reply>): MutableList<TreeNode> {
         fun aux(child: TreeNode, replies: MutableList<Reply>) {
@@ -86,6 +90,10 @@ class PostActivity : BaseLayoutActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.setOnTouchListener(View.OnTouchListener { v, event ->
+            v.performClick()
+            mDetector.onTouchEvent(event)
+        })
 
         val post: Post = intent.getParcelableExtra("post")!!
         if (URLUtil.isValidUrl(post.content.image))
@@ -162,6 +170,8 @@ class PostActivity : BaseLayoutActivity() {
             resultLauncher.launch(intent)
 
         }
+
+        mDetector = GestureDetectorCompat(this, this)
     }
 
     class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
@@ -195,5 +205,51 @@ class PostActivity : BaseLayoutActivity() {
                 activity.launcher.launch(intent)
             }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        mDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    override fun onFling(
+        event1: MotionEvent,
+        event2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        return false
+    }
+
+    override fun onDown(p0: MotionEvent): Boolean {
+        return true
+    }
+
+    override fun onShowPress(p0: MotionEvent) {
+    }
+
+    override fun onLongPress(p0: MotionEvent) {
+    }
+
+    override fun onScroll(
+        event1: MotionEvent,
+        event2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        if (velocityX > 0.0) {
+            intent.putExtra("nextPost", true)
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        } else if (velocityX < 0.0) {
+            intent.putExtra("prevPost", true)
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
+        return true
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent): Boolean {
+        return false
     }
 }
