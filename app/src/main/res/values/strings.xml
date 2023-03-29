@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Pulsa</string>
+    <string name="user">User</string>
+    <string name="token">Token</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="newPostButton">Create New Post</string>

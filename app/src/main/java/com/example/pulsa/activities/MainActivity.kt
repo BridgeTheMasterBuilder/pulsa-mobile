@@ -90,4 +90,9 @@ class MainActivity : BaseLayoutActivity() {
         // TODO: Rename function
         println("Failed to load posts")
     }
+
+    override fun onResume() {
+        super.onResume()
+        super.setupUserMenu()
+    }
 }
