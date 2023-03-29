@@ -18,9 +18,11 @@ import com.amrdeveloper.treeview.TreeViewHolderFactory
 import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
+import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
 import com.example.pulsa.utils.glideRequestListener
+import com.google.gson.reflect.TypeToken
 
 const val NO_REPLY = -1L
 
@@ -84,10 +86,59 @@ class PostActivity : BaseLayoutActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPostBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         val post: Post = intent.getParcelableExtra("post")!!
+
+        runOnUiThread {
+            NetworkManager().get(
+                this,
+                hashMapOf(
+                    "type" to object : TypeToken<Post>() {},
+                    "url" to "p/${post.sub.slug}/${post.postId}"
+                )
+            )
+        }
+
+        binding = ActivityPostBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
+        TreeViewHolder(itemView) {
+        private var text = itemView.findViewById<TextView>(R.id.textView)
+        private var image = itemView.findViewById<ImageView>(R.id.imageAttachment)
+
+        override fun bindTreeNode(node: TreeNode) {
+            super.bindTreeNode(node)
+
+            val reply = node.value as Reply
+            image.visibility = View.GONE
+
+            text.text = reply.content.text
+            if (reply.content.image != "") {
+                Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
+                if (URLUtil.isValidUrl(reply.content.image))
+                    Glide.with(this.activity)
+                        .load(reply.content.image)
+                        .listener(glideRequestListener)
+                        .into(image)
+                        .view.visibility = View.VISIBLE
+            }
+
+            itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
+                val intent = Intent(activity, NewReplyActivity::class.java)
+                intent.putExtra("sub", activity.post.sub)
+                intent.putExtra("replyId", (node.value as Reply).replyId)
+                intent.putExtra("reply", (node.value as Reply))
+                intent.putExtra("post", activity.post)
+                activity.launcher.launch(intent)
+            }
+        }
+    }
+
+    override fun resolveGet(content: Any) {
+        post = content as Post
+
         if (URLUtil.isValidUrl(post.content.image))
             Glide.with(this)
                 .load(post.content.image)
@@ -95,7 +146,6 @@ class PostActivity : BaseLayoutActivity() {
                 .into(findViewById(binding.postpageImage.id))
                 .view.visibility = View.VISIBLE
 
-        this.post = post
         postPosition = intent.getIntExtra("pos", -1)
         replies = post.replies
         factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
@@ -109,7 +159,7 @@ class PostActivity : BaseLayoutActivity() {
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
 
-        val resultLauncher =
+        launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val reply: Reply? = result.data?.getParcelableExtra("reply")!!
@@ -154,46 +204,12 @@ class PostActivity : BaseLayoutActivity() {
                 }
             }
 
-        launcher = resultLauncher
 
         binding.replybtn.setOnClickListener {
             val intent = Intent(this, NewReplyActivity::class.java)
             intent.putExtra("post", this.post)
-            resultLauncher.launch(intent)
+            launcher.launch(intent)
 
-        }
-    }
-
-    class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
-        TreeViewHolder(itemView) {
-        private var text = itemView.findViewById<TextView>(R.id.textView)
-        private var image = itemView.findViewById<ImageView>(R.id.imageAttachment)
-
-        override fun bindTreeNode(node: TreeNode) {
-            super.bindTreeNode(node)
-
-            val reply = node.value as Reply
-            image.visibility = View.GONE
-
-            text.text = reply.content.text
-            if (reply.content.image != "") {
-                Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
-                if (URLUtil.isValidUrl(reply.content.image))
-                    Glide.with(this.activity)
-                        .load(reply.content.image)
-                        .listener(glideRequestListener)
-                        .into(image)
-                        .view.visibility = View.VISIBLE
-            }
-
-            itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
-                val intent = Intent(activity, NewReplyActivity::class.java)
-                intent.putExtra("sub", activity.post.sub)
-                intent.putExtra("replyId", (node.value as Reply).replyId)
-                intent.putExtra("reply", (node.value as Reply))
-                intent.putExtra("post", activity.post)
-                activity.launcher.launch(intent)
-            }
         }
     }
 }
