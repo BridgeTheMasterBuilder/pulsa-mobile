@@ -59,23 +59,18 @@ class MainActivity : BaseLayoutActivity() {
                 var pos = result.data?.extras?.getInt("pos")!!
 
                 if (result.data?.extras?.getBoolean("nextPost", false)!!) {
-                    var position = pos
-                    var post = posts[pos]
-
-                    if (position + 1 < posts.size) {
-                        position += 1
-                        post = posts[position]
-                    }
+                    val position = (pos + 1) % posts.size
+                    val post = posts[position]
 
                     adapterOnClick(post, position)
                 } else if (result.data?.extras?.getBoolean("prevPost", false)!!) {
-                    var position = pos
-                    var post = posts[pos]
+                    var position = pos - 1
 
-                    if (position > 0) {
-                        position -= 1
-                        post = posts[position]
+                    if (position < 0) {
+                        position = posts.size - 1
                     }
+
+                    val post = posts[position]
 
                     adapterOnClick(post, position)
                 } else {
