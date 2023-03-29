@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.amrdeveloper.treeview.TreeNode
 import com.amrdeveloper.treeview.TreeViewAdapter
 import com.amrdeveloper.treeview.TreeViewHolder
@@ -58,29 +59,17 @@ class PostActivity : BaseLayoutActivity() {
         return roots
     }
 
-    private fun findNodeById(roots: MutableList<TreeNode>, id: Long): TreeNode? {
-        fun aux(root: TreeNode, id: Long): TreeNode? {
-            if ((root.value as Reply).replyId == id)
-                return root
-            else if (root.children.size > 0) {
-                for (child in root.children) {
-                    val result = aux(child, id)
-
-                    if (result != null) {
-                        return result
-                    }
+    private fun MutableList<Reply>.findReply(parentReply: Reply): Reply? {
+        for (reply in this) {
+            if (reply.replyId == parentReply.replyId) {
+                return reply
+            } else {
+                val foundReply = reply.replies.findReply(parentReply)
+                if (foundReply != null) {
+                    return foundReply
                 }
-
-                return null
-            } else return null
+            }
         }
-
-        for (root in roots) {
-            val result = aux(root, id)
-
-            if (result != null) return result
-        }
-
         return null
     }
 
@@ -101,6 +90,39 @@ class PostActivity : BaseLayoutActivity() {
 
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        launcher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    var reply: Reply? = null
+
+                    if (result.data?.hasExtra("nestedReply")!!) {
+                        val parentReply = result.data?.getParcelableExtra<Reply>("reply")!!
+                        val nestedReply = result.data?.getParcelableExtra<Reply>("nestedReply")!!
+                        replies.findReply(parentReply)?.replies?.add(nestedReply)
+                        post.replies.findReply(parentReply)?.replies?.add(nestedReply)
+                    } else if (result.data?.hasExtra("reply")!!) {
+                        reply = result.data?.getParcelableExtra<Reply>("reply")!!
+                        replies.add(reply)
+                        post.replies.add(reply)
+                    }
+
+                    roots = createReplyTree(replies)
+                    adapter.updateTreeNodes(roots)
+                    adapter.expandAll()
+
+                    val intent = intent
+                    intent.putExtra("postWithReply", post)
+                    intent.putExtra("pos", postPosition)
+                    setResult(Activity.RESULT_OK, intent)
+                }
+            }
+
+        binding.replybtn.setOnClickListener {
+            val intent = Intent(this, NewReplyActivity::class.java)
+            intent.putExtra("post", this.post)
+            launcher.launch(intent)
+        }
     }
 
     class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
@@ -117,12 +139,19 @@ class PostActivity : BaseLayoutActivity() {
             text.text = reply.content.text
             if (reply.content.image != "") {
                 Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
-                if (URLUtil.isValidUrl(reply.content.image))
+                if (URLUtil.isValidUrl(reply.content.image)) {
+                    val circularProgressDrawable = CircularProgressDrawable(activity)
+                    circularProgressDrawable.strokeWidth = 5f
+                    circularProgressDrawable.centerRadius = 30f
+                    circularProgressDrawable.start()
+
                     Glide.with(this.activity)
                         .load(reply.content.image)
+                        .placeholder(circularProgressDrawable)
                         .listener(glideRequestListener)
                         .into(image)
                         .view.visibility = View.VISIBLE
+                }
             }
 
             itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
@@ -139,12 +168,19 @@ class PostActivity : BaseLayoutActivity() {
     override fun resolveGet(content: Any) {
         post = content as Post
 
-        if (URLUtil.isValidUrl(post.content.image))
+        if (URLUtil.isValidUrl(post.content.image)) {
+            val circularProgressDrawable = CircularProgressDrawable(this)
+            circularProgressDrawable.strokeWidth = 15f
+            circularProgressDrawable.centerRadius = 90f
+            circularProgressDrawable.start()
+
             Glide.with(this)
                 .load(post.content.image)
+                .placeholder(circularProgressDrawable)
                 .listener(glideRequestListener)
                 .into(findViewById(binding.postpageImage.id))
                 .view.visibility = View.VISIBLE
+        }
 
         postPosition = intent.getIntExtra("pos", -1)
         replies = post.replies
@@ -158,58 +194,5 @@ class PostActivity : BaseLayoutActivity() {
 
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
-
-        launcher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val reply: Reply? = result.data?.getParcelableExtra("reply")!!
-                    println("Recieving reply ${reply?.content?.text}")
-                    reply?.let { it ->
-                        replies.add(reply)
-                        post.replies.add(reply)
-                    }
-
-                    val nestedReply: Reply? = result.data?.getParcelableExtra("nestedReply")
-
-                    nestedReply?.let {
-                        val id: Long = result.data?.getLongExtra("replyId", NO_REPLY)!!
-                        val node = findNodeById(roots, id)
-                        val replies = (node?.value as Reply).replies
-
-                        replies.add(nestedReply)
-                        println("nestedReply added to replies")
-                    }
-
-
-                    println("replies array updated on post")
-                    post.replies.forEach { it ->
-                        println("${it.replyId}: ${it.content.text}")
-                    }
-
-                    println("New replies array content")
-                    post.replies.forEach { it ->
-                        println("${it.replyId}: ${it.content.text}")
-                    }
-                    roots = createReplyTree(replies)
-                    adapter.updateTreeNodes(roots)
-                    adapter.expandAll()
-
-                    println("post with new reply added in intent as extra")
-                    val intent = intent
-                    intent.putExtra("postWithReply", post)
-                    intent.putExtra("pos", postPosition)
-                    println("added to result")
-                    setResult(Activity.RESULT_OK, intent)
-                    println("Success setting result ok")
-                }
-            }
-
-
-        binding.replybtn.setOnClickListener {
-            val intent = Intent(this, NewReplyActivity::class.java)
-            intent.putExtra("post", this.post)
-            launcher.launch(intent)
-
-        }
     }
 }
