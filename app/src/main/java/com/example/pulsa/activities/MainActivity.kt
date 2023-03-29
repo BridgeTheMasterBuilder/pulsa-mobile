@@ -44,12 +44,6 @@ class MainActivity : BaseLayoutActivity() {
                 }
             )
         }
-
-
-        /*binding.newpostbtn.setOnClickListener {
-            val intent = Intent(this, NewPostActivity::class.java)
-            resultLauncher.launch(intent)
-        }*/
     }
 
     val resultLauncher =
