@@ -133,7 +133,11 @@ class NetworkManager {
                             "Authorization"
                         )!!
                     )
-                    activity.runOnUiThread { activity.resolvePost(content) }
+                    if (map.containsKey("nestedReply")) {
+                        activity.runOnUiThread { activity.resolvePost(mapOf("reply" to content))}
+                    } else {
+                        activity.runOnUiThread { activity.resolvePost(content) }
+                    }
                 } else {
                     println(message)
                 }
