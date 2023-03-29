@@ -21,8 +21,6 @@ data class PostService(
         "anon@anon.anon",
         mutableListOf(),
         mutableListOf(),
-        mutableListOf(),
-        mutableListOf(),
         LocalDateTime.now(),
         LocalDateTime.now()
     ),

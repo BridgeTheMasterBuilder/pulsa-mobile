@@ -14,8 +14,6 @@ data class UserService(
             "god@mode.com",
             mutableListOf(),
             mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
             LocalDateTime.now(),
             LocalDateTime.now()
         )

@@ -31,9 +31,9 @@ class UserActivity : BaseLayoutActivity() {
             replaceFragment(AccountPostsFragment())
         }
         binding.repliesbtn.setOnClickListener {
-            val args = Bundle()
-            args.putParcelableArrayList("replies", ArrayList(user.replies))
-            AccountRepliesFragment().arguments = args
+            // val args = Bundle()
+            // args.putParcelableArrayList("replies", ArrayList(user.replies))
+            // AccountRepliesFragment().arguments = args
             replaceFragment(AccountRepliesFragment())
         }
         binding.editaccountbtn.setOnClickListener {

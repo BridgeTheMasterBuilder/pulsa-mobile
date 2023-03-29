@@ -14,8 +14,6 @@ object UserList {
             "god@mode.com",
             mutableListOf(),
             mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
             LocalDateTime.now(),
             LocalDateTime.now()
         )
