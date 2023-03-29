@@ -140,14 +140,9 @@ class PostActivity : BaseLayoutActivity() {
             if (reply.content.image != "") {
                 Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
                 if (URLUtil.isValidUrl(reply.content.image)) {
-                    val circularProgressDrawable = CircularProgressDrawable(activity)
-                    circularProgressDrawable.strokeWidth = 5f
-                    circularProgressDrawable.centerRadius = 30f
-                    circularProgressDrawable.start()
 
                     Glide.with(this.activity)
                         .load(reply.content.image)
-                        .placeholder(circularProgressDrawable)
                         .listener(glideRequestListener)
                         .into(image)
                         .view.visibility = View.VISIBLE
