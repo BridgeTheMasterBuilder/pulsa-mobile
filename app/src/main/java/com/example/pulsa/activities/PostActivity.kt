@@ -91,6 +91,19 @@ class PostActivity : BaseLayoutActivity() {
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        postPosition = intent.getIntExtra("pos", -1)
+        replies = post.replies
+        factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
+        adapter = TreeViewAdapter(factory)
+        binding.recyclerView.adapter = adapter
+        roots = createReplyTree(replies)
+
+        adapter.updateTreeNodes(roots)
+        adapter.expandAll()
+
+        binding.postpageTitle.text = post.title
+        binding.postpageText.text = post.content.text
+
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
