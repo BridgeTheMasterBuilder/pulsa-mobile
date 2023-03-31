@@ -1,8 +1,9 @@
 package com.example.pulsa.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.pulsa.R
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivitySubIndexBinding
@@ -10,7 +11,7 @@ import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Sub
 import com.google.gson.reflect.TypeToken
 
-class SubIndexActivity : BaseLayoutActivity() {
+class SubIndexActivity : BaseLayoutActivity(), ActivityRing<Sub> {
 
     private lateinit var binding: ActivitySubIndexBinding
     private lateinit var adapter: GenericRecyclerAdapter<Sub>
@@ -27,6 +28,24 @@ class SubIndexActivity : BaseLayoutActivity() {
         setContentView(binding.root)
     }
 
+    val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.extras
+                val pos = data?.getInt("pos")!!
+
+                if (data.getBoolean("nextSub", false)) {
+                    val (post, position) = next(subs, pos)
+
+                    dispatch(post, position, ::adapterOnClick)
+                } else if (data.getBoolean("prevSub", false)) {
+                    val (post, position) = prev(subs, pos)
+
+                    dispatch(post, position, ::adapterOnClick)
+                }
+            }
+        }
+
     override fun resolveGet(content: Any) {
         subs = content as MutableList<Sub>
 
@@ -42,12 +61,16 @@ class SubIndexActivity : BaseLayoutActivity() {
         val intent = Intent(this, SubActivity::class.java)
         intent.putExtra("sub", sub)
         intent.putExtra("pos", position)
-        startActivity(intent)
+        resultLauncher.launch(intent)
     }
 
     public fun failure() {
         // TODO: Display failed to load posts xml
         // TODO: Rename function
         println("Failed to load subs")
+    }
+
+    override fun dispatch(content: Sub, position: Int, launcher: (Sub, Int) -> Unit) {
+        adapterOnClick(content, position)
     }
 }

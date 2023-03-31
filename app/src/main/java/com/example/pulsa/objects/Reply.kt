@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Parcelize
 class Reply(
-    var replyId: Long,
+    val replyId: Long,
     var content: Content,
     var creator: User,
     var sub: Sub,

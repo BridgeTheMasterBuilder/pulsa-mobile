@@ -12,7 +12,7 @@ import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.google.gson.reflect.TypeToken
 
-class MainActivity : BaseLayoutActivity() {
+class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
@@ -50,25 +50,36 @@ class MainActivity : BaseLayoutActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 println("IN MAIN ACTIVITY AGAIN")
-                val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
-                var pos = result.data?.extras?.getInt("pos")!!
-                println("size of replies after adding reply to post:${post.replies.size}")
-                println("Position in array${pos}")
-                println("DID I RECIEVE POST?: ${post?.title}")
-                println("post size before added to adapter:${posts.size}")
-                post?.let { it ->
-                    adapter.updateItem(post, pos)
-                    posts[pos] = post
-                }
-                println("post size after added to adapter:${posts.size}")
+                val data = result.data?.extras
+                val pos = data?.getInt("pos")!!
 
+                if (data.getBoolean("nextPost", false)) {
+                    val (post, position) = next(posts, pos)
+
+                    dispatch(post, position, ::adapterOnClick)
+                } else if (data.getBoolean("prevPost", false)) {
+                    val (post, position) = prev(posts, pos)
+
+                    dispatch(post, position, ::adapterOnClick)
+                } else {
+                    val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
+
+                    println("size of replies after adding reply to post:${post.replies.size}")
+                    println("Position in array${pos}")
+                    println("DID I RECIEVE POST?: ${post?.title}")
+                    println("post size before added to adapter:${posts.size}")
+                    post?.let { it ->
+                        adapter.updateItem(post, pos)
+                        posts[pos] = post
+                    }
+                    println("post size after added to adapter:${posts.size}")
+                }
             }
         }
 
     override fun resolveGet(content: Any) {
         posts = content as MutableList<Post>
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
-
         binding.recyclerView.adapter = adapter
     }
 
@@ -89,5 +100,9 @@ class MainActivity : BaseLayoutActivity() {
     override fun onResume() {
         super.onResume()
         super.setupUserMenu()
+    }
+
+    override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
+        adapterOnClick(content, position)
     }
 }

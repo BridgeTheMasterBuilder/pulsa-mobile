@@ -19,6 +19,8 @@ data class PostService(
         "Anonymous",
         "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
         "anon@anon.anon",
+        HashSet(),
+        mutableListOf(),
         mutableListOf(),
         mutableListOf(),
         LocalDateTime.now(),

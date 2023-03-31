@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Sub(
-    var sub_id: Long,
+    val sub_id: Long,
     var name: String,
     var slug: String,
     var followers: MutableList<User>,
