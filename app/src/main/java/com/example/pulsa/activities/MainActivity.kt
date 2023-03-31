@@ -12,7 +12,7 @@ import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.google.gson.reflect.TypeToken
 
-class MainActivity : BaseLayoutActivity() {
+class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
@@ -56,23 +56,17 @@ class MainActivity : BaseLayoutActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 println("IN MAIN ACTIVITY AGAIN")
-                var pos = result.data?.extras?.getInt("pos")!!
+                val data = result.data?.extras
+                val pos = data?.getInt("pos")!!
 
-                if (result.data?.extras?.getBoolean("nextPost", false)!!) {
-                    val position = (pos + 1) % posts.size
-                    val post = posts[position]
+                if (data.getBoolean("nextPost", false)) {
+                    val (post, position) = next(posts, pos)
 
-                    adapterOnClick(post, position)
-                } else if (result.data?.extras?.getBoolean("prevPost", false)!!) {
-                    var position = pos - 1
+                    dispatch(post, position, ::adapterOnClick)
+                } else if (data.getBoolean("prevPost", false)) {
+                    val (post, position) = prev(posts, pos)
 
-                    if (position < 0) {
-                        position = posts.size - 1
-                    }
-
-                    val post = posts[position]
-
-                    adapterOnClick(post, position)
+                    dispatch(post, position, ::adapterOnClick)
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
@@ -108,5 +102,9 @@ class MainActivity : BaseLayoutActivity() {
         // TODO: Display failed to load posts xml
         // TODO: Rename function
         println("Failed to load posts")
+    }
+
+    override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
+        adapterOnClick(content, position)
     }
 }
