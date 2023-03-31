@@ -80,7 +80,6 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     override fun resolveGet(content: Any) {
         posts = content as MutableList<Post>
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
-
         binding.recyclerView.adapter = adapter
     }
 

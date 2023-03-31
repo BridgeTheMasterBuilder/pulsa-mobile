@@ -12,6 +12,8 @@ data class UserService(
             "adminus",
             "https://res.cloudinary.com/dc6h0nrwk/image/upload/v1668893599/a6zqfrxfflxw5gtspwjr.png",
             "god@mode.com",
+            HashSet(),
+            mutableListOf(),
             mutableListOf(),
             mutableListOf(),
             LocalDateTime.now(),
