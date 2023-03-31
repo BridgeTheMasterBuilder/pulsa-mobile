@@ -2,7 +2,6 @@ package com.example.pulsa.networking
 
 import android.util.Log
 import com.example.pulsa.activities.BaseLayoutActivity
-import com.example.pulsa.utils.LoggedIn
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
@@ -122,19 +121,15 @@ class NetworkManager {
                     .create()
                 val type = (map["type"] as TypeToken<*>)
                 val content = gson.fromJson(response.body?.string(), type)
-                println("---------------------Response Headers---------------------")
-                response.headers.forEach { it ->
-                    println("First:${it.first}    Second:${it.second}")
-                }
+
                 if (response.isSuccessful) {
                     // Jwt token
-                    if (response.headers.get("Authorization") != null) LoggedIn.setJwtToken(
-                        response.headers?.get(
-                            "Authorization"
-                        )!!
-                    )
+                    response.headers["Authorization"]?.let {
+                        activity.intent.putExtra("token", it)
+                    }
+
                     if (map.containsKey("nestedReply")) {
-                        activity.runOnUiThread { activity.resolvePost(mapOf("reply" to content))}
+                        activity.runOnUiThread { activity.resolvePost(mapOf("reply" to content)) }
                     } else {
                         activity.runOnUiThread { activity.resolvePost(content) }
                     }

@@ -44,12 +44,6 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 }
             )
         }
-
-
-        /*binding.newpostbtn.setOnClickListener {
-            val intent = Intent(this, NewPostActivity::class.java)
-            resultLauncher.launch(intent)
-        }*/
     }
 
     val resultLauncher =
@@ -102,6 +96,11 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         // TODO: Display failed to load posts xml
         // TODO: Rename function
         println("Failed to load posts")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        super.setupUserMenu()
     }
 
     override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {

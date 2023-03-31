@@ -23,6 +23,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
         binding = BaseLayoutBinding.inflate(layoutInflater)
         drawerLayout = binding.drawerLayout
         setSupportActionBar(binding.myToolbar.toolbar)
+
         setupNavMenu()
         setupUserMenu()
         super.onCreate(savedInstanceState)
@@ -95,13 +96,18 @@ open class BaseLayoutActivity : AppCompatActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.END)
     }
 
-    private fun setupUserMenu() {
+    fun setupUserMenu() {
         binding.myToolbar.userMenu.setOnClickListener {
             if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) closeUserMenu()
             else binding.drawerLayout.openDrawer(GravityCompat.END)
         }
 
-        if (LoggedIn.getLoggedIn()) {
+        val token = getSharedPreferences(
+            getString(R.string.user),
+            MODE_PRIVATE
+        ).getString(getString(R.string.token), "")
+
+        if (token != "") {
             binding.navViewUser.menu.clear()
             binding.navViewUser.inflateMenu(R.menu.nav_drawer_loggedin)
             binding.navViewUser.setNavigationItemSelectedListener {
@@ -113,6 +119,8 @@ open class BaseLayoutActivity : AppCompatActivity() {
                     R.id.logout -> {
                         LoggedIn.setLoggedIn(false)
                         binding.navViewUser.let {
+                            getSharedPreferences(getString(R.string.user), MODE_PRIVATE).edit()
+                                .clear().commit()
                             it.menu.clear()
                             it.inflateMenu(R.menu.nav_drawer_user)
                             setDefaultNav()

@@ -1,10 +1,10 @@
 package com.example.pulsa.activities
 
 import android.os.Bundle
+import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityLoginBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.User
-import com.example.pulsa.utils.LoggedIn
 import com.google.gson.reflect.TypeToken
 
 class LoginActivity : BaseLayoutActivity() {
@@ -68,10 +68,15 @@ class LoginActivity : BaseLayoutActivity() {
 
     override fun resolvePost(content: Any) {
         user = content as User
-        println("---------------------USER INFO---------------------")
-        println("Id:${user.user_id}")
-        println("Username:${user.username}")
-        println("Authorization:${LoggedIn.getJwtToken()}")
+
+        val tkn = intent.extras?.getString("token")
+        val sharedPref =
+            this.getSharedPreferences(getString(R.string.user), MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putString(getString(R.string.token), tkn)
+            apply()
+        }
+
         finish()
     }
 }
