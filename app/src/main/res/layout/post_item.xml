@@ -13,37 +13,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="18dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="36dp"
-        android:layout_marginTop="18dp">
+        android:layout_marginBottom="36dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/post_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/post_separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/post_avatar"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="250dp"
-                app:cardBackgroundColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    app:cardCornerRadius="250dp"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="250dp">
 
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:tag="avatar"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/pulsa"
-                        android:scaleType="centerCrop"/>
+                        android:tag="avatar" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -54,15 +58,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/post_avatar">
+                app:layout_constraintLeft_toRightOf="@id/post_avatar"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/post_sub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
+                    android:fontFamily="@font/jetbrains_mono_medium"
                     android:text='@{"p/" + postItem.sub.slug}'
+                    android:textColor="@color/sub"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +76,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
+                    android:fontFamily="@font/jetbrains_mono_medium"
                     android:text='@{"u/" + postItem.creator.username}'
+                    android:textColor="@color/user"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -79,35 +86,41 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/post_seperator"
+        <ImageView
+            android:id="@+id/post_separator"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_marginTop="16dp"
-            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/pulsa_gradient"
+            app:layout_constraintBottom_toTopOf="@+id/post_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_header" />
 
         <TextView
             android:id="@+id/post_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="63dp"
+            android:fontFamily="@font/open_sans_semibold"
             android:hint="Post Item"
             android:text="@{postItem.title}"
-            android:textColor="@color/black"
+            android:textColor="@color/title"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_seperator" />
+            app:layout_constraintBottom_toTopOf="@id/post_text"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/post_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:fontFamily="@font/open_sans"
             android:text="@{postItem.content.text}"
-            app:layout_constraintTop_toBottomOf="@+id/post_title"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textColor="@color/text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_title" />
 
         <ImageView
             android:id="@+id/image"
@@ -130,10 +143,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans"
             android:text='@{postItem.replyCount() + " replies"}'
+            android:textColor="@color/text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
-        
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

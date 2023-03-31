@@ -13,36 +13,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="18dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="18dp"
-        android:layout_marginTop="18dp">
+        android:layout_marginBottom="18dp">
 
         <TextView
             android:id="@+id/sub_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#000000"
+            android:fontFamily="@font/audiowide"
             android:hint="Sub Item"
             android:text="@{subItem.name}"
-            android:textColor="@color/black"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:translationZ="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/image" />
 
         <ImageView
             android:id="@+id/image"
-            android:tag="image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:tag="image"
             android:visibility="visible"
+            android:translationZ="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="w,16:9"
+            app:layout_constraintDimensionRatio="w, 16:9"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sub_name"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

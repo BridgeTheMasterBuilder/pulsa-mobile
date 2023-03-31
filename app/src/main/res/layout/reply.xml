@@ -11,61 +11,86 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/reply_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:layout_weight="3">
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:hint="User"
-            android:text="@{listItem.creator.username}"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/reply_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/white"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="245dp" />
+            app:srcCompat="@drawable/pulsa" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/reply_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tftr"
-            app:layout_constraintBottom_toTopOf="@+id/imageAttachment"
-            app:layout_constraintEnd_toStartOf="@+id/replybtn"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:hint="User"
+            android:text="@{listItem.creator.username}"
+            android:textColor="@color/user"
+            android:translationZ="2dp"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/vertical_line"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/vertical_line"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reply_avatar" />
+
+        <TextView
+            android:id="@+id/reply_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="text"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_avatar"
             tools:layout_conversion_absoluteHeight="19dp"
             tools:layout_conversion_absoluteWidth="0dp" />
 
         <ImageView
-            android:id="@+id/imageAttachment"
+            android:id="@+id/reply_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/replybtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_text"
             app:srcCompat="@drawable/ic_launcher_foreground"
             tools:layout_conversion_absoluteHeight="0dp"
             tools:layout_conversion_absoluteWidth="108dp" />
 
         <Button
-            android:id="@+id/replybtn"
+            android:id="@+id/postpage_replybutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="Reply"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/username"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_image"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

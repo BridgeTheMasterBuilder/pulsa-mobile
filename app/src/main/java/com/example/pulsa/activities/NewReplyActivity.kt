@@ -41,7 +41,9 @@ class NewReplyActivity : BaseLayoutActivity() {
         binding = ActivityNewReplyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        reply = intent.getParcelableExtra<Reply>("reply")!!
+        if (intent.hasExtra("reply")) {
+            reply = intent.getParcelableExtra<Reply>("reply")!!
+        }
 
         mediaUtils.verifyStoragePermissions(this);
 

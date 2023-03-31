@@ -8,7 +8,6 @@ import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -103,6 +102,23 @@ class PostActivity : BaseLayoutActivity() {
 
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
+        binding.postpageUser.text = "u/${post.creator.username}"
+        binding.postpageSub.text = "p/${post.sub.slug}"
+
+        if (URLUtil.isValidUrl(post.creator.avatar)) {
+            val circularProgressDrawable = CircularProgressDrawable(this)
+            circularProgressDrawable.strokeWidth = 3f
+            circularProgressDrawable.centerRadius = 18f
+            circularProgressDrawable.start()
+
+            Glide.with(this)
+                .load(post.creator.avatar)
+                .placeholder(circularProgressDrawable)
+                .listener(glideRequestListener)
+                .into(binding.postpageAvatarImage)
+                .view.visibility = View.VISIBLE
+        }
+
 
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -131,7 +147,7 @@ class PostActivity : BaseLayoutActivity() {
                 }
             }
 
-        binding.replybtn.setOnClickListener {
+        binding.postpageReplybutton.setOnClickListener {
             val intent = Intent(this, NewReplyActivity::class.java)
             intent.putExtra("post", this.post)
             launcher.launch(intent)
@@ -140,8 +156,10 @@ class PostActivity : BaseLayoutActivity() {
 
     class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
         TreeViewHolder(itemView) {
-        private var text = itemView.findViewById<TextView>(R.id.textView)
-        private var image = itemView.findViewById<ImageView>(R.id.imageAttachment)
+        private var username = itemView.findViewById<TextView>(R.id.reply_username)
+        private var text = itemView.findViewById<TextView>(R.id.reply_text)
+        private var image = itemView.findViewById<ImageView>(R.id.reply_image)
+        private var avatar = itemView.findViewById<ImageView>(R.id.reply_avatar)
 
         override fun bindTreeNode(node: TreeNode) {
             super.bindTreeNode(node)
@@ -149,9 +167,10 @@ class PostActivity : BaseLayoutActivity() {
             val reply = node.value as Reply
             image.visibility = View.GONE
 
+            username.text = "u/${reply.creator.username}"
             text.text = reply.content.text
+
             if (reply.content.image != "") {
-                Toast.makeText(activity, reply.content.image, Toast.LENGTH_SHORT).show()
                 if (URLUtil.isValidUrl(reply.content.image)) {
 
                     Glide.with(this.activity)
@@ -162,7 +181,18 @@ class PostActivity : BaseLayoutActivity() {
                 }
             }
 
-            itemView.findViewById<Button>(R.id.replybtn).setOnClickListener {
+            if (reply.creator.avatar != "") {
+                if (URLUtil.isValidUrl(reply.creator.avatar)) {
+
+                    Glide.with(this.activity)
+                        .load(reply.creator.avatar)
+                        .listener(glideRequestListener)
+                        .into(avatar)
+                        .view.visibility = View.VISIBLE
+                }
+            }
+
+            itemView.findViewById<Button>(R.id.postpage_replybutton).setOnClickListener {
                 val intent = Intent(activity, NewReplyActivity::class.java)
                 intent.putExtra("sub", activity.post.sub)
                 intent.putExtra("replyId", (node.value as Reply).replyId)

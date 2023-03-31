@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/reply_avatar"
+                android:id="@+id/reply_a"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
@@ -71,7 +71,7 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/reply_text"
+                android:id="@+id/reply_t"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
