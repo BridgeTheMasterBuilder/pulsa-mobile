@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="postItem"
             type="com.example.pulsa.objects.Post" />
@@ -17,100 +18,73 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="36dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/post_header"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/post_separator"
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/post_avatar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:tag="avatar"
+            android:src="@drawable/pulsa"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/post_separator"
+            app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/pulsa" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/post_avatar"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="250dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/post_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:text='@{"p/" + postItem.sub.slug}'
+            android:textColor="@color/sub"
+            app:layout_constraintBottom_toBottomOf="@id/post_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="sub slug" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    app:cardCornerRadius="250dp">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/pulsa"
-                        android:tag="avatar" />
-
-                </androidx.cardview.widget.CardView>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/post_header_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/post_avatar"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/post_sub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/jetbrains_mono_medium"
-                    android:text='@{"p/" + postItem.sub.slug}'
-                    android:textColor="@color/sub"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/post_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:fontFamily="@font/jetbrains_mono_medium"
-                    android:text='@{"u/" + postItem.creator.username}'
-                    android:textColor="@color/user"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/post_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:text='@{"u/" + postItem.creator.username}'
+            android:textColor="@color/user"
+            app:layout_constraintBottom_toBottomOf="@+id/post_avatar"
+            app:layout_constraintStart_toEndOf="@+id/post_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Username" />
 
         <ImageView
             android:id="@+id/post_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/pulsa_gradient"
-            app:layout_constraintBottom_toTopOf="@+id/post_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_header" />
+            app:layout_constraintTop_toBottomOf="@id/post_sub" />
 
         <TextView
             android:id="@+id/post_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="63dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/open_sans_semibold"
-            android:hint="Post Item"
             android:text="@{postItem.title}"
             android:textColor="@color/title"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/post_text"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_separator"
+            tools:text="Post Item" />
 
         <TextView
             android:id="@+id/post_text"
@@ -120,7 +94,8 @@
             android:text="@{postItem.content.text}"
             android:textColor="@color/text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_title" />
+            app:layout_constraintTop_toBottomOf="@+id/post_title"
+            tools:text="Posts content" />
 
         <ImageView
             android:id="@+id/image"
@@ -129,7 +104,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="image"
             android:tag="image"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/post_reply_count"
             app:layout_constraintDimensionRatio="w,16:9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,12 +117,64 @@
             android:id="@+id/post_reply_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/open_sans"
             android:text='@{postItem.replyCount() + " replies"}'
             android:textColor="@color/text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
+
+        <TextView
+            android:id="@+id/post_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(postItem.vote)}"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/post_sub"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toEndOf="@id/post_user"
+            tools:layout_editor_absoluteY="10dp"
+            tools:text="0"
+            tools:textColor="#000000" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/post_vote_up"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerInside"
+            android:tag="vote_up"
+            android:visibility="gone"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@id/post_vote_count"
+            app:layout_constraintTop_toTopOf="@id/post_vote_count"
+            app:srcCompat="@android:drawable/arrow_up_float" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/post_vote_down"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:scaleType="centerInside"
+            android:visibility="gone"
+            android:tag="vote_down"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toEndOf="@id/post_vote_count"
+            app:layout_constraintTop_toTopOf="@id/post_vote_count"
+            app:srcCompat="@android:drawable/arrow_down_float" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

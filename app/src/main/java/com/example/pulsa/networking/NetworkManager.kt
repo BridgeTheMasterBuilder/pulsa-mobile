@@ -2,6 +2,7 @@ package com.example.pulsa.networking
 
 import android.util.Log
 import com.example.pulsa.activities.BaseLayoutActivity
+import com.example.pulsa.utils.UserUtils
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
@@ -15,9 +16,9 @@ import java.time.LocalDateTime
 
 class NetworkManager {
     private val LOG = "OkHttp"
-    // private val URL = "http://10.0.2.2:8080/api/v1/"
+    private val URL = "http://10.0.2.2:8080/api/v1/"
 
-    private val URL = "https://pulsa-rest-production.up.railway.app/api/v1/"
+    // private val URL = "https://pulsa-rest-production.up.railway.app/api/v1/"
     private val client: OkHttpClient = OkHttpClient()
     private lateinit var message: String
 
@@ -55,6 +56,7 @@ class NetworkManager {
 
     fun post(activity: BaseLayoutActivity, map: HashMap<String, Any>) {
         val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        val requestHeaderBuilder = Headers.Builder()
 
         // Post and replies
         map["title"]?.let { requestBodyBuilder.addFormDataPart("title", it as String) }
@@ -92,14 +94,20 @@ class NetworkManager {
         map["username"]?.let { requestBodyBuilder.addFormDataPart("username", it as String) }
         map["email"]?.let { requestBodyBuilder.addFormDataPart("email", it as String) }
         map["password"]?.let { requestBodyBuilder.addFormDataPart("password", it as String) }
+        map["vote"]?.let { requestBodyBuilder.addFormDataPart("", "") }
+
+        // Header
+        if (UserUtils.loggedIn()) requestHeaderBuilder.add("Authorization", UserUtils.getJwtToken())
 
         val requestBody = requestBodyBuilder.build()
+        val requestHeader = requestHeaderBuilder.build()
 
         println("request url: ${URL + map["url"]}")
         println("Request body: ${requestBody}")
         val request: Request = Request.Builder()
             .url(URL + map["url"])
             .post(requestBody)
+            .headers(requestHeader)
             .build()
 
         val call = client.newCall(request)

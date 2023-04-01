@@ -1,12 +1,18 @@
 <resources>
     <string name="app_name">Pulsa</string>
+    <!-- User -->
     <string name="user">User</string>
     <string name="token">Token</string>
+    <string name="avatar">Avatar</string>
+    <string name="loggedIn">LoggedIn</string>
+    <!-- Nav menu -->
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <!-- Buttons -->
     <string name="newPostButton">Create New Post</string>
     <string name="allSubsButton">See All Subs</string>
     <string name="replyButton">Create Reply</string>
+    <!-- random -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_sub_index">SubIndexActivity</string>
     <string name="large_text">

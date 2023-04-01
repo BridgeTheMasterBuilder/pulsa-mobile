@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Parcelize
 class Post(
-    val postId: Int,
+    val postId: Long,
     var title: String,
     var content: Content,
     var creator: User,

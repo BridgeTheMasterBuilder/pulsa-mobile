@@ -45,6 +45,60 @@
             app:layout_constraintStart_toEndOf="@id/reply_avatar"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/reply_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text=""
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_avatar"
+            app:layout_constraintStart_toEndOf="@+id/reply_username"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0"
+            tools:textColor="@color/white" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/reply_vote_up"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerInside"
+            android:tag="vote_up"
+            android:visibility="gone"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@id/reply_vote_count"
+            app:layout_constraintTop_toTopOf="@id/reply_vote_count"
+            app:srcCompat="@android:drawable/arrow_up_float"
+            tools:visibility="visible" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/reply_vote_down"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:scaleType="centerInside"
+            android:tag="vote_down"
+            android:visibility="gone"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toEndOf="@id/reply_vote_count"
+            app:layout_constraintTop_toTopOf="@id/reply_vote_count"
+            app:srcCompat="@android:drawable/arrow_down_float"
+            tools:visibility="visible" />
+
+
         <ImageView
             android:id="@+id/vertical_line"
             android:layout_width="40dp"
@@ -66,7 +120,9 @@
             app:layout_constraintStart_toEndOf="@id/reply_avatar"
             app:layout_constraintTop_toBottomOf="@id/reply_avatar"
             tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            tools:layout_conversion_absoluteWidth="0dp"
+            tools:text="Reply text"
+            tools:textColor="@color/black" />
 
         <ImageView
             android:id="@+id/reply_image"

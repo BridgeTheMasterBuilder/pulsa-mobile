@@ -24,6 +24,7 @@ import com.example.pulsa.databinding.ActivityPostBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
+import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.gson.reflect.TypeToken
 
@@ -80,7 +81,6 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         super.onCreate(savedInstanceState)
 
         val post: Post = intent.getParcelableExtra("post")!!
-
         runOnUiThread {
             NetworkManager().get(
                 this,
@@ -92,6 +92,12 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         }
 
         binding = ActivityPostBinding.inflate(layoutInflater)
+        if (UserUtils.loggedIn()) {
+            setupVoting<Post>(binding.postVoteUp, binding.postVoteDown, post.postId)
+        } else {
+            binding.postVoteUp.visibility = View.GONE
+            binding.postVoteDown.visibility = View.GONE
+        }
         setContentView(binding.root)
         binding.root.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
@@ -112,6 +118,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         binding.postpageText.text = post.content.text
         binding.postpageUser.text = "u/${post.creator.username}"
         binding.postpageSub.text = "p/${post.sub.slug}"
+        binding.postVoteCount.text = post.vote.toString()
 
         if (URLUtil.isValidUrl(post.creator.avatar)) {
             val circularProgressDrawable = CircularProgressDrawable(this)
@@ -123,7 +130,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                 .load(post.creator.avatar)
                 .placeholder(circularProgressDrawable)
                 .listener(glideRequestListener)
-                .into(binding.postpageAvatarImage)
+                .into(binding.postpageAvatar)
                 .view.visibility = View.VISIBLE
         }
 
@@ -170,6 +177,9 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         private var text = itemView.findViewById<TextView>(R.id.reply_text)
         private var image = itemView.findViewById<ImageView>(R.id.reply_image)
         private var avatar = itemView.findViewById<ImageView>(R.id.reply_avatar)
+        private var votes = itemView.findViewById<TextView>(R.id.reply_vote_count)
+        private var upvote = itemView.findViewById<ImageView>(R.id.reply_vote_up)
+        private var downvote = itemView.findViewById<ImageView>(R.id.reply_vote_down)
 
         override fun bindTreeNode(node: TreeNode) {
             super.bindTreeNode(node)
@@ -178,7 +188,15 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             image.visibility = View.GONE
 
             username.text = "u/${reply.creator.username}"
+            votes.text = reply.vote.toString()
             text.text = reply.content.text
+
+            if (UserUtils.loggedIn()) {
+                activity.setupVoting<Reply>(upvote, downvote, reply.replyId)
+            } else {
+                upvote.visibility = View.GONE
+                downvote.visibility = View.GONE
+            }
 
             if (reply.content.image != "") {
                 if (URLUtil.isValidUrl(reply.content.image)) {
@@ -259,6 +277,39 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         return false
     }
 
+    inline fun <reified T> setupVoting(upvote: View, downvote: View, id: Long) {
+        upvote.visibility = View.VISIBLE
+        downvote.visibility = View.VISIBLE
+
+        if (!upvote.hasOnClickListeners()) {
+            upvote.setOnClickListener {
+                runOnUiThread {
+                    NetworkManager().post(
+                        this, hashMapOf(
+                            "url" to "p/${id}/upvote",
+                            "type" to object : TypeToken<T>() {},
+                            "vote" to ""
+                        )
+                    )
+                }
+            }
+        }
+
+        if (!downvote.hasOnClickListeners()) {
+            downvote.setOnClickListener {
+                runOnUiThread {
+                    NetworkManager().post(
+                        this, hashMapOf(
+                            "url" to "p/${id}/downvote",
+                            "type" to object : TypeToken<T>() {},
+                            "vote" to ""
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     override fun resolveGet(content: Any) {
         post = content as Post
 
@@ -277,6 +328,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         }
 
         postPosition = intent.getIntExtra("pos", -1)
+        binding.postpageTitle.text = post.title
+        binding.postpageText.text = post.content.text
         replies = post.replies
         factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
         adapter = TreeViewAdapter(factory)
@@ -285,8 +338,14 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
 
         adapter.updateTreeNodes(roots)
         adapter.expandAll()
+    }
 
-        binding.postpageTitle.text = post.title
-        binding.postpageText.text = post.content.text
+    override fun resolvePost(content: Any) {
+        post = content as Post
+        binding.postVoteCount.text = post.vote.toString()
+        val intent = intent
+        intent.putExtra("postWithReply", post)
+        intent.putExtra("pos", postPosition)
+        setResult(RESULT_OK, intent)
     }
 }

@@ -74,6 +74,8 @@ class LoginActivity : BaseLayoutActivity() {
             this.getSharedPreferences(getString(R.string.user), MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString(getString(R.string.token), tkn)
+            putString(getString(R.string.avatar), user.avatar)
+            putBoolean(getString(R.string.loggedIn), true)
             apply()
         }
 

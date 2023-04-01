@@ -4,14 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.BaseLayoutBinding
 import com.example.pulsa.utils.LoggedIn
+import com.example.pulsa.utils.UserUtils
+import com.example.pulsa.utils.glideRequestListener
 
 open class BaseLayoutActivity : AppCompatActivity() {
 
@@ -21,6 +26,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = BaseLayoutBinding.inflate(layoutInflater)
+        UserUtils.setup(this)
         drawerLayout = binding.drawerLayout
         setSupportActionBar(binding.myToolbar.toolbar)
 
@@ -102,12 +108,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
             else binding.drawerLayout.openDrawer(GravityCompat.END)
         }
 
-        val token = getSharedPreferences(
-            getString(R.string.user),
-            MODE_PRIVATE
-        ).getString(getString(R.string.token), "")
-
-        if (token != "") {
+        if (UserUtils.loggedIn()) {
             binding.navViewUser.menu.clear()
             binding.navViewUser.inflateMenu(R.menu.nav_drawer_loggedin)
             binding.navViewUser.setNavigationItemSelectedListener {
@@ -131,6 +132,24 @@ open class BaseLayoutActivity : AppCompatActivity() {
                 }
                 true
             }
+
+            val avatar = UserUtils.getUserAvatar(this)
+
+            if (URLUtil.isValidUrl(avatar)) {
+                val circularProgressDrawable = CircularProgressDrawable(this)
+                circularProgressDrawable.strokeWidth = 3f
+                circularProgressDrawable.centerRadius = 15f
+                circularProgressDrawable.start()
+
+                Glide.with(this)
+                    .load(avatar)
+                    .placeholder(circularProgressDrawable)
+                    .listener(glideRequestListener)
+                    .into(binding.myToolbar.userMenu)
+                    .view.visibility = View.VISIBLE
+            }
+
+
         } else {
             setDefaultNav()
         }

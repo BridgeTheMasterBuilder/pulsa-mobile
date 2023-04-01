@@ -49,7 +49,6 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                println("IN MAIN ACTIVITY AGAIN")
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
@@ -64,15 +63,11 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
-                    println("size of replies after adding reply to post:${post.replies.size}")
-                    println("Position in array${pos}")
-                    println("DID I RECIEVE POST?: ${post?.title}")
-                    println("post size before added to adapter:${posts.size}")
                     post?.let { it ->
                         adapter.updateItem(post, pos)
                         posts[pos] = post
                     }
-                    println("post size after added to adapter:${posts.size}")
+
                 }
             }
         }
@@ -80,6 +75,7 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     override fun resolveGet(content: Any) {
         posts = content as MutableList<Post>
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
+        voteOnClickSetup()
         binding.recyclerView.adapter = adapter
     }
 
@@ -87,7 +83,6 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         val intent = Intent(this, PostActivity::class.java)
         intent.putExtra("post", post)
         intent.putExtra("pos", position)
-        println("BEFORE LAuNCHING intent with post: Size of replies:${post.replies.size}")
         resultLauncher.launch(intent)
     }
 
@@ -99,10 +94,47 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
 
     override fun onResume() {
         super.onResume()
+
+        if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
         super.setupUserMenu()
     }
 
     override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
         adapterOnClick(content, position)
     }
+
+    private fun voteOnClickSetup() {
+        adapter.upvoteOnClick { id, pos ->
+            runOnUiThread {
+                NetworkManager().post(
+                    this, hashMapOf(
+                        "type" to object : TypeToken<Post>() {},
+                        "url" to "p/${id}/upvote",
+                        "vote" to ""
+                    )
+                )
+            }
+            intent.putExtra("pos", pos)
+        }
+
+        adapter.downvoteOnClick { id, pos ->
+            runOnUiThread {
+                NetworkManager().post(
+                    this, hashMapOf(
+                        "type" to object : TypeToken<Post>() {},
+                        "url" to "p/${id}/downvote",
+                        "vote" to ""
+                    )
+                )
+            }
+            intent.putExtra("pos", pos)
+        }
+    }
+
+    override fun resolvePost(content: Any) {
+        val votedPost = content as Post
+        val position = intent.getIntExtra("pos", -1)!!
+        adapter.updateItem(votedPost, position)
+    }
+
 }
