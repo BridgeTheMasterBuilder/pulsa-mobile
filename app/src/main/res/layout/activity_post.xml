@@ -8,12 +8,13 @@
     tools:context=".activities.PostActivity">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/postpage_replybutton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +28,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:fillViewport="true"
+            android:nestedScrollingEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +36,8 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/postpage_avatar"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:scaleType="centerInside"
                 android:tag="avatar"
                 app:civ_border_color="@color/white"
@@ -43,8 +45,7 @@
                 app:civ_shadow="true"
                 app:civ_shadow_color="@color/black"
                 app:civ_shadow_radius="1dp"
-                app:layout_constraintBottom_toBottomOf="@id/postpage_separator"
-                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintBottom_toTopOf="@id/postpage_separator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pulsa" />
@@ -79,11 +80,11 @@
                 android:id="@+id/postpage_separator"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/pulsa_gradient"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/postpage_sub" />
+                app:layout_constraintTop_toBottomOf="@id/postpage_avatar" />
 
 
             <TextView
@@ -92,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/postpage_image"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/open_sans_semibold"
                 android:text=""
                 android:textColor="@color/title"
@@ -118,17 +119,14 @@
 
             <ImageView
                 android:id="@+id/postpage_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:scaleType="fitXY"
                 android:visibility="gone"
-                app:layout_constraintDimensionRatio="h,2:1"
-                app:layout_constraintEnd_toEndOf="@id/recyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/postpage_text"
-                tools:scaleType="fitXY"
                 tools:srcCompat="@tools:sample/backgrounds/scenic"
                 tools:visibility="visible" />
 
@@ -139,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/postpage_separator"
+                app:layout_constraintBottom_toBottomOf="@id/postpage_avatar"
                 app:layout_constraintEnd_toStartOf="@+id/postpage_sub"
                 app:layout_constraintStart_toEndOf="@+id/postpage_user"
                 app:layout_constraintTop_toTopOf="parent"
@@ -186,12 +184,16 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:nestedScrollingEnabled="false"
                 android:translationZ="2dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/postpage_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postpage_image"
                 tools:listitem="@layout/reply" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -201,13 +203,15 @@
 
     <Button
         android:id="@+id/postpage_replybutton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/replyButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

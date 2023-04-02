@@ -20,18 +20,17 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/post_avatar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:scaleType="centerInside"
-            android:tag="avatar"
             android:src="@drawable/pulsa"
+            android:tag="avatar"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp"
             app:civ_shadow="true"
             app:civ_shadow_color="@color/black"
             app:civ_shadow_radius="1dp"
-            app:layout_constraintBottom_toBottomOf="@id/post_separator"
-            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintBottom_toTopOf="@id/post_separator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pulsa" />
@@ -66,17 +65,17 @@
             android:id="@+id/post_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/pulsa_gradient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/post_sub" />
+            app:layout_constraintTop_toBottomOf="@id/post_avatar" />
 
         <TextView
             android:id="@+id/post_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/open_sans_semibold"
             android:text="@{postItem.title}"
             android:textColor="@color/title"
@@ -104,7 +103,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="image"
             android:tag="image"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/post_reply_count"
             app:layout_constraintDimensionRatio="w,16:9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,12 +116,12 @@
             android:id="@+id/post_reply_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/open_sans"
             android:text='@{postItem.replyCount() + " replies"}'
             android:textColor="@color/text"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
         <TextView
@@ -131,10 +130,11 @@
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(postItem.vote)}"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/post_avatar"
             app:layout_constraintEnd_toStartOf="@+id/post_sub"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toEndOf="@id/post_user"
-            tools:layout_editor_absoluteY="10dp"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="0"
             tools:textColor="#000000" />
 
