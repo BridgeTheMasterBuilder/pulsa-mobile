@@ -16,9 +16,9 @@ import java.time.LocalDateTime
 
 class NetworkManager {
     private val LOG = "OkHttp"
-    private val URL = "http://10.0.2.2:8080/api/v1/"
+    //  private val URL = "http://10.0.2.2:8080/api/v1/"
 
-    // private val URL = "https://pulsa-rest-production.up.railway.app/api/v1/"
+    private val URL = "https://pulsa-rest-production.up.railway.app/api/v1/"
     private val client: OkHttpClient = OkHttpClient()
     private lateinit var message: String
 

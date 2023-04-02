@@ -10,11 +10,13 @@ import com.example.pulsa.activities.UserActivity
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.FragmentAccountPostsBinding
 import com.example.pulsa.objects.Post
+import com.example.pulsa.services.PostService
 
 
 class AccountPostsFragment : Fragment() {
     private lateinit var binding: FragmentAccountPostsBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
+    private lateinit var posts: MutableList<Post>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +24,7 @@ class AccountPostsFragment : Fragment() {
     ): View? {
         binding = FragmentAccountPostsBinding.inflate(inflater, container, false)
         val view = binding.root
-        val posts: ArrayList<Post> = arguments?.getParcelableArrayList("posts")!!
+        posts = PostService().posts
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
         binding.recyclerView.adapter = adapter
         return view

@@ -11,22 +11,37 @@ import com.example.pulsa.fragments.EditAccountFragment
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.User
+import com.example.pulsa.services.PostService
 import com.google.gson.reflect.TypeToken
 
 class UserActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityUserBinding
     private lateinit var user: User
+    private lateinit var posts: ArrayList<Post>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        /*
+           val loggedInUser = LoggedIn.getUser()
+           if(loggedInUser != user) {
+               binding.buttonlayout.visibility = View.INVISIBLE
+           }
+
+        val userFromIntent = intent.getStringExtra("user")
+
+         */
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object : TypeToken<User>() {}
-        map["url"] = "u/test/"
+        map["url"] = "u/gervinotandi1/"
         runOnUiThread { NetworkManager().get(this, map) }
+
         binding.postsbtn.setOnClickListener {
             val args = Bundle()
-            args.putParcelableArrayList("posts", ArrayList(user.posts))
+            posts = ArrayList<Post>(PostService().posts)
+            args.putParcelableArrayList("posts", posts)
+
             AccountPostsFragment().arguments = args
             replaceFragment(AccountPostsFragment())
         }
@@ -43,8 +58,10 @@ class UserActivity : BaseLayoutActivity() {
             args.putString("email", user.email)
             args.putString("password", user.password)
             args.putString("avatar", user.avatar)
-            AccountRepliesFragment().arguments = args
-            replaceFragment(EditAccountFragment())
+            val fragment = EditAccountFragment()
+            fragment.arguments = args
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.userfragment, fragment).commit()
         }
     }
 
@@ -63,4 +80,6 @@ class UserActivity : BaseLayoutActivity() {
         fT.replace(R.id.userfragment, fragment)
         fT.commit()
     }
+
+    companion object
 }
