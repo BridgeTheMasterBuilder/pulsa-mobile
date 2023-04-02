@@ -114,12 +114,36 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         })
 
         if (UserUtils.loggedIn()) {
-            setupVoting<Post>(binding.postVoteUp, binding.postVoteDown, post.postId)
+            binding.postVoteUp.visibility = View.VISIBLE
+            binding.postVoteDown.visibility = View.VISIBLE
+
+            binding.postVoteUp.setOnClickListener {
+                runOnUiThread {
+                    NetworkManager().post(
+                        this, hashMapOf(
+                            "url" to "p/${post.postId}/upvote",
+                            "type" to object : TypeToken<Post>() {},
+                            "vote" to ""
+                        )
+                    )
+                }
+            }
+
+            binding.postVoteDown.setOnClickListener {
+                runOnUiThread {
+                    NetworkManager().post(
+                        this, hashMapOf(
+                            "url" to "p/${post.postId}/downvote",
+                            "type" to object : TypeToken<Post>() {},
+                            "vote" to ""
+                        )
+                    )
+                }
+            }
+
         } else {
-            if (binding.postVoteUp.visibility != View.GONE) binding.postVoteUp.visibility =
-                View.GONE
-            if (binding.postVoteDown.visibility != View.GONE) binding.postVoteDown.visibility =
-                View.GONE
+            binding.postVoteUp.visibility = View.GONE
+            binding.postVoteDown.visibility = View.GONE
         }
 
         postPosition = intent.getIntExtra("pos", -1)
@@ -204,10 +228,11 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             text.text = reply.content.text
 
             if (UserUtils.loggedIn()) {
-                activity.setupVoting<Reply>(upvote, downvote, reply.replyId)
+                upvote.visibility = View.VISIBLE
+                downvote.visibility = View.VISIBLE
             } else {
-                if (upvote.visibility != View.GONE) upvote.visibility = View.GONE
-                if (downvote.visibility != View.GONE) downvote.visibility = View.GONE
+                upvote.visibility = View.GONE
+                downvote.visibility = View.GONE
             }
 
             if (reply.content.image != "") {
@@ -229,6 +254,30 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                         .listener(glideRequestListener)
                         .into(avatar)
                         .view.visibility = View.VISIBLE
+                }
+            }
+
+            itemView.findViewById<ImageView>(R.id.reply_vote_up).setOnClickListener {
+                activity.runOnUiThread {
+                    NetworkManager().post(
+                        activity, hashMapOf(
+                            "url" to "r/${reply.replyId}/upvote",
+                            "type" to object : TypeToken<Reply>() {},
+                            "vote" to ""
+                        )
+                    )
+                }
+            }
+
+            itemView.findViewById<ImageView>(R.id.reply_vote_down).setOnClickListener {
+                activity.runOnUiThread {
+                    NetworkManager().post(
+                        activity, hashMapOf(
+                            "url" to "r/${reply.replyId}/downvote",
+                            "type" to object : TypeToken<Reply>() {},
+                            "vote" to ""
+                        )
+                    )
                 }
             }
 
@@ -289,45 +338,6 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         return false
     }
 
-    inline fun <reified T> setupVoting(upvote: View, downvote: View, id: Long) {
-        upvote.visibility = View.VISIBLE
-        downvote.visibility = View.VISIBLE
-        var param = ""
-
-        when (T::class) {
-            Post::class -> param = "p"
-            Reply::class -> param = "r"
-        }
-
-        if (!upvote.hasOnClickListeners()) {
-            upvote.setOnClickListener {
-                runOnUiThread {
-                    NetworkManager().post(
-                        this, hashMapOf(
-                            "url" to "${param}/${id}/upvote",
-                            "type" to object : TypeToken<T>() {},
-                            "vote" to ""
-                        )
-                    )
-                }
-            }
-        }
-
-        if (!downvote.hasOnClickListeners()) {
-            downvote.setOnClickListener {
-                runOnUiThread {
-                    NetworkManager().post(
-                        this, hashMapOf(
-                            "url" to "${param}/${id}/downvote",
-                            "type" to object : TypeToken<T>() {},
-                            "vote" to ""
-                        )
-                    )
-                }
-            }
-        }
-    }
-
     override fun resolveGet(content: Any) {
         post = content as Post
 
@@ -386,3 +396,43 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         setResult(RESULT_OK, intent)
     }
 }
+
+
+// inline fun <reified T> setupVoting(upvote: View, downvote: View, id: Long) {
+//     upvote.visibility = View.VISIBLE
+//     downvote.visibility = View.VISIBLE
+//     var param = ""
+//
+//     when (T::class) {
+//         Post::class -> param = "p"
+//         Reply::class -> param = "r"
+//     }
+//
+//     if (!upvote.hasOnClickListeners()) {
+//         upvote.setOnClickListener {
+//             runOnUiThread {
+//                 NetworkManager().post(
+//                     this, hashMapOf(
+//                         "url" to "${param}/${id}/upvote",
+//                         "type" to object : TypeToken<T>() {},
+//                         "vote" to ""
+//                     )
+//                 )
+//             }
+//         }
+//     }
+//
+//     if (!downvote.hasOnClickListeners()) {
+//         downvote.setOnClickListener {
+//             runOnUiThread {
+//                 NetworkManager().post(
+//                     this, hashMapOf(
+//                         "url" to "${param}/${id}/downvote",
+//                         "type" to object : TypeToken<T>() {},
+//                         "vote" to ""
+//                     )
+//                 )
+//             }
+//         }
+//     }
+// }
