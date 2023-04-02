@@ -34,15 +34,7 @@ class SubIndexActivity : BaseLayoutActivity(), ActivityRing<Sub> {
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
-                if (data.getBoolean("nextSub", false)) {
-                    val (post, position) = next(subs, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
-                } else if (data.getBoolean("prevSub", false)) {
-                    val (post, position) = prev(subs, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
-                }
+                handle(data, subs, pos)
             }
         }
 
@@ -70,7 +62,7 @@ class SubIndexActivity : BaseLayoutActivity(), ActivityRing<Sub> {
         println("Failed to load subs")
     }
 
-    override fun dispatch(content: Sub, position: Int, launcher: (Sub, Int) -> Unit) {
+    override fun dispatch(content: Sub, position: Int) {
         adapterOnClick(content, position)
     }
 }

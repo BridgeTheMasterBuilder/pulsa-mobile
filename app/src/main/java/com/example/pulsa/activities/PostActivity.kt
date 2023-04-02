@@ -21,7 +21,6 @@ import com.example.pulsa.databinding.ActivityPostBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
-import com.example.pulsa.services.UserService
 import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
@@ -115,7 +114,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
 
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.root.setOnTouchListener(View.OnTouchListener { v, event ->
+        binding.scrollView.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
             mDetector.onTouchEvent(event)
         })
@@ -165,7 +164,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             )
             binding.postPlayaudiobutton.setOnClickListener {
                 val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
-                if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+                if (!containsTuple) mediaUtilsArray =
+                    mediaUtilsArray.plusElement(mediaUtils to button)
                 mediaUtils.playMedia(button)
             }
         }
@@ -182,7 +182,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             )
             binding.postPlayrecordingbutton.setOnClickListener {
                 val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
-                if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+                if (!containsTuple) mediaUtilsArray =
+                    mediaUtilsArray.plusElement(mediaUtils to button)
                 mediaUtils.playMedia(button)
             }
         }
@@ -342,8 +343,10 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                     reply.content.audio
                 )
                 button.setOnClickListener {
-                    val containsTuple = activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
-                    if (!containsTuple) activity.mediaUtilsArray = activity.mediaUtilsArray.plusElement(mediaUtils to button)
+                    val containsTuple =
+                        activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                    if (!containsTuple) activity.mediaUtilsArray =
+                        activity.mediaUtilsArray.plusElement(mediaUtils to button)
                     mediaUtils.playMedia(button)
                 }
             }
@@ -359,8 +362,10 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                     reply.content.recording
                 )
                 button.setOnClickListener {
-                    val containsTuple = activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
-                    if (!containsTuple) activity.mediaUtilsArray = activity.mediaUtilsArray.plusElement(mediaUtils to button)
+                    val containsTuple =
+                        activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                    if (!containsTuple) activity.mediaUtilsArray =
+                        activity.mediaUtilsArray.plusElement(mediaUtils to button)
                     mediaUtils.playMedia(button)
                 }
             }
@@ -397,16 +402,16 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         velocityX: Float,
         velocityY: Float
     ): Boolean {
-        if (velocityX > 0.0) {
-            intent.putExtra("nextPost", true)
+        if (velocityX > TOLERANCE) {
+            intent.putExtra("nextContent", true)
             setResult(Activity.RESULT_OK, intent)
             finish()
-        } else if (velocityX < 0.0) {
-            intent.putExtra("prevPost", true)
+        } else if (velocityX < -TOLERANCE) {
+            intent.putExtra("prevContent", true)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-        return true
+        return false
     }
 
     override fun onSingleTapUp(p0: MotionEvent): Boolean {

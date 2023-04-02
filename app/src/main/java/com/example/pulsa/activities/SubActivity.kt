@@ -63,14 +63,8 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
-                if (data.getBoolean("nextPost", false)) {
-                    val (post, position) = next(posts, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
-                } else if (data.getBoolean("prevPost", false)) {
-                    val (post, position) = prev(posts, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
+                if (handle(data, posts, pos)) {
+                    return@registerForActivityResult
                 } else {
                     val post: Post = result.data?.getParcelableExtra("post")!!
                     adapter.addItem(post)
@@ -167,11 +161,11 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         velocityY: Float
     ): Boolean {
         if (velocityX > 0.0) {
-            intent.putExtra("nextSub", true)
+            intent.putExtra("nextContent", true)
             setResult(Activity.RESULT_OK, intent)
             finish()
         } else if (velocityX < 0.0) {
-            intent.putExtra("prevSub", true)
+            intent.putExtra("prevContent", true)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -182,7 +176,7 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         return false
     }
 
-    override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
+    override fun dispatch(content: Post, position: Int) {
         adapterOnClick(content, position)
     }
 

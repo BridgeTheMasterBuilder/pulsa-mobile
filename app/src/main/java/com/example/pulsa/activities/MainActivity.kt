@@ -67,14 +67,8 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
-                if (data.getBoolean("nextPost", false)) {
-                    val (post, position) = next(posts, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
-                } else if (data.getBoolean("prevPost", false)) {
-                    val (post, position) = prev(posts, pos)
-
-                    dispatch(post, position, ::adapterOnClick)
+                if (handle(data, posts, pos)) {
+                    return@registerForActivityResult
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
@@ -138,7 +132,7 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         super.setupUserMenu()
     }
 
-    override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
+    override fun dispatch(content: Post, position: Int) {
         adapterOnClick(content, position)
     }
 
