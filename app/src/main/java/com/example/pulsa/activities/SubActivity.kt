@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
 import com.example.pulsa.R
@@ -42,9 +43,9 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
 
         binding = ActivitySubBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.root.setOnTouchListener(View.OnTouchListener { v, event ->
+        binding.recyclerView.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
-            mDetector.onTouchEvent(event)
+            onTouchEvent(event)
         })
 
 
@@ -160,6 +161,7 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         velocityX: Float,
         velocityY: Float
     ): Boolean {
+        Toast.makeText(this, "jjjj", Toast.LENGTH_SHORT).show()
         if (velocityX > 0.0) {
             intent.putExtra("nextContent", true)
             setResult(Activity.RESULT_OK, intent)
