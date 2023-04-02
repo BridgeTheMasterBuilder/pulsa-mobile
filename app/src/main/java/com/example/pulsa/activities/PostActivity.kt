@@ -14,10 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.amrdeveloper.treeview.TreeNode
-import com.amrdeveloper.treeview.TreeViewAdapter
-import com.amrdeveloper.treeview.TreeViewHolder
-import com.amrdeveloper.treeview.TreeViewHolderFactory
+import com.amrdeveloper.treeview.*
 import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
@@ -37,6 +34,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private var postPosition = 0;
     private lateinit var replies: MutableList<Reply>
     private lateinit var factory: TreeViewHolderFactory
+    private lateinit var treeNodeManager: TreeNodeManager
     private lateinit var roots: MutableList<TreeNode>
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private lateinit var mDetector: GestureDetectorCompat
@@ -77,9 +75,26 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         return null
     }
 
+    private fun MutableList<Reply>.updateReply(updatedReply: Reply): Reply? {
+        var index = 0
+        for (reply in this) {
+            if (reply.replyId == updatedReply.replyId) {
+                this[index] = updatedReply
+                return reply
+            } else {
+                val foundReply = reply.replies.updateReply(updatedReply)
+                if (foundReply != null) {
+                    return foundReply
+                }
+            }
+            index++
+        }
+        return null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        treeNodeManager = TreeNodeManager()
         val post: Post = intent.getParcelableExtra("post")!!
         runOnUiThread {
             NetworkManager().get(
@@ -92,27 +107,24 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         }
 
         binding = ActivityPostBinding.inflate(layoutInflater)
-        if (UserUtils.loggedIn()) {
-            setupVoting<Post>(binding.postVoteUp, binding.postVoteDown, post.postId)
-        } else {
-            binding.postVoteUp.visibility = View.GONE
-            binding.postVoteDown.visibility = View.GONE
-        }
         setContentView(binding.root)
         binding.root.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
             mDetector.onTouchEvent(event)
         })
 
+        if (UserUtils.loggedIn()) {
+            setupVoting<Post>(binding.postVoteUp, binding.postVoteDown, post.postId)
+        } else {
+            if (binding.postVoteUp.visibility != View.GONE) binding.postVoteUp.visibility =
+                View.GONE
+            if (binding.postVoteDown.visibility != View.GONE) binding.postVoteDown.visibility =
+                View.GONE
+        }
+
         postPosition = intent.getIntExtra("pos", -1)
         replies = post.replies
-        factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
-        adapter = TreeViewAdapter(factory)
-        binding.recyclerView.adapter = adapter
-        roots = createReplyTree(replies)
-
-        adapter.updateTreeNodes(roots)
-        adapter.expandAll()
+        setupReplyTree()
 
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
@@ -134,7 +146,6 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                 .view.visibility = View.VISIBLE
         }
 
-
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -144,11 +155,12 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                         val parentReply = result.data?.getParcelableExtra<Reply>("reply")!!
                         val nestedReply = result.data?.getParcelableExtra<Reply>("nestedReply")!!
                         replies.findReply(parentReply)?.replies?.add(nestedReply)
-                        post.replies.findReply(parentReply)?.replies?.add(nestedReply)
+                        post.replies = replies
+
                     } else if (result.data?.hasExtra("reply")!!) {
                         reply = result.data?.getParcelableExtra<Reply>("reply")!!
                         replies.add(reply)
-                        post.replies.add(reply)
+                        post.replies = replies
                     }
 
                     roots = createReplyTree(replies)
@@ -194,8 +206,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             if (UserUtils.loggedIn()) {
                 activity.setupVoting<Reply>(upvote, downvote, reply.replyId)
             } else {
-                upvote.visibility = View.GONE
-                downvote.visibility = View.GONE
+                if (upvote.visibility != View.GONE) upvote.visibility = View.GONE
+                if (downvote.visibility != View.GONE) downvote.visibility = View.GONE
             }
 
             if (reply.content.image != "") {
@@ -280,13 +292,19 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     inline fun <reified T> setupVoting(upvote: View, downvote: View, id: Long) {
         upvote.visibility = View.VISIBLE
         downvote.visibility = View.VISIBLE
+        var param = ""
+
+        when (T::class) {
+            Post::class -> param = "p"
+            Reply::class -> param = "r"
+        }
 
         if (!upvote.hasOnClickListeners()) {
             upvote.setOnClickListener {
                 runOnUiThread {
                     NetworkManager().post(
                         this, hashMapOf(
-                            "url" to "p/${id}/upvote",
+                            "url" to "${param}/${id}/upvote",
                             "type" to object : TypeToken<T>() {},
                             "vote" to ""
                         )
@@ -300,7 +318,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                 runOnUiThread {
                     NetworkManager().post(
                         this, hashMapOf(
-                            "url" to "p/${id}/downvote",
+                            "url" to "${param}/${id}/downvote",
                             "type" to object : TypeToken<T>() {},
                             "vote" to ""
                         )
@@ -331,8 +349,13 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
         replies = post.replies
+        setupReplyTree()
+    }
+
+    private fun setupReplyTree() {
+        treeNodeManager.clearNodes()
         factory = TreeViewHolderFactory { view, _ -> ReplyViewHolder(view, this) }
-        adapter = TreeViewAdapter(factory)
+        adapter = TreeViewAdapter(factory, treeNodeManager)
         binding.recyclerView.adapter = adapter
         roots = createReplyTree(replies)
 
@@ -341,8 +364,22 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     }
 
     override fun resolvePost(content: Any) {
-        post = content as Post
-        binding.postVoteCount.text = post.vote.toString()
+        when (content) {
+            is Post -> {
+                post = content
+                binding.postVoteCount.text = post.vote.toString()
+
+            }
+            is Reply -> {
+                replies.updateReply(content)
+                post.replies = replies
+
+                roots = createReplyTree(replies)
+                adapter.updateTreeNodes(roots)
+                adapter.expandAll()
+            }
+        }
+
         val intent = intent
         intent.putExtra("postWithReply", post)
         intent.putExtra("pos", postPosition)

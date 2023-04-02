@@ -90,7 +90,8 @@ class NewReplyActivity : BaseLayoutActivity() {
             mediaUtils.playAudio(
                 aPlayToggle,
                 audioUri,
-                this)
+                this
+            )
         }
 
         binding.submitbutton.setOnClickListener {
