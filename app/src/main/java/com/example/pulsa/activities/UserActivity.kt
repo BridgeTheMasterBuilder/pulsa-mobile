@@ -50,6 +50,7 @@ class UserActivity : BaseLayoutActivity() {
 
     override fun resolveGet(content: Any) {
         user = content as User
+        println("USER:${user.toString()}")
     }
 
     internal fun startPostActivity(post: Post, pos: Int) {
