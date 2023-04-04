@@ -21,11 +21,10 @@ class AccountPostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAccountPostsBinding.inflate(inflater, container, false)
-        val view = binding.root
         val posts: ArrayList<Post> = arguments?.getParcelableArrayList("posts")!!
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
         binding.recyclerView.adapter = adapter
-        return view
+        return binding.root
     }
 
     private fun adapterOnClick(post: Post, position: Int) {

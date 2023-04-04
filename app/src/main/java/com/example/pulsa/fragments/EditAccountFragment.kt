@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.pulsa.R
+import com.example.pulsa.databinding.FragmentEditAccountBinding
+import com.example.pulsa.objects.User
 
 class EditAccountFragment : Fragment() {
+    private lateinit var binding: FragmentEditAccountBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -16,6 +18,14 @@ class EditAccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_edit_account, container, false)
+        binding = FragmentEditAccountBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    fun setUserFields(user: User) {
+        binding.editaccrealname.setText(user.realName)
+        binding.editaccusername.setText(user.username)
+        binding.editaccemail.setText(user.email)
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.pulsa.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityUserBinding
 import com.example.pulsa.fragments.AccountPostsFragment
@@ -15,11 +16,13 @@ import com.google.gson.reflect.TypeToken
 
 class UserActivity : BaseLayoutActivity() {
     private lateinit var binding: ActivityUserBinding
+    private lateinit var fragmentManager: FragmentManager
     private lateinit var user: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        fragmentManager = supportFragmentManager
         var map: HashMap<String, Any> = HashMap()
         map["type"] = object : TypeToken<User>() {}
         map["url"] = "u/test/"
@@ -50,7 +53,8 @@ class UserActivity : BaseLayoutActivity() {
 
     override fun resolveGet(content: Any) {
         user = content as User
-        println("USER:${user.toString()}")
+        val editAccountFragment = getCurrentFragment() as EditAccountFragment
+        editAccountFragment.setUserFields(user)
     }
 
     internal fun startPostActivity(post: Post, pos: Int) {
@@ -59,9 +63,11 @@ class UserActivity : BaseLayoutActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        val fM = supportFragmentManager
-        val fT = fM.beginTransaction()
-        fT.replace(R.id.userfragment, fragment)
-        fT.commit()
+        fragmentManager.beginTransaction().replace(R.id.userfragment, fragment).commit()
+    }
+
+
+    private fun getCurrentFragment(): Fragment? {
+        return fragmentManager.findFragmentById(R.id.userfragment)
     }
 }

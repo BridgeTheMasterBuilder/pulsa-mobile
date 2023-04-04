@@ -5,6 +5,13 @@
     <string name="token">Token</string>
     <string name="avatar">Avatar</string>
     <string name="loggedIn">LoggedIn</string>
+    <!-- Edit Account Fragment -->
+    <string name="editAccountTitle">Account Details</string>
+    <string name="editAccountUsername">Username</string>
+    <string name="editAccountRealname">Realname</string>
+    <string name="editAccountEmail">Email</string>
+    <string name="editAccountPassword">Password</string>
+    <string name="editAccountImageDescription">Current avatar image</string>
     <!-- Nav menu -->
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -12,6 +19,8 @@
     <string name="newPostButton">Create New Post</string>
     <string name="allSubsButton">See All Subs</string>
     <string name="replyButton">Create Reply</string>
+    <string name="saveButton">Save</string>
+    <string name="changeImageButton">Change Image</string>
     <!-- random -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_sub_index">SubIndexActivity</string>
