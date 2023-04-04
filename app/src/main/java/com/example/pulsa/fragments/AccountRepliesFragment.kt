@@ -6,21 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.pulsa.R
+import com.example.pulsa.adapters.ReplyRecyclerAdapter
+import com.example.pulsa.databinding.FragmentAccountRepliesBinding
+import com.example.pulsa.objects.Reply
+import com.example.pulsa.services.PostService
 
 class AccountRepliesFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var binding: FragmentAccountRepliesBinding
+    private lateinit var adapter: ReplyRecyclerAdapter<Reply>
+    private lateinit var replies: MutableList<Reply>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account_replies, container, false)
+        binding = FragmentAccountRepliesBinding.inflate(inflater, container, false)
+        val view = binding.root
+        replies = PostService().replies
+        adapter = ReplyRecyclerAdapter(replies, ::adapterOnClick, R.layout.reply)
+        binding.recyclerView.adapter = adapter
+        return view
     }
 
+    private fun adapterOnClick(reply: Reply, position: Int) {
+        //fuck
+    }
 
 }

@@ -24,19 +24,23 @@ class UserActivity : BaseLayoutActivity() {
         setContentView(binding.root)
         fragmentManager = supportFragmentManager
         var map: HashMap<String, Any> = HashMap()
+
+        //VANTAR USER I SHAREDPREFERENCES
         map["type"] = object : TypeToken<User>() {}
         map["url"] = "u/test/"
+
         runOnUiThread { NetworkManager().get(this, map) }
         binding.postsbtn.setOnClickListener {
+            /*
             val args = Bundle()
             args.putParcelableArrayList("posts", ArrayList(user.posts))
-            AccountPostsFragment().arguments = args
+            AccountPostsFragment().arguments = args*/
             replaceFragment(AccountPostsFragment())
         }
         binding.repliesbtn.setOnClickListener {
-            // val args = Bundle()
-            // args.putParcelableArrayList("replies", ArrayList(user.replies))
-            // AccountRepliesFragment().arguments = args
+            /* val args = Bundle()
+             args.putParcelableArrayList("replies", ArrayList(user.replies))
+             AccountRepliesFragment().arguments = args*/
             replaceFragment(AccountRepliesFragment())
         }
         binding.editaccountbtn.setOnClickListener {
