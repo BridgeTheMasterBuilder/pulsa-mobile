@@ -21,11 +21,16 @@ import com.example.pulsa.databinding.ActivityPostBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
+import com.example.pulsa.services.UserService
+import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
+import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
 
 const val NO_REPLY = -1L
+private const val MEDIA_PLAY = R.drawable.icons8_play_96
+private const val MEDIA_STOPPED = "stopped"
 
 class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
@@ -38,6 +43,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var roots: MutableList<TreeNode>
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private lateinit var mDetector: GestureDetectorCompat
+    private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
+
 
     private fun createReplyTree(replies: MutableList<Reply>): MutableList<TreeNode> {
         fun aux(child: TreeNode, replies: MutableList<Reply>) {
@@ -146,6 +153,40 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             binding.postVoteDown.visibility = View.GONE
         }
 
+        if (URLUtil.isValidUrl(post.content.audio)) {
+            val button = binding.postPlayaudiobutton
+            button.visibility = View.VISIBLE
+            val mediaUtils = MediaUtils()
+            val mediaPlayer = mediaUtils.initMediaPlayerWithUrl(
+                this,
+                binding.root.findViewWithTag("audioVisualizer"),
+                button as MaterialButton,
+                post.content.audio
+            )
+            binding.postPlayaudiobutton.setOnClickListener {
+                val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+                mediaUtils.playMedia(button)
+            }
+        }
+
+        if (URLUtil.isValidUrl(post.content.recording)) {
+            val button = binding.postPlayrecordingbutton
+            button.visibility = View.VISIBLE
+            val mediaUtils = MediaUtils()
+            val mediaPlayer = mediaUtils.initMediaPlayerWithUrl(
+                this,
+                binding.root.findViewWithTag("recordingVisualizer"),
+                button as MaterialButton,
+                post.content.recording
+            )
+            binding.postPlayrecordingbutton.setOnClickListener {
+                val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+                mediaUtils.playMedia(button)
+            }
+        }
+
         postPosition = intent.getIntExtra("pos", -1)
         replies = post.replies
         setupReplyTree()
@@ -223,6 +264,10 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             val reply = node.value as Reply
             image.visibility = View.GONE
 
+            // TODO: Fjarlægja eftir að user er lagað
+            if (reply.creator == null) {
+                reply.creator = UserService.user
+            }
             username.text = "u/${reply.creator.username}"
             votes.text = reply.vote.toString()
             text.text = reply.content.text
@@ -288,6 +333,40 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                 intent.putExtra("reply", (node.value as Reply))
                 intent.putExtra("post", activity.post)
                 activity.launcher.launch(intent)
+            }
+
+            if (URLUtil.isValidUrl(reply.content.audio)) {
+                val button = itemView.findViewById<Button>(R.id.reply_playaudiobutton)
+                button.visibility = View.VISIBLE
+                val mediaUtils = MediaUtils()
+                val mediaPlayer = mediaUtils.initMediaPlayerWithUrl(
+                    activity,
+                    itemView.findViewWithTag("audioVisualizer"),
+                    button as MaterialButton,
+                    reply.content.audio
+                )
+                button.setOnClickListener {
+                    val containsTuple = activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                    if (!containsTuple) activity.mediaUtilsArray = activity.mediaUtilsArray.plusElement(mediaUtils to button)
+                    mediaUtils.playMedia(button)
+                }
+            }
+
+            if (URLUtil.isValidUrl(reply.content.recording)) {
+                val button = itemView.findViewById<Button>(R.id.reply_playrecordingbutton)
+                button.visibility = View.VISIBLE
+                val mediaUtils = MediaUtils()
+                val mediaPlayer = mediaUtils.initMediaPlayerWithUrl(
+                    activity,
+                    itemView.findViewWithTag("recordingVisualizer"),
+                    button as MaterialButton,
+                    reply.content.recording
+                )
+                button.setOnClickListener {
+                    val containsTuple = activity.mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+                    if (!containsTuple) activity.mediaUtilsArray = activity.mediaUtilsArray.plusElement(mediaUtils to button)
+                    mediaUtils.playMedia(button)
+                }
             }
         }
     }
@@ -359,7 +438,13 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
         replies = post.replies
+
+        audioSetup()
         setupReplyTree()
+    }
+
+    private fun audioSetup() {
+
     }
 
     private fun setupReplyTree() {
@@ -394,6 +479,16 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         intent.putExtra("postWithReply", post)
         intent.putExtra("pos", postPosition)
         setResult(RESULT_OK, intent)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        mediaUtilsArray.forEach { pair ->
+            pair.first.medPlayer?.stop()
+            pair.second?.tag = MEDIA_STOPPED
+            pair.second?.setIconResource(MEDIA_PLAY)
+        }
     }
 }
 

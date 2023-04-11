@@ -6,18 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.chibde.visualizer.LineVisualizer
 import com.example.pulsa.BR
+import com.example.pulsa.R
 import com.example.pulsa.databinding.PostItemBindingImpl
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
+import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
+import com.google.android.material.button.MaterialButton
 
 
 open class GenericRecyclerAdapter<T : Any>(
@@ -29,6 +35,10 @@ open class GenericRecyclerAdapter<T : Any>(
     private lateinit var context: Context
     private lateinit var upvote: ((id: Long, pos: Int) -> Unit)
     private lateinit var downvote: ((id: Long, pos: Int) -> Unit)
+    private lateinit var sub: ((sub: Sub, position: Int) -> Unit)
+    private lateinit var playAudio: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
+    private lateinit var playRecording: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
+
 
     fun upvoteOnClick(upvoteOnClickListener: (id: Long, pos: Int) -> Unit) {
         upvote = upvoteOnClickListener
@@ -36,6 +46,18 @@ open class GenericRecyclerAdapter<T : Any>(
 
     fun downvoteOnClick(downvoteOnClickListener: ((id: Long, pos: Int) -> Unit)) {
         downvote = downvoteOnClickListener
+    }
+
+    fun subOnClick(subOnClickListener: ((sub: Sub, position: Int) -> Unit)) {
+        sub = subOnClickListener
+    }
+
+    fun playAudioOnClick(playAudioOnClickListener: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)) {
+        playAudio = playAudioOnClickListener
+    }
+
+    fun playRecordingOnClick(playRecordingOnClickListener: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)) {
+        playRecording = playRecordingOnClickListener
     }
 
     fun swapList(list: MutableList<T>) {
@@ -69,7 +91,7 @@ open class GenericRecyclerAdapter<T : Any>(
         )
 
 
-        return GenericViewHolder(binding, onClick)
+        return GenericViewHolder(binding, onClick, context)
     }
 
     override fun getItemCount(): Int = items.size
@@ -77,6 +99,21 @@ open class GenericRecyclerAdapter<T : Any>(
     override fun onBindViewHolder(holder: GenericViewHolder<T>, position: Int) {
         if (this::upvote.isInitialized) holder.upvoteOnClickListener = upvote
         if (this::downvote.isInitialized) holder.downvoteOnClickListener = downvote
+        if (this::sub.isInitialized) holder.subOnClickListener = sub
+
+        when (val item = items[position]) {
+            is Post -> {
+                if (URLUtil.isValidUrl(item.content.audio)) {
+                    holder.audio?.visibility = View.VISIBLE
+                    holder.playAudioOnClickListener = playAudio
+                }
+                if (URLUtil.isValidUrl(item.content.recording)) {
+                    holder.recording?.visibility = View.VISIBLE
+                    holder.playRecordingOnClickListener = playRecording
+                }
+            }
+        }
+
         holder.bind(items[position], position)
         val image = when (val item = items[position]) {
             is Post -> item.content.image
@@ -84,10 +121,12 @@ open class GenericRecyclerAdapter<T : Any>(
             else -> ""
         }
 
-        val avatar = when (val item = items[position]) {
+        /* val avatar = when (val item = items[position]) {
             is Post -> item.creator.avatar
             else -> ""
-        }
+        } */
+
+        val avatar = ""
 
         if (URLUtil.isValidUrl(avatar)) {
             val circularProgressDrawable = CircularProgressDrawable(context)
@@ -122,14 +161,22 @@ open class GenericRecyclerAdapter<T : Any>(
 
     class GenericViewHolder<T>(
         private val binding: ViewDataBinding,
-        private val onClick: ((T, position: Int) -> Unit)?
+        private val onClick: ((T, position: Int) -> Unit)?,
+        private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
         val imageView: ImageView = binding.root.findViewWithTag("image")
         var avatar: ImageView? = null
+        var sub: TextView? = null
+
+        var audio: MaterialButton? = binding.root.findViewWithTag("audio")
+        var recording: MaterialButton? = binding.root.findViewWithTag("recording")
+
         lateinit var upvoteOnClickListener: (id: Long, pos: Int) -> Unit
         lateinit var downvoteOnClickListener: (id: Long, pos: Int) -> Unit
-
+        lateinit var subOnClickListener: (sub: Sub, position: Int) -> Unit
+        lateinit var playAudioOnClickListener: (button: MaterialButton?, mediaUtils: MediaUtils) -> Unit
+        lateinit var playRecordingOnClickListener: (button: MaterialButton?, mediaUtils: MediaUtils) -> Unit
 
         fun bind(item: T, position: Int) {
             when (item) {
@@ -138,18 +185,55 @@ open class GenericRecyclerAdapter<T : Any>(
             }
 
             if (binding is PostItemBindingImpl) {
+                val post = binding.postItem!!
                 avatar = binding.root.findViewWithTag("avatar")
+                binding.root.findViewWithTag<TextView>("sub").let { it ->
+                    it.setOnClickListener {
+                        subOnClickListener(post.sub, position)
+                    }
+                }
+
+                audio.let { it ->
+                    if (URLUtil.isValidUrl((item as Post).content.audio)) {
+                        val mediaUtils = MediaUtils()
+                        val mediaPlayer = mediaUtils.initMediaPlayerWithUrl(
+                            context,
+                            binding.root.findViewWithTag("audioVisualizer"),
+                            audio,
+                            post.content.audio
+                        )
+                        it?.setOnClickListener {
+                            playAudioOnClickListener(audio, mediaUtils)
+                        }
+                    }
+                }
+
+                recording.let { it ->
+                    if (URLUtil.isValidUrl((item as Post).content.recording)) {
+                        val mediaUtils = MediaUtils()
+                        mediaUtils.initMediaPlayerWithUrl(
+                            context,
+                            binding.root.findViewWithTag("recordingVisualizer"),
+                            recording,
+                            post.content.recording
+                        )
+                        it?.setOnClickListener {
+                            playRecordingOnClickListener(recording, mediaUtils)
+                        }
+                    }
+                }
+
                 if (UserUtils.loggedIn()) {
                     binding.root.findViewWithTag<ImageView>("vote_up").let { it ->
                         it.setOnClickListener {
-                            upvoteOnClickListener(binding.postItem!!.postId, position)
+                            upvoteOnClickListener(post.postId, position)
                         }
                         it.visibility = View.VISIBLE
                     }
                     binding.root.findViewWithTag<ImageView>("vote_down").let { it ->
                         it.setOnClickListener {
                             downvoteOnClickListener(
-                                binding.postItem!!.postId,
+                                post.postId,
                                 position
                             )
                         }

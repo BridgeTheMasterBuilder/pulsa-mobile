@@ -10,12 +10,25 @@ import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivityMainBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Role
+import com.example.pulsa.objects.User
+import com.example.pulsa.services.UserService
+import com.example.pulsa.utils.MediaUtils
+import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
+import java.time.LocalDateTime
+
+private const val MEDIA_STOP = R.drawable.icons8_stop_96
+private const val MEDIA_PLAY = R.drawable.icons8_play_96
+private const val MEDIA_STOPPED = "stopped"
+
 
 class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
+    private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +89,18 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         posts = content as MutableList<Post>
         adapter = GenericRecyclerAdapter(posts, ::adapterOnClick, R.layout.post_item)
         voteOnClickSetup()
+        audioOnClickSetup()
+        subOnClickSetup()
         binding.recyclerView.adapter = adapter
     }
 
     private fun adapterOnClick(post: Post, position: Int) {
         val intent = Intent(this, PostActivity::class.java)
+        // TODO: Fjarlægja eftir að user dótið er lagað
+        post.creator = UserService.user
+        for (reply in post.replies) {
+            reply.creator = UserService.user
+        }
         intent.putExtra("post", post)
         intent.putExtra("pos", position)
         resultLauncher.launch(intent)
@@ -131,10 +151,42 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         }
     }
 
+    private fun audioOnClickSetup() {
+        adapter.playAudioOnClick { button, mediaUtils ->
+            val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+            if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+            mediaUtils.playMedia(button)
+        }
+
+        adapter.playRecordingOnClick { button, mediaUtils ->
+            val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+            if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+            mediaUtils.playMedia(button)
+        }
+    }
+
+    private fun subOnClickSetup() {
+        adapter.subOnClick { sub, position ->
+            val intent = Intent(this, SubActivity::class.java)
+            intent.putExtra("sub", sub)
+            intent.putExtra("pos", position)
+            resultLauncher.launch(intent)
+        }
+    }
+
     override fun resolvePost(content: Any) {
         val votedPost = content as Post
         val position = intent.getIntExtra("pos", -1)!!
         adapter.updateItem(votedPost, position)
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        mediaUtilsArray.forEach { pair ->
+            pair.first.medPlayer?.stop()
+            pair.second?.tag = MEDIA_STOPPED
+            pair.second?.setIconResource(MEDIA_PLAY)
+        }
+    }
 }

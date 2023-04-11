@@ -136,6 +136,56 @@
             tools:layout_conversion_absoluteWidth="108dp" />
 
         <Button
+            android:id="@+id/reply_playaudiobutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="audio"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_image"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/reply_audioVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:tag="audioVisualizer"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/reply_playaudiobutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_playaudiobutton"
+            app:layout_constraintTop_toTopOf="@id/reply_playaudiobutton" />
+
+        <Button
+            android:id="@+id/reply_playrecordingbutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="recording"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_audioVisualizer"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/reply_recordingVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:tag="recordingVisualizer"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/reply_playrecordingbutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_playrecordingbutton"
+            app:layout_constraintTop_toTopOf="@id/reply_playrecordingbutton" />
+
+        <Button
             android:id="@+id/postpage_replybutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,7 +195,7 @@
             android:text="Reply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/reply_avatar"
-            app:layout_constraintTop_toBottomOf="@id/reply_image"
+            app:layout_constraintTop_toBottomOf="@id/reply_playrecordingbutton"
             app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

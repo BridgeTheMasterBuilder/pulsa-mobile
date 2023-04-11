@@ -8,6 +8,8 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.SeekBar
+import android.widget.TextView
 import com.blankj.utilcode.util.UriUtils
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityNewReplyBinding
@@ -16,6 +18,7 @@ import com.example.pulsa.objects.*
 import com.example.pulsa.utils.MediaUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
+import java.util.concurrent.TimeUnit
 
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -50,7 +53,6 @@ class NewReplyActivity : BaseLayoutActivity() {
         recordingPath = "${externalCacheDir?.absolutePath}/tempRecording.3gp"
         rPlayToggle = (binding.playrecordingbutton as MaterialButton)
         aPlayToggle = (binding.playaudiobutton as MaterialButton)
-
 
         binding.imagebutton.setOnClickListener {
             val i = Intent().apply {

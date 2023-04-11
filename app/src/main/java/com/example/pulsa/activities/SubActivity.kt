@@ -14,13 +14,19 @@ import com.example.pulsa.databinding.ActivitySubBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
+import com.example.pulsa.utils.MediaUtils
+import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
+
+private const val MEDIA_PLAY = R.drawable.icons8_play_96
+private const val MEDIA_STOPPED = "stopped"
 
 class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, ActivityRing<Post> {
     private lateinit var binding: ActivitySubBinding
     private lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
     private lateinit var mDetector: GestureDetectorCompat
+    private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +85,22 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
             { post, position -> adapterOnClick(post, position) },
             R.layout.post_item
         )
+        audioOnClickSetup()
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun audioOnClickSetup() {
+        adapter.playAudioOnClick { button, mediaUtils ->
+            val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+            if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+            mediaUtils.playMedia(button)
+        }
+
+        adapter.playRecordingOnClick { button, mediaUtils ->
+            val containsTuple = mediaUtilsArray.any { (util, _) -> util == mediaUtils }
+            if (!containsTuple) mediaUtilsArray = mediaUtilsArray.plusElement(mediaUtils to button)
+            mediaUtils.playMedia(button)
+        }
     }
 
     private fun adapterOnClick(post: Post, position: Int) {
@@ -143,5 +164,15 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
 
     override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
         adapterOnClick(content, position)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        mediaUtilsArray.forEach { pair ->
+            pair.first.medPlayer?.stop()
+            pair.second?.tag = MEDIA_STOPPED
+            pair.second?.setIconResource(MEDIA_PLAY)
+        }
     }
 }
