@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.Pulsa" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/cardview_dark_background</item>
+        <item name="colorPrimary">@color/button_color</item>
         <item name="colorPrimaryVariant">@android:color/darker_gray</item>
-        <item name="colorOnPrimary">@color/header</item>
+        <item name="colorOnPrimary">@color/button_text</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/text</item>
         <item name="colorSecondaryVariant">@color/purple_200</item>
@@ -21,5 +21,5 @@
 
     <style name="Theme.Pulsa.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.Pulsa.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Pulsa.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>

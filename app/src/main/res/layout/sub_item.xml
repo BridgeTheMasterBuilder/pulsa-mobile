@@ -26,7 +26,7 @@
             android:hint="Sub Item"
             android:text="@{subItem.name}"
             android:textAlignment="viewStart"
-            android:textColor="@color/white"
+            android:textColor="@color/button_text"
             android:textSize="20sp"
             android:textStyle="bold"
             android:translationZ="3dp"

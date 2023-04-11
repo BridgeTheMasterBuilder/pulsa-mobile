@@ -12,5 +12,8 @@
     <color name="sub">#D1C466</color>
     <color name="title">#86efac</color>
     <color name="text">#818cf8</color>
+    <color name="button_color">#191d24</color>
+    <color name="button_text">#a6adba</color>
+    <color name="indigo">#6366f1</color>
 
 </resources>

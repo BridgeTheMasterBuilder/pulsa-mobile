@@ -10,13 +10,10 @@ import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivityMainBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
-import com.example.pulsa.objects.Role
-import com.example.pulsa.objects.User
 import com.example.pulsa.services.UserService
 import com.example.pulsa.utils.MediaUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
-import java.time.LocalDateTime
 
 private const val MEDIA_STOP = R.drawable.icons8_stop_96
 private const val MEDIA_PLAY = R.drawable.icons8_play_96

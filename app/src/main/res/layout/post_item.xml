@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/jetbrains_mono_medium"
-            android:text='@{"p/" + postItem.sub.slug}'
+            android:text='@{"p/" + postItem.sub.name}'
             android:textColor="@color/sub"
             app:layout_constraintBottom_toBottomOf="@id/post_avatar"
             app:layout_constraintEnd_toEndOf="parent"
@@ -181,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{String.valueOf(postItem.vote)}"
-            android:textColor="@color/white"
+            android:textColor="@color/button_text"
             app:layout_constraintBottom_toBottomOf="@id/post_avatar"
             app:layout_constraintEnd_toStartOf="@+id/post_sub"
             app:layout_constraintHorizontal_bias="0.505"

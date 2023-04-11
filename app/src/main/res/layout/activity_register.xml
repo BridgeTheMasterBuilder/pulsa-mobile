@@ -5,7 +5,7 @@
     android:id="@+id/registerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pulsa"
+    android:background="@color/black"
     tools:context=".activities.RegisterActivity">
 
     <TextView
@@ -15,96 +15,161 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="50dp"
+        android:fontFamily="@font/trace_regular"
         android:gravity="center"
         android:shadowColor="#000000"
         android:shadowDx="10"
         android:shadowDy="10"
         android:shadowRadius="10"
-        android:text="Join The Pulsiverse"
-        android:textColor="@color/purple_500"
-        android:textSize="50dp"
+        android:text="Join the Pulsiverse"
+        android:textColor="@color/indigo"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/registerrealname"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/purple_200"
-        android:drawableLeft="@drawable/baseline_self_improvement_24"
-        android:gravity="center"
-        android:hint="Real Name"
-        android:inputType="textPersonName"
-        android:padding="20dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Username:"
+        android:textColor="@color/title"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerpagetext" />
+        app:layout_constraintTop_toBottomOf="@id/registerpagetext" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Password:"
+        android:textColor="@color/title"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerusername" />
+
+    <TextView
+        android:id="@+id/realName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Real Name:"
+        android:textColor="@color/title"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerpassword" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Email:"
+        android:textColor="@color/title"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerrealname" />
 
     <EditText
         android:id="@+id/registerusername"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/purple_200"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/type_box"
         android:drawableLeft="@drawable/baseline_person_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
         android:gravity="center"
         android:hint="Username"
         android:inputType="text"
-        android:padding="20dp"
+        android:padding="10dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerrealname" />
-
-    <EditText
-        android:id="@+id/registeremail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/purple_200"
-        android:drawableLeft="@drawable/baseline_email_24"
-        android:gravity="center"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerusername" />
+        app:layout_constraintTop_toBottomOf="@id/userName" />
 
     <EditText
         android:id="@+id/registerpassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="24dp"
-        android:background="@color/purple_200"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/type_box"
         android:drawableLeft="@drawable/baseline_info_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
         android:gravity="center"
         android:hint="Password"
         android:inputType="textPassword"
-        android:padding="20dp"
+        android:padding="10dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registeremail" />
+        app:layout_constraintTop_toBottomOf="@id/password" />
+
+    <EditText
+        android:id="@+id/registerrealname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/type_box"
+        android:drawableLeft="@drawable/baseline_self_improvement_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:gravity="center"
+        android:hint="Real Name"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/realName" />
+
+    <EditText
+        android:id="@+id/registeremail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/type_box"
+        android:drawableLeft="@drawable/baseline_email_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:gravity="center"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/registerpagebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:text="REGISTER"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerpassword" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

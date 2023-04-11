@@ -3,62 +3,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pulsa"
+    android:background="@color/black"
     tools:context=".activities.LoginActivity">
 
     <TextView
+        android:id="@+id/loginpagetext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/loginpagetext"
-        android:textSize="50dp"
-        android:text="Enter the Pulsiverse"
-        android:textColor="@color/purple_500"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/trace_regular"
+        android:gravity="center"
         android:shadowColor="#000000"
         android:shadowDx="10"
         android:shadowDy="10"
         android:shadowRadius="10"
-        android:layout_margin="50dp"
-        android:textStyle="bold"
-        android:gravity="center" />
+        android:text="Become Pulsa"
+        android:textColor="@color/indigo"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginpagetext"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Username:"
+        android:textColor="@color/title"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginusername"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="Password:"
+        android:textColor="@color/title"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/loginusername"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/loginpagetext"
-        android:layout_margin="10dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/userName"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/type_box"
         android:drawableLeft="@drawable/baseline_person_24"
-        android:background="@color/purple_200"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
         android:gravity="center"
         android:hint="Username"
+        android:textColor="@color/white"
         android:inputType="text"
-        android:padding="20dp" />
+        android:padding="10dp" />
 
     <EditText
         android:id="@+id/loginpassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_below="@+id/loginusername"
-        android:gravity="center"
+        android:layout_height="50dp"
+        android:layout_below="@id/password"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:background="@drawable/type_box"
         android:drawableLeft="@drawable/baseline_info_24"
-        android:background="@color/purple_200"
-        android:layout_margin="10dp"
-        android:padding="20dp"
-        android:hint="Password" />
+        android:drawableTint="@color/white"
+        android:gravity="center"
+        android:hint="Password"
+        android:textColor="@color/white"
+        android:inputType="textPassword"
+        android:padding="10dp" />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginpagebutton"
-        android:text="LOGIN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginpassword"
-        android:layout_margin="50dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:text="LOGIN" />
 
 </RelativeLayout>

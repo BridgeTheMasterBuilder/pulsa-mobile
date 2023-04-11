@@ -10,6 +10,7 @@ import com.example.pulsa.activities.BaseLayoutActivity
 object UserUtils {
     private var sharedPreferences: SharedPreferences? = null
     private var token: String? = ""
+    private var userName: String? = ""
     private var avatar: String? = ""
     private var loggedIn: String? = ""
 
@@ -17,6 +18,7 @@ object UserUtils {
         token = context.getString(R.string.token)
         avatar = context.getString(R.string.avatar)
         loggedIn = context.getString(R.string.loggedIn)
+        userName = context.getString(R.string.userName)
         sharedPreferences =
             context.getSharedPreferences(context.getString(R.string.user), MODE_PRIVATE)
     }
@@ -31,5 +33,9 @@ object UserUtils {
 
     fun getUserAvatar(activity: BaseLayoutActivity): String {
         return sharedPreferences!!.getString(avatar, "")!!
+    }
+
+    fun getUserName(activity: BaseLayoutActivity): String {
+        return sharedPreferences!!.getString(userName, "")!!
     }
 }

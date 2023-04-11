@@ -194,7 +194,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         binding.postpageTitle.text = post.title
         binding.postpageText.text = post.content.text
         binding.postpageUser.text = "u/${post.creator.username}"
-        binding.postpageSub.text = "p/${post.sub.slug}"
+        binding.postpageSub.text = "p/${post.sub.name}"
         binding.postVoteCount.text = post.vote.toString()
 
         if (URLUtil.isValidUrl(post.creator.avatar)) {

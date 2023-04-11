@@ -40,8 +40,8 @@
                 android:layout_height="40dp"
                 android:scaleType="centerInside"
                 android:tag="avatar"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp"
+                app:civ_border_color="@color/button_text"
+                app:civ_border_width="2dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="@color/black"
                 app:civ_shadow_radius="1dp"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/jetbrains_mono_medium"
-                android:text='@{"p/" + postItem.sub.slug}'
+                android:text='@{"p/" + postItem.sub.name}'
                 android:textColor="@color/sub"
                 app:layout_constraintBottom_toBottomOf="@id/postpage_avatar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/white"
+                android:textColor="@color/button_text"
                 app:layout_constraintBottom_toBottomOf="@id/postpage_avatar"
                 app:layout_constraintEnd_toStartOf="@+id/postpage_sub"
                 app:layout_constraintStart_toEndOf="@+id/postpage_user"

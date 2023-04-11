@@ -5,51 +5,14 @@
     android:id="@+id/buttonlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
     android:background="@color/black"
     tools:context=".activities.UserActivity">
-
-    <Button
-        android:id="@+id/editaccountbtn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="-8dp"
-        android:text="Edit Account"
-        app:layout_constraintBottom_toBottomOf="@id/postsbtn"
-        app:layout_constraintEnd_toStartOf="@id/postsbtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Edit Account" />
-
-    <Button
-        android:id="@+id/postsbtn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="-8dp"
-        android:layout_marginBottom="16dp"
-        android:text="View Posts"
-        app:layout_constraintBottom_toTopOf="@id/userfragment"
-        app:layout_constraintEnd_toStartOf="@id/repliesbtn"
-        app:layout_constraintStart_toEndOf="@id/editaccountbtn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/repliesbtn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="-8dp"
-        android:text="View Replies"
-        app:layout_constraintBottom_toBottomOf="@id/postsbtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/postsbtn"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/userfragment"
         android:name="com.example.pulsa.fragments.EditAccountFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

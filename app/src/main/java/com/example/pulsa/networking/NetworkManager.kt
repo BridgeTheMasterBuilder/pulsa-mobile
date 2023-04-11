@@ -90,10 +90,20 @@ class NetworkManager {
         }
 
         // Users
-        map["real name"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
+        map["realName"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
         map["username"]?.let { requestBodyBuilder.addFormDataPart("username", it as String) }
         map["email"]?.let { requestBodyBuilder.addFormDataPart("email", it as String) }
         map["password"]?.let { requestBodyBuilder.addFormDataPart("password", it as String) }
+        (map["avatar"] as? File)?.let {
+            map["avatarType"]?.let { imageType ->
+                requestBodyBuilder.addFormDataPart(
+                    "avatar",
+                    "image1.jpg",
+                    it.asRequestBody((imageType as String).toMediaTypeOrNull())
+                )
+            }
+        }
+
         map["vote"]?.let { requestBodyBuilder.addFormDataPart("", "") }
 
         // Header
@@ -142,7 +152,7 @@ class NetworkManager {
                         activity.runOnUiThread { activity.resolvePost(content) }
                     }
                 } else {
-                    println(message)
+                    activity.runOnUiThread { activity.resolveFailure(response) }
                 }
             }
         })

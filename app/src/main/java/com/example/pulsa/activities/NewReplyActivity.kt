@@ -137,7 +137,6 @@ class NewReplyActivity : BaseLayoutActivity() {
             map["recording"] = UriUtils.uri2File(mediaUtils.recordingUri)
             map["recordingType"] = "video/3gpp"
         }
-        map["token"] = ""
 
         runOnUiThread { NetworkManager().post(this, map) }
     }

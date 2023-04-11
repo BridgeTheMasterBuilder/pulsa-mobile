@@ -17,6 +17,7 @@ import com.example.pulsa.databinding.BaseLayoutBinding
 import com.example.pulsa.utils.LoggedIn
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
+import okhttp3.Response
 
 open class BaseLayoutActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
         UserUtils.setup(this)
         drawerLayout = binding.drawerLayout
         setSupportActionBar(binding.myToolbar.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupNavMenu()
         setupUserMenu()
@@ -53,6 +55,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
             R.string.open,
             R.string.close
         )
+        toggle.drawerArrowDrawable.setColor(getColor(R.color.button_text))
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setHomeButtonEnabled(true)
@@ -162,5 +165,25 @@ open class BaseLayoutActivity : AppCompatActivity() {
 
     public open fun resolvePost(content: Any) {
         return
+    }
+
+    public open fun resolveFailure(response: Response) {
+        return
+    }
+
+    public open fun updateAvatar(avatar: String) {
+        if (URLUtil.isValidUrl(avatar)) {
+            val circularProgressDrawable = CircularProgressDrawable(this)
+            circularProgressDrawable.strokeWidth = 3f
+            circularProgressDrawable.centerRadius = 15f
+            circularProgressDrawable.start()
+
+            Glide.with(this)
+                .load(avatar)
+                .placeholder(circularProgressDrawable)
+                .listener(glideRequestListener)
+                .into(binding.myToolbar.userMenu)
+                .view.visibility = View.VISIBLE
+        }
     }
 }

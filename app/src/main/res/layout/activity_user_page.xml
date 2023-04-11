@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".fragments.EditAccountFragment">
+
+    <ImageView
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cover_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="-75dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:tag="avatar"
+        app:civ_border_width="0dp"
+        app:civ_shadow="true"
+        app:civ_shadow_color="@color/black"
+        app:civ_shadow_radius="1dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        tools:src="@drawable/anonymous" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/audiowide"
+        tools:text="User"
+        android:textColor="@color/indigo"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_avatar" />
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/pulsa_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username" />
+
+    <Button
+        android:id="@+id/biobtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="User Bio"
+        app:layout_constraintEnd_toStartOf="@id/postsbtn"
+        app:layout_constraintStart_toStartOf="@id/separator"
+        app:layout_constraintTop_toBottomOf="@id/separator" />
+
+    <Button
+        android:id="@+id/postsbtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="View Posts"
+        app:layout_constraintEnd_toStartOf="@id/repliesbtn"
+        app:layout_constraintStart_toEndOf="@id/biobtn"
+        app:layout_constraintTop_toBottomOf="@id/separator" />
+
+    <Button
+        android:id="@+id/repliesbtn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:text="View Replies"
+        app:layout_constraintBottom_toBottomOf="@id/postsbtn"
+        app:layout_constraintEnd_toEndOf="@id/separator"
+        app:layout_constraintStart_toEndOf="@id/postsbtn"
+        app:layout_constraintTop_toBottomOf="@id/separator" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/userfragment"
+        android:name="com.example.pulsa.fragments.AccountBioFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postsbtn"
+        tools:layout="@layout/fragment_user_bio" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
