@@ -1,11 +1,13 @@
 package com.example.pulsa.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityLoginBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.User
 import com.google.gson.reflect.TypeToken
+import okhttp3.Response
 
 class LoginActivity : BaseLayoutActivity() {
 
@@ -81,5 +83,9 @@ class LoginActivity : BaseLayoutActivity() {
         }
 
         finish()
+    }
+
+    override fun resolveFailure(response: Response) {
+        Toast.makeText(this, "${response.code} error... Oops", Toast.LENGTH_SHORT).show()
     }
 }

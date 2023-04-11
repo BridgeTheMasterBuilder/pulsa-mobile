@@ -57,6 +57,7 @@
             android:fontFamily="@font/jetbrains_mono_medium"
             android:text='@{"u/" + postItem.creator.username}'
             android:textColor="@color/user"
+            android:tag="user"
             app:layout_constraintBottom_toBottomOf="@+id/post_avatar"
             app:layout_constraintStart_toEndOf="@+id/post_avatar"
             app:layout_constraintTop_toTopOf="parent"

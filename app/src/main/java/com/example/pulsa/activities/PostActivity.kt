@@ -264,10 +264,6 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             val reply = node.value as Reply
             image.visibility = View.GONE
 
-            // TODO: Fjarlægja eftir að user er lagað
-            if (reply.creator == null) {
-                reply.creator = UserService.user
-            }
             username.text = "u/${reply.creator.username}"
             votes.text = reply.vote.toString()
             text.text = reply.content.text

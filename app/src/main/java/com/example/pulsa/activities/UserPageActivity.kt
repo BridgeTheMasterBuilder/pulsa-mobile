@@ -1,8 +1,10 @@
 package com.example.pulsa.activities
 
 import android.os.Bundle
+import android.webkit.URLUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityUserPageBinding
 import com.example.pulsa.fragments.AccountBioFragment
@@ -13,6 +15,7 @@ import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
 import com.example.pulsa.objects.User
 import com.example.pulsa.utils.UserUtils
+import com.example.pulsa.utils.glideRequestListener
 import com.google.gson.reflect.TypeToken
 
 class UserPageActivity : BaseLayoutActivity() {
@@ -63,6 +66,16 @@ class UserPageActivity : BaseLayoutActivity() {
 
     override fun resolveGet(content: Any) {
         user = content as User
+
+        if (URLUtil.isValidUrl(user.avatar)) {
+            binding.userAvatar.let {
+                Glide.with(this)
+                    .load(user.avatar)
+                    .listener(glideRequestListener)
+                    .into(it)
+            }
+        }
+
         val args = Bundle()
         args.putParcelable("user", user)
         accountBioFragment = getCurrentFragment() as AccountBioFragment

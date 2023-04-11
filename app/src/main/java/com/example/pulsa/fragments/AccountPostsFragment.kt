@@ -91,11 +91,7 @@ class AccountPostsFragment : Fragment(), ActivityRing<Post> {
 
     private fun adapterOnClick(post: Post, position: Int) {
         val intent = Intent(this.context, PostActivity::class.java)
-        // TODO: Fjarlægja eftir að user dótið er lagað
-        post.creator = UserService.user
-        for (reply in post.replies) {
-            reply.creator = UserService.user
-        }
+
         intent.putExtra("post", post)
         intent.putExtra("pos", position)
         resultLauncher.launch(intent)

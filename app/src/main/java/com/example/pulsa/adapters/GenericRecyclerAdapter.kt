@@ -21,6 +21,7 @@ import com.example.pulsa.databinding.ReplyBindingImpl
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
 import com.example.pulsa.objects.Sub
+import com.example.pulsa.objects.User
 import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
@@ -37,6 +38,7 @@ open class GenericRecyclerAdapter<T : Any>(
     private lateinit var upvote: ((id: Long, pos: Int) -> Unit)
     private lateinit var downvote: ((id: Long, pos: Int) -> Unit)
     private lateinit var sub: ((sub: Sub, position: Int) -> Unit)
+    private lateinit var userPage: ((user: User, position: Int) -> Unit)
     private lateinit var playAudio: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
     private lateinit var playRecording: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
 
@@ -51,6 +53,10 @@ open class GenericRecyclerAdapter<T : Any>(
 
     fun subOnClick(subOnClickListener: ((sub: Sub, position: Int) -> Unit)) {
         sub = subOnClickListener
+    }
+
+    fun userOnClick(userOnClickListener: ((user: User, position: Int) -> Unit)) {
+        userPage = userOnClickListener
     }
 
     fun playAudioOnClick(playAudioOnClickListener: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)) {
@@ -101,6 +107,7 @@ open class GenericRecyclerAdapter<T : Any>(
         if (this::upvote.isInitialized) holder.upvoteOnClickListener = upvote
         if (this::downvote.isInitialized) holder.downvoteOnClickListener = downvote
         if (this::sub.isInitialized) holder.subOnClickListener = sub
+        if (this::userPage.isInitialized) holder.userOnClickListener = userPage
 
         when (val item = items[position]) {
             is Post -> {
@@ -133,13 +140,11 @@ open class GenericRecyclerAdapter<T : Any>(
             else -> ""
         }
 
-        /* val avatar = when (val item = items[position]) {
+        val avatar = when (val item = items[position]) {
             is Post -> item.creator.avatar
             is Reply -> item.creator.avatar
             else -> ""
-        } */
-
-        val avatar = ""
+        }
 
         if (URLUtil.isValidUrl(avatar)) {
             holder.avatar?.let {
@@ -175,6 +180,7 @@ open class GenericRecyclerAdapter<T : Any>(
         lateinit var upvoteOnClickListener: (id: Long, pos: Int) -> Unit
         lateinit var downvoteOnClickListener: (id: Long, pos: Int) -> Unit
         lateinit var subOnClickListener: (sub: Sub, position: Int) -> Unit
+        lateinit var userOnClickListener: (user: User, position: Int) -> Unit
         lateinit var playAudioOnClickListener: (button: MaterialButton?, mediaUtils: MediaUtils) -> Unit
         lateinit var playRecordingOnClickListener: (button: MaterialButton?, mediaUtils: MediaUtils) -> Unit
 
@@ -195,6 +201,11 @@ open class GenericRecyclerAdapter<T : Any>(
                     binding.root.findViewWithTag<TextView>("sub").let { it ->
                         it.setOnClickListener {
                             subOnClickListener(rItem.sub, position)
+                        }
+                    }
+                    binding.root.findViewWithTag<TextView>("user").let { it ->
+                        it.setOnClickListener {
+                            userOnClickListener(rItem.creator, position)
                         }
                     }
                 }
