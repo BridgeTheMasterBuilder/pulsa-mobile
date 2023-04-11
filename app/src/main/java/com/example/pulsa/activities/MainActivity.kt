@@ -2,6 +2,7 @@ package com.example.pulsa.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,7 +11,6 @@ import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivityMainBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
-import com.example.pulsa.services.UserService
 import com.example.pulsa.utils.MediaUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken
 private const val MEDIA_STOP = R.drawable.icons8_stop_96
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOPPED = "stopped"
+private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
 
 class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
@@ -39,6 +40,8 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 )
             )
         }
+
+        MediaUtils().verifyRecordingPermissions(this);
 
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
@@ -81,6 +84,18 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 }
             }
         }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            // TODO, bregðast við ef það er ekki granted I guess?
+            // TODO, það þarf að láta alla audio takka verða gone
+            return
+    }
 
     override fun resolveGet(content: Any) {
         posts = content as MutableList<Post>
