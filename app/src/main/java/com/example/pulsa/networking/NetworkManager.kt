@@ -90,6 +90,7 @@ class NetworkManager {
         }
 
         // Users
+        map["real name"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String)}
         map["realName"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
         map["username"]?.let { requestBodyBuilder.addFormDataPart("username", it as String) }
         map["email"]?.let { requestBodyBuilder.addFormDataPart("email", it as String) }
