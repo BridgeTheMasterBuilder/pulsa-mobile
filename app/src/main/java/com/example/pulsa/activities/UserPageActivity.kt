@@ -102,14 +102,8 @@ class UserPageActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
-                if (data.getBoolean("nextPost", false)) {
-                    val (post, position) = next(user.posts, pos)
-
-                    dispatch(post, position)
-                } else if (data.getBoolean("prevPost", false)) {
-                    val (post, position) = prev(user.posts, pos)
-
-                    dispatch(post, position)
+                if (handle(data, user.posts, pos)) {
+                    return@registerForActivityResult
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
