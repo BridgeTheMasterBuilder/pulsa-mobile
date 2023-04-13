@@ -196,17 +196,34 @@ open class GenericRecyclerAdapter<T : Any>(
             binding.root.apply {
                 findViewWithTag<TextView>("user")
                     .setOnClickListener {
-                        userOnClickListener((item as? Post)?.creator ?: (item as? Reply)?.creator!!, position)
+                        userOnClickListener(
+                            (item as? Post)?.creator ?: (item as? Reply)?.creator!!,
+                            position
+                        )
                     }
 
-                setUpMediaUtils(context, "audioVisualizer", audio, (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio)
-                setUpMediaUtils(context, "recordingVisualizer", recording, (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording)
+                setUpMediaUtils(
+                    context,
+                    "audioVisualizer",
+                    audio,
+                    (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio
+                )
+                setUpMediaUtils(
+                    context,
+                    "recordingVisualizer",
+                    recording,
+                    (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording
+                )
 
-                findViewWithTag<ImageView>("vote_up").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
-                findViewWithTag<ImageView>("vote_down").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                findViewWithTag<ImageView>("vote_up").visibility =
+                    if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                findViewWithTag<ImageView>("vote_down").visibility =
+                    if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
 
-                (item as? Post)?.postId ?: (item as? Reply)?.replyId?.let {
-                    setupVoteOnClickListener(this, it, position)
+                if (item is Post) {
+                    setupVoteOnClickListener(this, item.postId, position)
+                } else if (item is Reply) {
+                    setupVoteOnClickListener(this, item.replyId, position)
                 }
 
                 val voter = when (item) {
@@ -234,12 +251,8 @@ open class GenericRecyclerAdapter<T : Any>(
         }
 
         private fun setupVoteOnClickListener(view: View, id: Long, position: Int) {
-            view.findViewWithTag<ImageView>("vote_up").apply {
-                setOnClickListener { upvoteOnClickListener(id, position) }
-            }
-            view.findViewWithTag<ImageView>("vote_down").apply {
-                setOnClickListener { downvoteOnClickListener(id, position) }
-            }
+            view.findViewWithTag<ImageView>("vote_up").setOnClickListener { upvoteOnClickListener(id, position) }
+            view.findViewWithTag<ImageView>("vote_down").setOnClickListener { downvoteOnClickListener(id, position) }
         }
     }
 }
