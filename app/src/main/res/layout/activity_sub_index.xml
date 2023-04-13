@@ -8,6 +8,16 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.SubIndexActivity">
 
+    <Button
+        android:id="@+id/subIndexNewSubButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create New Sub"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
@@ -17,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subIndexNewSubButton"
         tools:context=".activities.SubIndexActivity">
 
         <androidx.recyclerview.widget.RecyclerView

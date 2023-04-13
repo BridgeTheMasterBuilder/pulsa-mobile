@@ -26,6 +26,10 @@ class SubIndexActivity : BaseLayoutActivity(), ActivityRing<Sub> {
 
         binding = ActivitySubIndexBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.subIndexNewSubButton.setOnClickListener {
+            val i = Intent(this, NewSubActivity::class.java)
+            startActivity(i)
+        }
     }
 
     val resultLauncher =
