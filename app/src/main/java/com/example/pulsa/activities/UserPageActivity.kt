@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.example.pulsa.R
-import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivityUserPageBinding
 import com.example.pulsa.fragments.AccountBioFragment
 import com.example.pulsa.fragments.AccountPostsFragment
@@ -17,9 +16,7 @@ import com.example.pulsa.fragments.AccountRepliesFragment
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
-import com.example.pulsa.objects.Sub
 import com.example.pulsa.objects.User
-import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.gson.reflect.TypeToken
 
@@ -108,11 +105,11 @@ class UserPageActivity : BaseLayoutActivity(), ActivityRing<Post> {
                 if (data.getBoolean("nextPost", false)) {
                     val (post, position) = next(user.posts, pos)
 
-                    dispatch(post, position, ::adapterOnClick)
+                    dispatch(post, position)
                 } else if (data.getBoolean("prevPost", false)) {
                     val (post, position) = prev(user.posts, pos)
 
-                    dispatch(post, position, ::adapterOnClick)
+                    dispatch(post, position)
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
@@ -124,7 +121,7 @@ class UserPageActivity : BaseLayoutActivity(), ActivityRing<Post> {
             }
         }
 
-    override fun dispatch(content: Post, position: Int, launcher: (Post, Int) -> Unit) {
+    override fun dispatch(content: Post, position: Int) {
         adapterOnClick(content, position)
     }
 
