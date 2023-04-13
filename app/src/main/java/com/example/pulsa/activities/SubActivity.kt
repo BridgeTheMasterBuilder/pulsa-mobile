@@ -84,6 +84,7 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         audioOnClickSetup()
         binding.recyclerView.adapter = adapter
         userOnClickSetup()
+        subOnClickSetup()
     }
 
     private fun audioOnClickSetup() {
