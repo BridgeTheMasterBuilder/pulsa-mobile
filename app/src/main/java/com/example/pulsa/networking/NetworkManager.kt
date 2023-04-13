@@ -58,6 +58,8 @@ class NetworkManager {
         val requestBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
         val requestHeaderBuilder = Headers.Builder()
 
+        // Sub stuff
+        map["name"]?.let { requestBodyBuilder.addFormDataPart("name", it as String) }
         // Post and replies
         map["title"]?.let { requestBodyBuilder.addFormDataPart("title", it as String) }
         map["text"]?.let { requestBodyBuilder.addFormDataPart("text", it as String) }
@@ -90,7 +92,7 @@ class NetworkManager {
         }
 
         // Users
-        map["real name"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String)}
+        map["real name"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
         map["realName"]?.let { requestBodyBuilder.addFormDataPart("realName", it as String) }
         map["username"]?.let { requestBodyBuilder.addFormDataPart("username", it as String) }
         map["email"]?.let { requestBodyBuilder.addFormDataPart("email", it as String) }

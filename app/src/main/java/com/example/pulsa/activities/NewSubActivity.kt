@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.UriUtils
 import com.example.pulsa.databinding.ActivityNewSubBinding
 import com.example.pulsa.networking.NetworkManager
@@ -36,7 +35,7 @@ class NewSubActivity : BaseLayoutActivity() {
             val map: HashMap<String, Any> = HashMap()
             map["url"] = "newSub"
             map["type"] = object : TypeToken<Sub>() {}
-            map["name"] = binding.newSubName.toString()
+            map["name"] = binding.newSubName.text.toString()
             if (this::imageUri.isInitialized) {
                 map["image"] = UriUtils.uri2File(imageUri)
                 map["imageType"] = this.contentResolver.getType(imageUri).toString()
@@ -49,7 +48,7 @@ class NewSubActivity : BaseLayoutActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != AppCompatActivity.RESULT_OK) return
+        if (resultCode != RESULT_OK) return
 
         when (requestCode) {
             SELECT_PICTURE -> {
