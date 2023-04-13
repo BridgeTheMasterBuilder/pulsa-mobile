@@ -34,6 +34,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
 
         setupNavMenu()
         setupUserMenu()
+        setupHomeOnClick()
         super.onCreate(savedInstanceState)
     }
 
@@ -157,6 +158,12 @@ open class BaseLayoutActivity : AppCompatActivity() {
             setDefaultNav()
         }
 
+    }
+
+    private fun setupHomeOnClick() {
+        binding.myToolbar.toolbarTitle.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     public open fun resolveGet(content: Any) {
