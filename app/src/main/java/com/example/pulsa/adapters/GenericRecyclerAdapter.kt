@@ -176,8 +176,6 @@ open class GenericRecyclerAdapter<T : Any>(
 
             avatar = binding.root.findViewWithTag("avatar")
 
-            onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
-
             when (item) {
                 is Post -> {
                     binding.setVariable(BR.postItem, item)
@@ -193,6 +191,11 @@ open class GenericRecyclerAdapter<T : Any>(
                     return
                 }
             }
+
+            binding.root.findViewWithTag<ImageView>("vote_up").visibility =
+                if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+            binding.root.findViewWithTag<ImageView>("vote_down").visibility =
+                if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
 
             binding.root.apply {
                 when (item) {
@@ -225,6 +228,8 @@ open class GenericRecyclerAdapter<T : Any>(
 
                 findViewWithTag<TextView>("voteCount").setTextColor(context.getColor(colorResId))
             }
+
+            onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
         }
 
         private fun setUpMediaUtils(context: Context, tag: String, button: MaterialButton?, url: String?) {
@@ -238,11 +243,9 @@ open class GenericRecyclerAdapter<T : Any>(
         private fun setupVoteOnClickListener(view: View, id: Long, position: Int) {
             view.findViewWithTag<ImageView>("vote_up").apply {
                 setOnClickListener { upvoteOnClickListener(id, position) }
-                visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
             }
             view.findViewWithTag<ImageView>("vote_down").apply {
                 setOnClickListener { downvoteOnClickListener(id, position) }
-                visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
             }
         }
 

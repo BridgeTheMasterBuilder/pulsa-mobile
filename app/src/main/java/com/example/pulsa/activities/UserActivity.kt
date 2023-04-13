@@ -14,6 +14,7 @@ import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
 import com.example.pulsa.objects.User
+import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
@@ -30,6 +31,9 @@ class UserActivity : BaseLayoutActivity() {
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fragmentManager = supportFragmentManager
+
+        MediaUtils().verifyStoragePermissions(this);
+
         var map: HashMap<String, Any> = HashMap()
 
         val userName = UserUtils.getUserName(this)
