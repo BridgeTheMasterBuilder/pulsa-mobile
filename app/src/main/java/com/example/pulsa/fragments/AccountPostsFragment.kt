@@ -10,12 +10,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.ThreadUtils
 import com.example.pulsa.R
-import com.example.pulsa.activities.*
+import com.example.pulsa.activities.ActivityRing
+import com.example.pulsa.activities.PostActivity
+import com.example.pulsa.activities.SubActivity
+import com.example.pulsa.activities.UserPageActivity
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.FragmentAccountPostsBinding
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
-import com.example.pulsa.services.UserService
 import com.example.pulsa.utils.MediaUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
@@ -123,11 +125,11 @@ class AccountPostsFragment : Fragment(), ActivityRing<Post> {
                 if (data.getBoolean("nextPost", false)) {
                     val (post, position) = next(posts, pos)
 
-                    dispatch(post, position, ::adapterOnClick)
+                    dispatch(post, position)
                 } else if (data.getBoolean("prevPost", false)) {
                     val (post, position) = prev(posts, pos)
 
-                    dispatch(post, position, ::adapterOnClick)
+                    dispatch(post, position)
                 } else {
                     val post: Post = result.data?.extras?.getParcelable("postWithReply")!!
 
@@ -150,7 +152,7 @@ class AccountPostsFragment : Fragment(), ActivityRing<Post> {
         }
     }
 
-    override fun dispatch(content: Post, pos: Int, launcher: (Post, Int) -> Unit) {
+    override fun dispatch(content: Post, pos: Int) {
         adapterOnClick(content, pos)
     }
 

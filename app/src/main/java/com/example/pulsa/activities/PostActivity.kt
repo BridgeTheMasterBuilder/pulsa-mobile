@@ -30,6 +30,7 @@ import com.google.gson.reflect.TypeToken
 const val NO_REPLY = -1L
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOPPED = "stopped"
+private const val TOLERANCE = 0.0
 
 class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
@@ -114,7 +115,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
 
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.scrollView.setOnTouchListener(View.OnTouchListener { v, event ->
+        binding.nestedScrollView.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
             mDetector.onTouchEvent(event)
         })
