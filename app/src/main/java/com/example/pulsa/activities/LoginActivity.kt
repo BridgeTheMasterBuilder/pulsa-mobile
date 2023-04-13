@@ -77,6 +77,7 @@ class LoginActivity : BaseLayoutActivity() {
         with(sharedPref.edit()) {
             putString(getString(R.string.token), tkn)
             putString(getString(R.string.avatar), user.avatar)
+            putLong(getString(R.string.userId), user.user_id)
             putString(getString(R.string.userName), user.username)
             putBoolean(getString(R.string.loggedIn), true)
             apply()

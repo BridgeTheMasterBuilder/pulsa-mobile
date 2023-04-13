@@ -13,12 +13,14 @@ object UserUtils {
     private var userName: String? = ""
     private var avatar: String? = ""
     private var loggedIn: String? = ""
+    private var userId: String? = ""
 
     fun setup(context: Context) {
         token = context.getString(R.string.token)
         avatar = context.getString(R.string.avatar)
         loggedIn = context.getString(R.string.loggedIn)
         userName = context.getString(R.string.userName)
+        userId = context.getString(R.string.userId)
         sharedPreferences =
             context.getSharedPreferences(context.getString(R.string.user), MODE_PRIVATE)
     }
@@ -37,5 +39,9 @@ object UserUtils {
 
     fun getUserName(activity: BaseLayoutActivity): String {
         return sharedPreferences!!.getString(userName, "")!!
+    }
+
+    fun getUserID(): Long {
+        return sharedPreferences!!.getLong(userId, -1)
     }
 }

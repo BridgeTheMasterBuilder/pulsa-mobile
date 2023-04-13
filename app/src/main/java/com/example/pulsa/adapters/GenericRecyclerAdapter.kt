@@ -8,20 +8,13 @@ import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.pulsa.BR
 import com.example.pulsa.R
-import com.example.pulsa.databinding.PostItemBindingImpl
-import com.example.pulsa.databinding.ReplyBindingImpl
-import com.example.pulsa.objects.Post
-import com.example.pulsa.objects.Reply
-import com.example.pulsa.objects.Sub
-import com.example.pulsa.objects.User
+import com.example.pulsa.objects.*
 import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
@@ -37,7 +30,7 @@ open class GenericRecyclerAdapter<T : Any>(
     private lateinit var context: Context
     private lateinit var upvote: ((id: Long, pos: Int) -> Unit)
     private lateinit var downvote: ((id: Long, pos: Int) -> Unit)
-    private lateinit var sub: ((sub: Sub, position: Int) -> Unit)
+    private lateinit var subItem: ((sub: Sub, position: Int) -> Unit)
     private lateinit var userPage: ((user: User, position: Int) -> Unit)
     private lateinit var playAudio: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
     private lateinit var playRecording: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
@@ -52,7 +45,7 @@ open class GenericRecyclerAdapter<T : Any>(
     }
 
     fun subOnClick(subOnClickListener: ((sub: Sub, position: Int) -> Unit)) {
-        sub = subOnClickListener
+        subItem = subOnClickListener
     }
 
     fun userOnClick(userOnClickListener: ((user: User, position: Int) -> Unit)) {
@@ -106,63 +99,58 @@ open class GenericRecyclerAdapter<T : Any>(
     override fun onBindViewHolder(holder: GenericViewHolder<T>, position: Int) {
         if (this::upvote.isInitialized) holder.upvoteOnClickListener = upvote
         if (this::downvote.isInitialized) holder.downvoteOnClickListener = downvote
-        if (this::sub.isInitialized) holder.subOnClickListener = sub
+        if (this::subItem.isInitialized) holder.subOnClickListener = subItem
         if (this::userPage.isInitialized) holder.userOnClickListener = userPage
 
-        when (val item = items[position]) {
-            is Post -> {
-                if (URLUtil.isValidUrl(item.content.audio)) {
-                    holder.audio?.visibility = View.VISIBLE
-                    holder.playAudioOnClickListener = playAudio
+        with(holder) {
+            val item = items[position]
+            if (item is Post || item is Reply) {
+                val content = when (item) {
+                    is Post -> item.content
+                    is Reply -> item.content
+                    else -> null
                 }
-                if (URLUtil.isValidUrl(item.content.recording)) {
-                    holder.recording?.visibility = View.VISIBLE
-                    holder.playRecordingOnClickListener = playRecording
+                if (URLUtil.isValidUrl(content?.audio)) {
+                    audio?.visibility = View.VISIBLE
+                    playAudioOnClickListener = playAudio
                 }
-            }
-            is Reply -> {
-                if (URLUtil.isValidUrl(item.content.audio)) {
-                    holder.audio?.visibility = View.VISIBLE
-                    holder.playAudioOnClickListener = playAudio
-                }
-                if (URLUtil.isValidUrl(item.content.recording)) {
-                    holder.recording?.visibility = View.VISIBLE
-                    holder.playRecordingOnClickListener = playRecording
+                if (URLUtil.isValidUrl(content?.recording)) {
+                    recording?.visibility = View.VISIBLE
+                    playRecordingOnClickListener = playRecording
                 }
             }
-        }
 
-        holder.bind(items[position], position)
-        val image = when (val item = items[position]) {
-            is Post -> item.content.image
-            is Reply -> item.content.image
-            is Sub -> item.image
-            else -> ""
-        }
+            bind(item, position)
 
-        val avatar = when (val item = items[position]) {
-            is Post -> item.creator.avatar
-            is Reply -> item.creator.avatar
-            else -> ""
-        }
-
-        if (URLUtil.isValidUrl(avatar)) {
-            holder.avatar?.let {
+            when (item) {
+                is Post -> item.content.image
+                is Reply -> item.content.image
+                is Sub -> item.image
+                else -> ""
+            }.takeIf { URLUtil.isValidUrl(it) }?.let { image ->
                 Glide.with(context)
-                    .load(avatar)
+                    .load(image)
                     .listener(glideRequestListener)
-                    .into(it)
+                    .into(imageView)
+                    .view.visibility = View.VISIBLE
             }
-        }
 
-        if (URLUtil.isValidUrl(image)) {
-            Glide.with(context)
-                .load(image)
-                .listener(glideRequestListener)
-                .into(holder.imageView)
-                .view.visibility = View.VISIBLE
+
+            when (item) {
+                is Post -> item.creator.avatar
+                is Reply -> item.creator.avatar
+                else -> ""
+            }.takeIf { URLUtil.isValidUrl(it) }?.let { avatar ->
+                this.avatar?.let {
+                    Glide.with(context)
+                        .load(avatar)
+                        .listener(glideRequestListener)
+                        .into(it)
+                }
+            }
         }
     }
+
 
     class GenericViewHolder<T>(
         private val binding: ViewDataBinding,
@@ -185,128 +173,82 @@ open class GenericRecyclerAdapter<T : Any>(
         lateinit var playRecordingOnClickListener: (button: MaterialButton?, mediaUtils: MediaUtils) -> Unit
 
         fun bind(item: T, position: Int) {
+
+            avatar = binding.root.findViewWithTag("avatar")
+
+            onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
+
             when (item) {
-                is Post -> binding.setVariable(BR.postItem, item)
-                is Sub -> binding.setVariable(BR.subItem, item)
-                is Reply -> binding.setVariable(BR.listItem, item)
-            }
-
-            if (binding is PostItemBindingImpl || binding is ReplyBindingImpl) {
-                val rItem = when (binding) {
-                    is PostItemBindingImpl -> binding.postItem!!
-                    else -> (binding as ReplyBindingImpl).listItem!!
-                }
-                avatar = binding.root.findViewWithTag("avatar")
-                if (rItem is Post) {
-                    binding.root.findViewWithTag<TextView>("sub").let { it ->
-                        it.setOnClickListener {
-                            subOnClickListener(rItem.sub, position)
-                        }
-                    }
-                    binding.root.findViewWithTag<TextView>("user").let { it ->
-                        it.setOnClickListener {
-                            userOnClickListener(rItem.creator, position)
-                        }
+                is Post -> {
+                    binding.setVariable(BR.postItem, item)
+                    binding.root.findViewWithTag<TextView>("sub").setOnClickListener {
+                        subOnClickListener(item.sub, position)
                     }
                 }
-
-                audio.let { it ->
-                    when (rItem) {
-                        is Post -> {
-                            if (URLUtil.isValidUrl(rItem.content.audio)) {
-                                val mediaUtils = MediaUtils()
-                                mediaUtils.initMediaPlayerWithUrl(
-                                    context,
-                                    binding.root.findViewWithTag("audioVisualizer"),
-                                    audio,
-                                    rItem.content.audio
-                                )
-                                it?.setOnClickListener {
-                                    playAudioOnClickListener(audio, mediaUtils)
-                                }
-                            }
-                        }
-
-                        is Reply -> {
-                            if (URLUtil.isValidUrl(rItem.content.audio)) {
-                                val mediaUtils = MediaUtils()
-                                mediaUtils.initMediaPlayerWithUrl(
-                                    context,
-                                    binding.root.findViewWithTag("audioVisualizer"),
-                                    audio,
-                                    rItem.content.audio
-                                )
-                                it?.setOnClickListener {
-                                    playAudioOnClickListener(audio, mediaUtils)
-                                }
-                            }
-                        }
-                    }
-
+                is Reply -> {
+                    binding.setVariable(BR.listItem, item)
                 }
-
-                recording.let { it ->
-                    when (rItem) {
-                        is Post ->
-                            if (URLUtil.isValidUrl(rItem.content.recording)) {
-                                val mediaUtils = MediaUtils()
-                                mediaUtils.initMediaPlayerWithUrl(
-                                    context,
-                                    binding.root.findViewWithTag("recordingVisualizer"),
-                                    recording,
-                                    rItem.content.recording
-                                )
-                                it?.setOnClickListener {
-                                    playRecordingOnClickListener(recording, mediaUtils)
-                                }
-                            }
-                        is Reply -> {
-                            if (URLUtil.isValidUrl(rItem.content.recording)) {
-                                val mediaUtils = MediaUtils()
-                                mediaUtils.initMediaPlayerWithUrl(
-                                    context,
-                                    binding.root.findViewWithTag("recordingVisualizer"),
-                                    recording,
-                                    rItem.content.recording
-                                )
-                                it?.setOnClickListener {
-                                    playRecordingOnClickListener(recording, mediaUtils)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (UserUtils.loggedIn()) {
-                    binding.root.findViewWithTag<ImageView>("vote_up").let { it ->
-                        it.setOnClickListener {
-                            when (rItem) {
-                                is Post -> upvoteOnClickListener(rItem.postId, position)
-                                is Reply -> upvoteOnClickListener(rItem.replyId, position)
-                            }
-
-                        }
-                        it.visibility = View.VISIBLE
-                    }
-                    binding.root.findViewWithTag<ImageView>("vote_down").let { it ->
-                        it.setOnClickListener {
-                            when (rItem) {
-                                is Post -> downvoteOnClickListener(rItem.postId, position)
-                                is Reply -> downvoteOnClickListener(rItem.replyId, position)
-                            }
-
-                        }
-                        it.visibility = View.VISIBLE
-                    }
-                } else {
-                    binding.root.findViewWithTag<ImageView>("vote_up").visibility = View.GONE
-                    binding.root.findViewWithTag<ImageView>("vote_down").visibility = View.GONE
+                is Sub -> {
+                    binding.setVariable(BR.subItem, item)
+                    return
                 }
             }
 
-            onClick?.let { listener ->
-                itemView.setOnClickListener { listener(item, position) }
+            binding.root.apply {
+                when (item) {
+                    is Post, is Reply -> {
+                        findViewWithTag<TextView>("user").setOnClickListener {
+                            userOnClickListener((item as? Post)?.creator ?: (item as? Reply)?.creator!!, position)
+                        }
+                    }
+                }
+
+                setUpMediaUtils(context, "audioVisualizer", audio, (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio)
+                setUpMediaUtils(context, "recordingVisualizer", recording, (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording)
+                tintImageViews(context, findViewWithTag("vote_up"), findViewWithTag("vote_down"))
+
+                (item as? Post)?.postId ?: (item as? Reply)?.replyId?.let {
+                    setupVoteOnClickListener(this, it, position)
+                }
+
+                val voter = when (item) {
+                    is Post -> item.voted.find { it.id == UserUtils.getUserID() }
+                    is Reply -> item.voted.find { it.id == UserUtils.getUserID() }
+                    else -> null
+                }
+
+                val colorResId = when (voter?.vote) {
+                    true -> R.color.purple_500
+                    false -> R.color.title
+                    else -> R.color.white
+                }
+
+                findViewWithTag<TextView>("voteCount").setTextColor(context.getColor(colorResId))
             }
+        }
+
+        private fun setUpMediaUtils(context: Context, tag: String, button: MaterialButton?, url: String?) {
+            if (URLUtil.isValidUrl(url)) {
+                val mediaUtils = MediaUtils().apply {
+                    initMediaPlayerWithUrl(context, binding.root.findViewWithTag(tag), button, url!!) }
+                button?.setOnClickListener { playAudioOnClickListener(button, mediaUtils) }
+            }
+        }
+
+        private fun setupVoteOnClickListener(view: View, id: Long, position: Int) {
+            view.findViewWithTag<ImageView>("vote_up").apply {
+                setOnClickListener { upvoteOnClickListener(id, position) }
+                visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+            }
+            view.findViewWithTag<ImageView>("vote_down").apply {
+                setOnClickListener { downvoteOnClickListener(id, position) }
+                visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+            }
+        }
+
+        private fun tintImageViews(context: Context, vararg imageViews: ImageView) {
+            imageViews.forEach { it.drawable.setTint(context.getColor(R.color.purple_500)) }
+            binding.root.findViewWithTag<ImageView>("vote_down").drawable.setTint(context.getColor(R.color.title))
         }
     }
 }

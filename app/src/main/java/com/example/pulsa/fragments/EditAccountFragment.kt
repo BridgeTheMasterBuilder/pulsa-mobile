@@ -140,7 +140,7 @@ class EditAccountFragment : Fragment() {
         }
 
         binding.userpage.setOnClickListener {
-            startActivity(Intent(this.context, UserPageActivity::class.java))
+            startActivity(Intent(this.context, UserPageActivity::class.java).putExtra("user", user))
         }
 
         return view

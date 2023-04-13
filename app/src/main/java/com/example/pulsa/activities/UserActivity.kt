@@ -33,6 +33,7 @@ class UserActivity : BaseLayoutActivity() {
         var map: HashMap<String, Any> = HashMap()
 
         val userName = UserUtils.getUserName(this)
+
         map["type"] = object : TypeToken<User>() {}
         map["url"] = "u/${userName}/"
 

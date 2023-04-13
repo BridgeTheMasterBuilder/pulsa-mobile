@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.pulsa.R
@@ -14,6 +15,7 @@ import com.example.pulsa.objects.Post
 import com.example.pulsa.utils.MediaUtils
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
+import okhttp3.Response
 
 private const val MEDIA_STOP = R.drawable.icons8_stop_96
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
@@ -120,6 +122,15 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
         println("Failed to load posts")
     }
 
+    override fun resolveFailure(response: Response) {
+        if (response.code == 401) {
+            Toast.makeText(this, "Authorization expired. Please log in again", Toast.LENGTH_SHORT).show()
+        }
+        if (response.code == 403) {
+            Toast.makeText(this, "403 - Forbidden Request", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -178,7 +189,7 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
             val intent = Intent(this, SubActivity::class.java)
             intent.putExtra("sub", sub)
             intent.putExtra("pos", position)
-            resultLauncher.launch(intent)
+            startActivity(intent)
         }
     }
 
@@ -187,7 +198,7 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
             val intent = Intent(this, UserPageActivity::class.java)
             intent.putExtra("user", user)
             intent.putExtra("pos", position)
-            resultLauncher.launch(intent)
+            startActivity(intent)
         }
     }
 

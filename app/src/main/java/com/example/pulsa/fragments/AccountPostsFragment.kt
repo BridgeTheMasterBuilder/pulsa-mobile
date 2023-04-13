@@ -10,10 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.ThreadUtils
 import com.example.pulsa.R
-import com.example.pulsa.activities.ActivityRing
-import com.example.pulsa.activities.PostActivity
-import com.example.pulsa.activities.UserActivity
-import com.example.pulsa.activities.UserPageActivity
+import com.example.pulsa.activities.*
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.FragmentAccountPostsBinding
 import com.example.pulsa.networking.NetworkManager
@@ -28,7 +25,7 @@ private const val MEDIA_STOPPED = "stopped"
 
 class AccountPostsFragment : Fragment(), ActivityRing<Post> {
     private lateinit var binding: FragmentAccountPostsBinding
-    private lateinit var adapter: GenericRecyclerAdapter<Post>
+    lateinit var adapter: GenericRecyclerAdapter<Post>
     private lateinit var posts: MutableList<Post>
     private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
 
@@ -36,7 +33,7 @@ class AccountPostsFragment : Fragment(), ActivityRing<Post> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountPostsBinding.inflate(inflater, container, false)
         val view = binding.root
         posts = (this.arguments?.getParcelableArrayList<Post>("posts") as MutableList<Post>)
@@ -44,7 +41,27 @@ class AccountPostsFragment : Fragment(), ActivityRing<Post> {
         binding.recyclerView.adapter = adapter
         audioOnClickSetup()
         voteOnClickSetup()
+        userOnClickSetup()
+        subOnClickSetup()
         return view
+    }
+
+    private fun userOnClickSetup() {
+        adapter.userOnClick { user, position ->
+            val intent = Intent(this.context, UserPageActivity::class.java)
+            intent.putExtra("user", user)
+            intent.putExtra("pos", position)
+            startActivity(intent)
+        }
+    }
+
+    private fun subOnClickSetup() {
+        adapter.subOnClick { sub, position ->
+            val intent = Intent(this.context, SubActivity::class.java)
+            intent.putExtra("sub", sub)
+            intent.putExtra("pos", position)
+            startActivity(intent)
+        }
     }
 
     private fun audioOnClickSetup() {

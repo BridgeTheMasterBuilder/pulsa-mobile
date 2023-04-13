@@ -25,7 +25,7 @@ private const val MEDIA_STOPPED = "stopped"
 class AccountRepliesFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountRepliesBinding
-    private lateinit var adapter: GenericRecyclerAdapter<Reply>
+    lateinit var adapter: GenericRecyclerAdapter<Reply>
     private lateinit var replies: MutableList<Reply>
     private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
 

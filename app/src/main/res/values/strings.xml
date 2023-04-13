@@ -6,6 +6,7 @@
     <string name="avatar">Avatar</string>
     <string name="loggedIn">LoggedIn</string>
     <string name="userName">UserName</string>
+    <string name="userId">UserID</string>
     <!-- Edit Account Fragment -->
     <string name="editAccountTitle">Account Details</string>
     <string name="editAccountUsername">Username</string>

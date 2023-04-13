@@ -11,6 +11,8 @@ import androidx.core.view.GestureDetectorCompat
 import com.example.pulsa.R
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivitySubBinding
+import com.example.pulsa.fragments.AccountPostsFragment
+import com.example.pulsa.fragments.AccountRepliesFragment
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
@@ -58,7 +60,6 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
     val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                println("IN MAIN ACTIVITY AGAIN")
                 val data = result.data?.extras
                 val pos = data?.getInt("pos")!!
 
@@ -87,6 +88,7 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         )
         audioOnClickSetup()
         binding.recyclerView.adapter = adapter
+        userOnClickSetup()
     }
 
     private fun audioOnClickSetup() {
@@ -108,6 +110,24 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
         intent.putExtra("post", post)
         intent.putExtra("pos", position)
         resultLauncher.launch(intent)
+    }
+
+    private fun userOnClickSetup() {
+        adapter.userOnClick { user, position ->
+            val intent = Intent(this, UserPageActivity::class.java)
+            intent.putExtra("user", user)
+            intent.putExtra("pos", position)
+            startActivity(intent)
+        }
+    }
+
+    private fun subOnClickSetup() {
+        adapter.subOnClick { sub, position ->
+            val intent = Intent(this, SubActivity::class.java)
+            intent.putExtra("sub", sub)
+            intent.putExtra("pos", position)
+            startActivity(intent)
+        }
     }
 
     public fun failure() {
