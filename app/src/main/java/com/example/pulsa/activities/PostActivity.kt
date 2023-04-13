@@ -26,11 +26,12 @@ import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
+import io.noties.markwon.Markwon
 
 const val NO_REPLY = -1L
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOPPED = "stopped"
-private const val TOLERANCE = 0.0
+private const val TOLERANCE = 1.0
 
 class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
@@ -44,7 +45,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private lateinit var mDetector: GestureDetectorCompat
     private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
-
+    private lateinit var markwon: Markwon
 
     private fun createReplyTree(replies: MutableList<Reply>): MutableList<TreeNode> {
         fun aux(child: TreeNode, replies: MutableList<Reply>) {
@@ -113,6 +114,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             )
         }
 
+        markwon = Markwon.create(this)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.nestedScrollView.setOnTouchListener(View.OnTouchListener { v, event ->
@@ -193,8 +195,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         replies = post.replies
         setupReplyTree()
 
-        binding.postpageTitle.text = post.title
-        binding.postpageText.text = post.content.text
+        markwon.setMarkdown(binding.postpageTitle, post.title)
+        markwon.setMarkdown(binding.postpageText, post.content.text)
         binding.postpageUser.text = "u/${post.creator.username}"
         binding.postpageSub.text = "p/${post.sub.name}"
         binding.postVoteCount.text = post.vote.toString()
@@ -268,7 +270,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
 
             username.text = "u/${reply.creator.username}"
             votes.text = reply.vote.toString()
-            text.text = reply.content.text
+            activity.markwon.setMarkdown(text, reply.content.text)
 
             if (UserUtils.loggedIn()) {
                 upvote.visibility = View.VISIBLE
@@ -437,8 +439,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         }
 
         postPosition = intent.getIntExtra("pos", -1)
-        binding.postpageTitle.text = post.title
-        binding.postpageText.text = post.content.text
+        markwon.setMarkdown(binding.postpageTitle, post.title)
+        markwon.setMarkdown(binding.postpageText, post.content.text)
         replies = post.replies
 
         audioSetup()

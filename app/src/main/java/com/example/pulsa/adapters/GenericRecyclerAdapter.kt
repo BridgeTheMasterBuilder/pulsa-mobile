@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pulsa.BR
 import com.example.pulsa.R
-import com.example.pulsa.objects.*
+import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Reply
+import com.example.pulsa.objects.Sub
+import com.example.pulsa.objects.User
 import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
+import io.noties.markwon.Markwon
 
 
 open class GenericRecyclerAdapter<T : Any>(
@@ -34,7 +38,7 @@ open class GenericRecyclerAdapter<T : Any>(
     private lateinit var userPage: ((user: User, position: Int) -> Unit)
     private lateinit var playAudio: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
     private lateinit var playRecording: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
-
+    private lateinit var markwon: Markwon
 
     fun upvoteOnClick(upvoteOnClickListener: (id: Long, pos: Int) -> Unit) {
         upvote = upvoteOnClickListener
@@ -242,17 +246,30 @@ open class GenericRecyclerAdapter<T : Any>(
             }
         }
 
-        private fun setUpMediaUtils(context: Context, tag: String, button: MaterialButton?, url: String?) {
+        private fun setUpMediaUtils(
+            context: Context,
+            tag: String,
+            button: MaterialButton?,
+            url: String?
+        ) {
             if (URLUtil.isValidUrl(url)) {
                 val mediaUtils = MediaUtils().apply {
-                    initMediaPlayerWithUrl(context, binding.root.findViewWithTag(tag), button, url!!) }
+                    initMediaPlayerWithUrl(
+                        context,
+                        binding.root.findViewWithTag(tag),
+                        button,
+                        url!!
+                    )
+                }
                 button?.setOnClickListener { playAudioOnClickListener(button, mediaUtils) }
             }
         }
 
         private fun setupVoteOnClickListener(view: View, id: Long, position: Int) {
-            view.findViewWithTag<ImageView>("vote_up").setOnClickListener { upvoteOnClickListener(id, position) }
-            view.findViewWithTag<ImageView>("vote_down").setOnClickListener { downvoteOnClickListener(id, position) }
+            view.findViewWithTag<ImageView>("vote_up")
+                .setOnClickListener { upvoteOnClickListener(id, position) }
+            view.findViewWithTag<ImageView>("vote_down")
+                .setOnClickListener { downvoteOnClickListener(id, position) }
         }
     }
 }
