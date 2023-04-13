@@ -87,6 +87,7 @@ open class GenericRecyclerAdapter<T : Any>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder<T> {
         context = parent.context
+        markwon = Markwon.create(context)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(context),
             layoutId,
@@ -114,6 +115,7 @@ open class GenericRecyclerAdapter<T : Any>(
                     is Reply -> item.content
                     else -> null
                 }
+
                 if (URLUtil.isValidUrl(content?.audio)) {
                     audio?.visibility = View.VISIBLE
                     playAudioOnClickListener = playAudio
@@ -125,6 +127,16 @@ open class GenericRecyclerAdapter<T : Any>(
             }
 
             bind(item, position)
+
+            when (item) {
+                is Post -> {
+                    markwon.setMarkdown(title!!, item.title)
+                    markwon.setMarkdown(text!!, item.content.text)
+                }
+                is Reply -> {
+                    markwon.setMarkdown(text!!, item.content.text)
+                }
+            }
 
             when (item) {
                 is Post -> item.content.image
@@ -164,6 +176,8 @@ open class GenericRecyclerAdapter<T : Any>(
 
         val imageView: ImageView = binding.root.findViewWithTag("image")
         var avatar: ImageView? = null
+        var title: TextView? = null
+        var text: TextView? = null
         var sub: TextView? = null
 
         var audio: MaterialButton? = binding.root.findViewWithTag("audio")
@@ -179,17 +193,23 @@ open class GenericRecyclerAdapter<T : Any>(
         fun bind(item: T, position: Int) {
 
             avatar = binding.root.findViewWithTag("avatar")
+            title = binding.root.findViewWithTag("title")
+            text = binding.root.findViewWithTag("text")
+
             onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
 
             when (item) {
                 is Post -> {
                     binding.setVariable(BR.postItem, item)
+                    title = binding.root.findViewWithTag("post_title")
+                    text = binding.root.findViewWithTag("post_text")
                     binding.root.findViewWithTag<TextView>("sub").setOnClickListener {
                         subOnClickListener(item.sub, position)
                     }
                 }
                 is Reply -> {
                     binding.setVariable(BR.listItem, item)
+                    text = binding.root.findViewWithTag("reply_text")
                 }
                 is Sub -> {
                     binding.setVariable(BR.subItem, item)
