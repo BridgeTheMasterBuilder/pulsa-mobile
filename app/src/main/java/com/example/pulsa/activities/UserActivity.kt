@@ -70,4 +70,12 @@ class UserActivity : BaseLayoutActivity() {
     private fun getCurrentFragment(): Fragment? {
         return fragmentManager.findFragmentById(R.id.userfragment)
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 }

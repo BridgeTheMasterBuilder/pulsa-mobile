@@ -22,6 +22,8 @@ class NewSubActivity : BaseLayoutActivity() {
         binding = ActivityNewSubBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        MediaUtils().verifyStoragePermissions(this)
+
         binding.newSubImage.setOnClickListener {
             val i = Intent().apply {
                 type = "image/*"
@@ -29,9 +31,8 @@ class NewSubActivity : BaseLayoutActivity() {
             }
             startActivityForResult(Intent.createChooser(i, "Select picture"), SELECT_PICTURE)
         }
-        binding.newSubSubmit.setOnClickListener {
 
-            MediaUtils().verifyStoragePermissions(this)
+        binding.newSubSubmit.setOnClickListener {
             val map: HashMap<String, Any> = HashMap()
             map["url"] = "newSub"
             map["type"] = object : TypeToken<Sub>() {}

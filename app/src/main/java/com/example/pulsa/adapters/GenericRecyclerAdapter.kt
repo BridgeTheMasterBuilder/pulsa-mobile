@@ -175,6 +175,7 @@ open class GenericRecyclerAdapter<T : Any>(
         fun bind(item: T, position: Int) {
 
             avatar = binding.root.findViewWithTag("avatar")
+            onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
 
             when (item) {
                 is Post -> {
@@ -192,23 +193,17 @@ open class GenericRecyclerAdapter<T : Any>(
                 }
             }
 
-            binding.root.findViewWithTag<ImageView>("vote_up").visibility =
-                if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
-            binding.root.findViewWithTag<ImageView>("vote_down").visibility =
-                if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
-
             binding.root.apply {
-                when (item) {
-                    is Post, is Reply -> {
-                        findViewWithTag<TextView>("user").setOnClickListener {
-                            userOnClickListener((item as? Post)?.creator ?: (item as? Reply)?.creator!!, position)
-                        }
+                findViewWithTag<TextView>("user")
+                    .setOnClickListener {
+                        userOnClickListener((item as? Post)?.creator ?: (item as? Reply)?.creator!!, position)
                     }
-                }
 
                 setUpMediaUtils(context, "audioVisualizer", audio, (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio)
                 setUpMediaUtils(context, "recordingVisualizer", recording, (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording)
-                tintImageViews(context, findViewWithTag("vote_up"), findViewWithTag("vote_down"))
+
+                findViewWithTag<ImageView>("vote_up").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                findViewWithTag<ImageView>("vote_down").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
 
                 (item as? Post)?.postId ?: (item as? Reply)?.replyId?.let {
                     setupVoteOnClickListener(this, it, position)
@@ -228,8 +223,6 @@ open class GenericRecyclerAdapter<T : Any>(
 
                 findViewWithTag<TextView>("voteCount").setTextColor(context.getColor(colorResId))
             }
-
-            onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
         }
 
         private fun setUpMediaUtils(context: Context, tag: String, button: MaterialButton?, url: String?) {
@@ -247,11 +240,6 @@ open class GenericRecyclerAdapter<T : Any>(
             view.findViewWithTag<ImageView>("vote_down").apply {
                 setOnClickListener { downvoteOnClickListener(id, position) }
             }
-        }
-
-        private fun tintImageViews(context: Context, vararg imageViews: ImageView) {
-            imageViews.forEach { it.drawable.setTint(context.getColor(R.color.purple_500)) }
-            binding.root.findViewWithTag<ImageView>("vote_down").drawable.setTint(context.getColor(R.color.title))
         }
     }
 }
