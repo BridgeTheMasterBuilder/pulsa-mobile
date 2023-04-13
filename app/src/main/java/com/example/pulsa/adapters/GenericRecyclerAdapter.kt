@@ -23,6 +23,7 @@ import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
 import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 
 
 open class GenericRecyclerAdapter<T : Any>(
@@ -87,7 +88,10 @@ open class GenericRecyclerAdapter<T : Any>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder<T> {
         context = parent.context
-        markwon = Markwon.create(context)
+        markwon = Markwon.builder(context)
+            // explicit `none` movement method
+            .usePlugin(MovementMethodPlugin.none())
+            .build()
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(context),
             layoutId,
