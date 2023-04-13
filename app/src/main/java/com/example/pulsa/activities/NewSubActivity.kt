@@ -69,6 +69,10 @@ class NewSubActivity : BaseLayoutActivity() {
         intent.putExtra("sub", sub)
         setResult(Activity.RESULT_OK, intent)
         finish()
+        val i = Intent(this, SubActivity::class.java)
+        i.putExtra("sub", sub)
+        startActivity(i)
+
     }
 
     override fun onRequestPermissionsResult(
