@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pulsa.BR
 import com.example.pulsa.R
+import com.example.pulsa.activities.UserPageActivity
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Reply
 import com.example.pulsa.objects.Sub
@@ -244,9 +245,9 @@ open class GenericRecyclerAdapter<T : Any>(
                 )
 
                 findViewWithTag<ImageView>("vote_up").visibility =
-                    if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                    if (UserUtils.loggedIn() && !(context is UserPageActivity)) View.VISIBLE else View.GONE
                 findViewWithTag<ImageView>("vote_down").visibility =
-                    if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                    if (UserUtils.loggedIn()  && !(context is UserPageActivity)) View.VISIBLE else View.GONE
 
                 if (item is Post) {
                     setupVoteOnClickListener(this, item.postId, position)

@@ -92,10 +92,6 @@ class UserPageActivity : BaseLayoutActivity(), ActivityRing<Post> {
         resultLauncher.launch(intent)
     }
 
-    private fun adapterOnClickReply(reply: Reply, position: Int) {
-        //fuck
-    }
-
     val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
