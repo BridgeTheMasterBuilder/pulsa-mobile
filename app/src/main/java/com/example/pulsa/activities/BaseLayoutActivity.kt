@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.webkit.URLUtil
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -62,23 +61,10 @@ open class BaseLayoutActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
 
         binding.navViewMenu.setNavigationItemSelectedListener {
-            val intent = Intent(this, NewPostActivity::class.java)
+            val intent = Intent(this, SubIndexActivity::class.java)
             when (it.itemId) {
-                R.id.item1 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 1",
-                    Toast.LENGTH_SHORT
-                ).show()
-                R.id.item2 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 2",
-                    Toast.LENGTH_SHORT
-                ).show()
-                R.id.item3 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 3",
-                    Toast.LENGTH_SHORT
-                ).show()
+                R.id.hamburgerMenuAllSubs -> startActivity(intent)
+
             }
             true
         }
@@ -96,6 +82,7 @@ open class BaseLayoutActivity : AppCompatActivity() {
                     val i = Intent(this, RegisterActivity::class.java)
                     closeUserMenu()
                     startActivity(i)
+                    closeHamburgerMenu()
                 }
             }
             true
@@ -104,6 +91,10 @@ open class BaseLayoutActivity : AppCompatActivity() {
 
     private fun closeUserMenu() {
         binding.drawerLayout.closeDrawer(GravityCompat.END)
+    }
+
+    private fun closeHamburgerMenu() {
+        binding.myToolbar.toolbar.collapseActionView()
     }
 
     fun setupUserMenu() {

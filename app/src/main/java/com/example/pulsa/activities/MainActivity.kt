@@ -47,9 +47,7 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
 
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
-            allsubsbtn.setOnClickListener {
-                startActivity(Intent(this@MainActivity, SubIndexActivity::class.java))
-            }
+
             onBackPressedDispatcher.addCallback(
                 this@MainActivity,
                 object : OnBackPressedCallback(true) {
@@ -88,8 +86,8 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            // TODO, bregðast við ef það er ekki granted I guess?
-            // TODO, það þarf að láta alla audio takka verða gone
+        // TODO, bregðast við ef það er ekki granted I guess?
+        // TODO, það þarf að láta alla audio takka verða gone
             return
     }
 
@@ -118,7 +116,8 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
 
     override fun resolveFailure(response: Response) {
         if (response.code == 401) {
-            Toast.makeText(this, "Authorization expired. Please log in again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Authorization expired. Please log in again", Toast.LENGTH_SHORT)
+                .show()
         }
         if (response.code == 403) {
             Toast.makeText(this, "403 - Forbidden Request", Toast.LENGTH_SHORT).show()
