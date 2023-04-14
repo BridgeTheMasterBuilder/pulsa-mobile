@@ -87,7 +87,7 @@
             app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintStart_toEndOf="@id/reply_vote_count"
             app:layout_constraintTop_toTopOf="@id/reply_vote_count"
-            app:srcCompat="@android:drawable/arrow_down_float"/>
+            app:srcCompat="@android:drawable/arrow_down_float" />
 
         <ImageView
             android:id="@+id/vertical_line"
@@ -95,7 +95,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:src="@drawable/vertical_line"
+            android:src="@drawable/baseline_playlist_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reply_avatar" />

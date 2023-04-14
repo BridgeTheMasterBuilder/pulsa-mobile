@@ -254,6 +254,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
 
     class ReplyViewHolder(itemView: View, private var activity: PostActivity) :
         TreeViewHolder(itemView) {
+        private var line = itemView.findViewById<ImageView>(R.id.vertical_line)
         private var username = itemView.findViewById<TextView>(R.id.reply_username)
         private var text = itemView.findViewById<TextView>(R.id.reply_text)
         private var image = itemView.findViewById<ImageView>(R.id.reply_image)
@@ -266,6 +267,13 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             super.bindTreeNode(node)
 
             val reply = node.value as Reply
+
+            if (node.isExpanded) {
+                line.setImageResource(R.drawable.vertical_line)
+            } else {
+                line.setImageResource(R.drawable.baseline_playlist_add_24)
+            }
+
             image.visibility = View.GONE
 
             username.text = "u/${reply.creator.username}"
