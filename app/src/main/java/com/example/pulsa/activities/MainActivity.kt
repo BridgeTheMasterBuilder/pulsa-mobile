@@ -29,7 +29,6 @@ class MainActivity : BaseLayoutActivity(), ActivityRing<Post> {
     private lateinit var posts: MutableList<Post>
     private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

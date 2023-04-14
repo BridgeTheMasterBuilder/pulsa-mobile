@@ -14,11 +14,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pulsa.BR
 import com.example.pulsa.R
-import com.example.pulsa.objects.*
+import com.example.pulsa.activities.UserPageActivity
+import com.example.pulsa.objects.Post
+import com.example.pulsa.objects.Reply
+import com.example.pulsa.objects.Sub
+import com.example.pulsa.objects.User
 import com.example.pulsa.utils.MediaUtils
 import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
+import io.noties.markwon.Markwon
+import io.noties.markwon.movement.MovementMethodPlugin
 
 
 open class GenericRecyclerAdapter<T : Any>(
@@ -34,7 +40,7 @@ open class GenericRecyclerAdapter<T : Any>(
     private lateinit var userPage: ((user: User, position: Int) -> Unit)
     private lateinit var playAudio: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
     private lateinit var playRecording: ((button: MaterialButton?, mediaUtils: MediaUtils) -> Unit)
-
+    private lateinit var markwon: Markwon
 
     fun upvoteOnClick(upvoteOnClickListener: (id: Long, pos: Int) -> Unit) {
         upvote = upvoteOnClickListener
@@ -83,6 +89,10 @@ open class GenericRecyclerAdapter<T : Any>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder<T> {
         context = parent.context
+        markwon = Markwon.builder(context)
+            // explicit `none` movement method
+            .usePlugin(MovementMethodPlugin.none())
+            .build()
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(context),
             layoutId,
@@ -110,6 +120,7 @@ open class GenericRecyclerAdapter<T : Any>(
                     is Reply -> item.content
                     else -> null
                 }
+
                 if (URLUtil.isValidUrl(content?.audio)) {
                     audio?.visibility = View.VISIBLE
                     playAudioOnClickListener = playAudio
@@ -121,6 +132,16 @@ open class GenericRecyclerAdapter<T : Any>(
             }
 
             bind(item, position)
+
+            when (item) {
+                is Post -> {
+                    markwon.setMarkdown(title!!, item.title)
+                    markwon.setMarkdown(text!!, item.content.text)
+                }
+                is Reply -> {
+                    markwon.setMarkdown(text!!, item.content.text)
+                }
+            }
 
             when (item) {
                 is Post -> item.content.image
@@ -160,6 +181,8 @@ open class GenericRecyclerAdapter<T : Any>(
 
         val imageView: ImageView = binding.root.findViewWithTag("image")
         var avatar: ImageView? = null
+        var title: TextView? = null
+        var text: TextView? = null
         var sub: TextView? = null
 
         var audio: MaterialButton? = binding.root.findViewWithTag("audio")
@@ -175,17 +198,23 @@ open class GenericRecyclerAdapter<T : Any>(
         fun bind(item: T, position: Int) {
 
             avatar = binding.root.findViewWithTag("avatar")
+            title = binding.root.findViewWithTag("title")
+            text = binding.root.findViewWithTag("text")
+
             onClick?.let { listener -> itemView.setOnClickListener { listener(item, position) } }
 
             when (item) {
                 is Post -> {
                     binding.setVariable(BR.postItem, item)
+                    title = binding.root.findViewWithTag("post_title")
+                    text = binding.root.findViewWithTag("post_text")
                     binding.root.findViewWithTag<TextView>("sub").setOnClickListener {
                         subOnClickListener(item.sub, position)
                     }
                 }
                 is Reply -> {
                     binding.setVariable(BR.listItem, item)
+                    text = binding.root.findViewWithTag("reply_text")
                 }
                 is Sub -> {
                     binding.setVariable(BR.subItem, item)
@@ -196,17 +225,34 @@ open class GenericRecyclerAdapter<T : Any>(
             binding.root.apply {
                 findViewWithTag<TextView>("user")
                     .setOnClickListener {
-                        userOnClickListener((item as? Post)?.creator ?: (item as? Reply)?.creator!!, position)
+                        userOnClickListener(
+                            (item as? Post)?.creator ?: (item as? Reply)?.creator!!,
+                            position
+                        )
                     }
 
-                setUpMediaUtils(context, "audioVisualizer", audio, (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio)
-                setUpMediaUtils(context, "recordingVisualizer", recording, (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording)
+                setUpMediaUtils(
+                    context,
+                    "audioVisualizer",
+                    audio,
+                    (item as? Post)?.content?.audio ?: (item as? Reply)?.content?.audio
+                )
+                setUpMediaUtils(
+                    context,
+                    "recordingVisualizer",
+                    recording,
+                    (item as? Post)?.content?.recording ?: (item as? Reply)?.content?.recording
+                )
 
-                findViewWithTag<ImageView>("vote_up").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
-                findViewWithTag<ImageView>("vote_down").visibility = if (UserUtils.loggedIn()) View.VISIBLE else View.GONE
+                findViewWithTag<ImageView>("vote_up").visibility =
+                    if (UserUtils.loggedIn() && !(context is UserPageActivity)) View.VISIBLE else View.GONE
+                findViewWithTag<ImageView>("vote_down").visibility =
+                    if (UserUtils.loggedIn()  && !(context is UserPageActivity)) View.VISIBLE else View.GONE
 
-                (item as? Post)?.postId ?: (item as? Reply)?.replyId?.let {
-                    setupVoteOnClickListener(this, it, position)
+                if (item is Post) {
+                    setupVoteOnClickListener(this, item.postId, position)
+                } else if (item is Reply) {
+                    setupVoteOnClickListener(this, item.replyId, position)
                 }
 
                 val voter = when (item) {
@@ -225,21 +271,30 @@ open class GenericRecyclerAdapter<T : Any>(
             }
         }
 
-        private fun setUpMediaUtils(context: Context, tag: String, button: MaterialButton?, url: String?) {
+        private fun setUpMediaUtils(
+            context: Context,
+            tag: String,
+            button: MaterialButton?,
+            url: String?
+        ) {
             if (URLUtil.isValidUrl(url)) {
                 val mediaUtils = MediaUtils().apply {
-                    initMediaPlayerWithUrl(context, binding.root.findViewWithTag(tag), button, url!!) }
+                    initMediaPlayerWithUrl(
+                        context,
+                        binding.root.findViewWithTag(tag),
+                        button,
+                        url!!
+                    )
+                }
                 button?.setOnClickListener { playAudioOnClickListener(button, mediaUtils) }
             }
         }
 
         private fun setupVoteOnClickListener(view: View, id: Long, position: Int) {
-            view.findViewWithTag<ImageView>("vote_up").apply {
-                setOnClickListener { upvoteOnClickListener(id, position) }
-            }
-            view.findViewWithTag<ImageView>("vote_down").apply {
-                setOnClickListener { downvoteOnClickListener(id, position) }
-            }
+            view.findViewWithTag<ImageView>("vote_up")
+                .setOnClickListener { upvoteOnClickListener(id, position) }
+            view.findViewWithTag<ImageView>("vote_down")
+                .setOnClickListener { downvoteOnClickListener(id, position) }
         }
     }
 }
