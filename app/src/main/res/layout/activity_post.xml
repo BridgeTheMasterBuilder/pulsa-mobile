@@ -193,44 +193,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="0" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <ImageView
                 android:id="@+id/post_vote_up"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"
-                android:scaleType="centerInside"
                 android:tag="vote_up"
+                app:tint="@color/indigo"
                 android:visibility="gone"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp"
-                app:civ_shadow="true"
-                app:civ_shadow_color="@color/black"
-                app:civ_shadow_radius="1dp"
                 app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
                 app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toStartOf="@id/post_vote_count"
                 app:layout_constraintTop_toTopOf="@id/post_vote_count"
                 app:srcCompat="@android:drawable/arrow_up_float" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <ImageView
                 android:id="@+id/post_vote_down"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:scaleType="centerInside"
                 android:tag="vote_down"
+                app:tint="@color/title"
                 android:visibility="gone"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="1dp"
-                app:civ_shadow="true"
-                app:civ_shadow_color="@color/black"
-                app:civ_shadow_radius="1dp"
                 app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
                 app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintStart_toEndOf="@id/post_vote_count"
                 app:layout_constraintTop_toTopOf="@id/post_vote_count"
-                app:srcCompat="@android:drawable/arrow_down_float" />
-
+                app:srcCompat="@android:drawable/arrow_down_float"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
