@@ -13,6 +13,8 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.amrdeveloper.treeview.*
 import com.bumptech.glide.Glide
@@ -117,10 +119,25 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         markwon = Markwon.create(this)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.nestedScrollView.setOnTouchListener(View.OnTouchListener { v, event ->
+        binding.postMainLayout.setOnTouchListener(View.OnTouchListener { v, event ->
             v.performClick()
             mDetector.onTouchEvent(event)
         })
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                if (recyclerView.canScrollVertically(-1)) {
+                    hidePost()
+                    recyclerView.smoothScrollToPosition(1)
+                } else {
+                    unhidePost()
+                }
+            }
+        })
+
 
         if (UserUtils.loggedIn()) {
             binding.postVoteUp.visibility = View.VISIBLE
@@ -262,7 +279,6 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         private var votes = itemView.findViewById<TextView>(R.id.reply_vote_count)
         private var upvote = itemView.findViewById<ImageView>(R.id.reply_vote_up)
         private var downvote = itemView.findViewById<ImageView>(R.id.reply_vote_down)
-
         override fun bindTreeNode(node: TreeNode) {
             super.bindTreeNode(node)
 
@@ -501,6 +517,15 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             pair.second?.tag = MEDIA_STOPPED
             pair.second?.setIconResource(MEDIA_PLAY)
         }
+    }
+
+    private fun hidePost() {
+        binding.postPostContainer.visibility = View.GONE
+
+    }
+
+    private fun unhidePost() {
+        binding.postPostContainer.visibility = View.VISIBLE
     }
 }
 
