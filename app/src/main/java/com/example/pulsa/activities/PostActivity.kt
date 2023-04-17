@@ -3,6 +3,7 @@ package com.example.pulsa.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -51,6 +52,9 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var mDetector: GestureDetectorCompat
     private var mediaUtilsArray = arrayOf<Pair<MediaUtils, MaterialButton?>>()
     private lateinit var markwon: Markwon
+    private var ypos = 0
+    private var delay = 0
+    private var postHidden = false
 
     private fun createReplyTree(replies: MutableList<Reply>): MutableList<TreeNode> {
         fun aux(child: TreeNode, replies: MutableList<Reply>) {
@@ -131,14 +135,30 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if (recyclerView.canScrollVertically(-1)) {
-                    hidePost()
+                if (delay > 0) {
+                    delay -= 1;
+                    return
+                }
+
+                ypos = if (recyclerView.canScrollVertically(-1)) {
+                    ypos + dy
                 } else {
+                    0
+                }
+
+                Log.println(Log.ERROR, "", "${ypos}")
+
+                if (ypos > 100 && !postHidden) {
+                    hidePost()
+                    postHidden = true
+                    delay = 10
+                } else if (ypos == 0) {
                     unhidePost()
+                    postHidden = false
+                    delay = 10
                 }
             }
         })
-
 
         if (UserUtils.loggedIn()) {
             binding.postVoteUp.visibility = View.VISIBLE
