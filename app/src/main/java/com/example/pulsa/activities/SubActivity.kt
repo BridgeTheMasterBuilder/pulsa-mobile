@@ -5,15 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
 import com.example.pulsa.R
 import com.example.pulsa.adapters.GenericRecyclerAdapter
 import com.example.pulsa.databinding.ActivitySubBinding
-import com.example.pulsa.fragments.AccountPostsFragment
-import com.example.pulsa.fragments.AccountRepliesFragment
 import com.example.pulsa.networking.NetworkManager
 import com.example.pulsa.objects.Post
 import com.example.pulsa.objects.Sub
@@ -43,10 +40,10 @@ class SubActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener, Act
 
         binding = ActivitySubBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recyclerView.setOnTouchListener(View.OnTouchListener { v, event ->
-            v.performClick()
-            onTouchEvent(event)
-        })
+        /*  binding.recyclerView.setOnTouchListener(View.OnTouchListener { v, event ->
+              v.performClick()
+              onTouchEvent(event)
+          })*/
 
 
         binding.newpostbtn.setOnClickListener {
