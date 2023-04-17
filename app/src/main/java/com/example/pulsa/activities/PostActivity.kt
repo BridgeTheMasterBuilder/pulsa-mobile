@@ -13,10 +13,13 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.amrdeveloper.treeview.*
+import com.amrdeveloper.treeview.TreeNode
+import com.amrdeveloper.treeview.TreeNodeManager
+import com.amrdeveloper.treeview.TreeViewAdapter
+import com.amrdeveloper.treeview.TreeViewHolder
+import com.amrdeveloper.treeview.TreeViewHolderFactory
 import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
@@ -33,7 +36,7 @@ import io.noties.markwon.Markwon
 const val NO_REPLY = -1L
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOPPED = "stopped"
-private const val TOLERANCE = 1.0
+private const val TOLERANCE = 100.0
 
 class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
@@ -127,11 +130,9 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
                 if (recyclerView.canScrollVertically(-1)) {
                     hidePost()
-                    recyclerView.smoothScrollToPosition(1)
                 } else {
                     unhidePost()
                 }
@@ -438,6 +439,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+
         return false
     }
 
@@ -493,6 +495,7 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
                 binding.postVoteCount.text = post.vote.toString()
 
             }
+
             is Reply -> {
                 replies.updateReply(content)
                 post.replies = replies
