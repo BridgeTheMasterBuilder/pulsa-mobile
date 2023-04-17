@@ -27,7 +27,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/userName" />
 
     <TextView
         android:id="@+id/userName"
@@ -40,7 +41,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerpagetext" />
+        app:layout_constraintTop_toBottomOf="@id/registerpagetext"
+        app:layout_constraintBottom_toTopOf="@id/registerusername" />
 
     <TextView
         android:id="@+id/password"
@@ -53,7 +55,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerusername" />
+        app:layout_constraintTop_toBottomOf="@id/registerusername"
+        app:layout_constraintBottom_toTopOf="@id/registerpassword" />
 
     <TextView
         android:id="@+id/realName"
@@ -66,7 +69,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerpassword" />
+        app:layout_constraintTop_toBottomOf="@id/registerpassword"
+        app:layout_constraintBottom_toTopOf="@id/registerrealname" />
 
     <TextView
         android:id="@+id/email"
@@ -79,7 +83,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerrealname" />
+        app:layout_constraintTop_toBottomOf="@id/registerrealname"
+        app:layout_constraintBottom_toTopOf="@id/registeremail" />
 
     <EditText
         android:id="@+id/registerusername"
@@ -99,7 +104,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userName" />
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        app:layout_constraintBottom_toTopOf="@id/password" />
 
     <EditText
         android:id="@+id/registerpassword"
@@ -119,7 +125,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password" />
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintBottom_toTopOf="@id/realName" />
 
     <EditText
         android:id="@+id/registerrealname"
@@ -139,7 +146,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/realName" />
+        app:layout_constraintTop_toBottomOf="@id/realName"
+        app:layout_constraintBottom_toTopOf="@id/email" />
 
     <EditText
         android:id="@+id/registeremail"
@@ -159,7 +167,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email" />
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintBottom_toTopOf="@id/registerpagebutton" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -170,6 +179,7 @@
         android:text="REGISTER"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registeremail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
