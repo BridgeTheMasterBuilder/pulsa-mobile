@@ -16,11 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GestureDetectorCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.amrdeveloper.treeview.TreeNode
-import com.amrdeveloper.treeview.TreeNodeManager
-import com.amrdeveloper.treeview.TreeViewAdapter
-import com.amrdeveloper.treeview.TreeViewHolder
-import com.amrdeveloper.treeview.TreeViewHolderFactory
+import com.amrdeveloper.treeview.*
 import com.bumptech.glide.Glide
 import com.example.pulsa.R
 import com.example.pulsa.databinding.ActivityPostBinding
@@ -37,7 +33,7 @@ import io.noties.markwon.Markwon
 const val NO_REPLY = -1L
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
 private const val MEDIA_STOPPED = "stopped"
-private const val TOLERANCE = 100.0
+private const val TOLERANCE = 30.0
 
 class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
     private lateinit var binding: ActivityPostBinding
