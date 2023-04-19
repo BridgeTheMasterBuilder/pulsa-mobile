@@ -1,15 +1,22 @@
-package com.example.pulsa
+package com.example.pulsa.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.webkit.URLUtil
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.example.pulsa.R
 import com.example.pulsa.databinding.BaseLayoutBinding
+import com.example.pulsa.utils.LoggedIn
+import com.example.pulsa.utils.UserUtils
+import com.example.pulsa.utils.glideRequestListener
+import okhttp3.Response
 
 open class BaseLayoutActivity : AppCompatActivity() {
 
@@ -19,10 +26,14 @@ open class BaseLayoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = BaseLayoutBinding.inflate(layoutInflater)
+        UserUtils.setup(this)
         drawerLayout = binding.drawerLayout
         setSupportActionBar(binding.myToolbar.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setupNavMenu()
         setupUserMenu()
+        setupHomeOnClick()
         super.onCreate(savedInstanceState)
     }
 
@@ -44,27 +55,16 @@ open class BaseLayoutActivity : AppCompatActivity() {
             R.string.open,
             R.string.close
         )
+        toggle.drawerArrowDrawable.setColor(getColor(R.color.button_text))
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setHomeButtonEnabled(true)
 
         binding.navViewMenu.setNavigationItemSelectedListener {
+            val intent = Intent(this, SubIndexActivity::class.java)
             when (it.itemId) {
-                R.id.item1 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 1",
-                    Toast.LENGTH_SHORT
-                ).show()
-                R.id.item2 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 2",
-                    Toast.LENGTH_SHORT
-                ).show()
-                R.id.item3 -> Toast.makeText(
-                    applicationContext,
-                    "Clicked item 3",
-                    Toast.LENGTH_SHORT
-                ).show()
+                R.id.hamburgerMenuAllSubs -> startActivity(intent)
+
             }
             true
         }
@@ -75,26 +75,35 @@ open class BaseLayoutActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.login -> {
                     val i = Intent(this, LoginActivity::class.java)
+                    closeUserMenu()
                     startActivity(i)
                 }
                 R.id.register -> {
                     val i = Intent(this, RegisterActivity::class.java)
+                    closeUserMenu()
                     startActivity(i)
+                    closeHamburgerMenu()
                 }
             }
             true
         }
     }
 
-    private fun setupUserMenu() {
+    private fun closeUserMenu() {
+        binding.drawerLayout.closeDrawer(GravityCompat.END)
+    }
+
+    private fun closeHamburgerMenu() {
+        binding.myToolbar.toolbar.collapseActionView()
+    }
+
+    fun setupUserMenu() {
         binding.myToolbar.userMenu.setOnClickListener {
-            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) binding.drawerLayout.closeDrawer(
-                GravityCompat.END
-            )
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) closeUserMenu()
             else binding.drawerLayout.openDrawer(GravityCompat.END)
         }
 
-        if (LoggedIn.getLoggedIn()) {
+        if (UserUtils.loggedIn()) {
             binding.navViewUser.menu.clear()
             binding.navViewUser.inflateMenu(R.menu.nav_drawer_loggedin)
             binding.navViewUser.setNavigationItemSelectedListener {
@@ -106,6 +115,8 @@ open class BaseLayoutActivity : AppCompatActivity() {
                     R.id.logout -> {
                         LoggedIn.setLoggedIn(false)
                         binding.navViewUser.let {
+                            getSharedPreferences(getString(R.string.user), MODE_PRIVATE).edit()
+                                .clear().commit()
                             it.menu.clear()
                             it.inflateMenu(R.menu.nav_drawer_user)
                             setDefaultNav()
@@ -116,9 +127,61 @@ open class BaseLayoutActivity : AppCompatActivity() {
                 }
                 true
             }
+
+            val avatar = UserUtils.getUserAvatar(this)
+
+            if (URLUtil.isValidUrl(avatar)) {
+                val circularProgressDrawable = CircularProgressDrawable(this)
+                circularProgressDrawable.strokeWidth = 3f
+                circularProgressDrawable.centerRadius = 15f
+                circularProgressDrawable.start()
+
+                Glide.with(this)
+                    .load(avatar)
+                    .placeholder(circularProgressDrawable)
+                    .listener(glideRequestListener)
+                    .into(binding.myToolbar.userMenu)
+                    .view.visibility = View.VISIBLE
+            }
+
+
         } else {
             setDefaultNav()
         }
 
+    }
+
+    private fun setupHomeOnClick() {
+        binding.myToolbar.toolbarTitle.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+    }
+
+    public open fun resolveGet(content: Any) {
+        return
+    }
+
+    public open fun resolvePost(content: Any) {
+        return
+    }
+
+    public open fun resolveFailure(response: Response) {
+        return
+    }
+
+    public open fun updateAvatar(avatar: String) {
+        if (URLUtil.isValidUrl(avatar)) {
+            val circularProgressDrawable = CircularProgressDrawable(this)
+            circularProgressDrawable.strokeWidth = 3f
+            circularProgressDrawable.centerRadius = 15f
+            circularProgressDrawable.start()
+
+            Glide.with(this)
+                .load(avatar)
+                .placeholder(circularProgressDrawable)
+                .listener(glideRequestListener)
+                .into(binding.myToolbar.userMenu)
+                .view.visibility = View.VISIBLE
+        }
     }
 }

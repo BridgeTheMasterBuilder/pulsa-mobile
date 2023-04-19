@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="postItem"
+            type="com.example.pulsa.objects.Post" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="36dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/post_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/pulsa"
+            android:tag="avatar"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="1dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/black"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintBottom_toTopOf="@id/post_separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/pulsa" />
+
+        <TextView
+            android:id="@+id/post_sub"
+            android:tag="sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:text='@{"p/" + postItem.sub.name}'
+            android:textColor="@color/sub"
+            app:layout_constraintBottom_toBottomOf="@id/post_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="sub slug" />
+
+
+        <TextView
+            android:id="@+id/post_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:text='@{"u/" + postItem.creator.username}'
+            android:textColor="@color/user"
+            android:tag="user"
+            app:layout_constraintBottom_toBottomOf="@+id/post_avatar"
+            app:layout_constraintStart_toEndOf="@+id/post_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Username" />
+
+        <ImageView
+            android:id="@+id/post_separator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/pulsa_gradient"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_avatar" />
+
+        <TextView
+            android:id="@+id/post_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:tag="post_title"
+            android:text=""
+            android:textColor="@color/title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_separator"
+            tools:text="Post Item" />
+
+        <TextView
+            android:id="@+id/post_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans"
+            android:tag="post_text"
+            android:text=""
+            android:textColor="@color/text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_title"
+            tools:text="Posts content" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="image"
+            android:tag="image"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/post_reply_count"
+            app:layout_constraintDimensionRatio="w,16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_text"
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/post_item_playaudiobutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="audio"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/audioVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:tag="audioVisualizer"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/post_item_playaudiobutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/post_item_playaudiobutton"
+            app:layout_constraintTop_toTopOf="@id/post_item_playaudiobutton" />
+
+        <Button
+            android:id="@+id/post_item_playrecordingbutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="recording"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/audioVisualizer"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/recordingVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:tag="recordingVisualizer"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/post_item_playrecordingbutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/post_item_playrecordingbutton"
+            app:layout_constraintTop_toTopOf="@id/post_item_playrecordingbutton" />
+
+        <TextView
+            android:id="@+id/post_reply_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/open_sans"
+            android:text='@{postItem.replyCount() + " replies"}'
+            android:textColor="@color/text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_item_playrecordingbutton" />
+
+        <TextView
+            android:id="@+id/post_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(postItem.vote)}"
+            android:textColor="@color/button_text"
+            android:tag="voteCount"
+            app:layout_constraintBottom_toBottomOf="@id/post_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/post_sub"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toEndOf="@id/post_user"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0"
+            tools:textColor="#000000" />
+
+        <ImageView
+            android:id="@+id/post_vote_up"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:tag="vote_up"
+            app:tint="@color/indigo"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@id/post_vote_count"
+            app:layout_constraintTop_toTopOf="@id/post_vote_count"
+            app:srcCompat="@android:drawable/arrow_up_float" />
+
+        <ImageView
+            android:id="@+id/post_vote_down"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:tag="vote_down"
+            app:tint="@color/title"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/post_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toEndOf="@id/post_vote_count"
+            app:layout_constraintTop_toTopOf="@id/post_vote_count"
+            app:srcCompat="@android:drawable/arrow_down_float"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

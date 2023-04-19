@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,27 +21,43 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
+                android:background="@color/button_color"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme"
+                app:title=" "
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:title="Pulsa"
-                app:titleTextColor="#fff" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/trace_regular"
+                    android:text="@string/app_name"
+                    android:textColor="#DD8080"
+                    android:textSize="24sp"
+                    tools:layout_editor_absoluteX="189dp"
+                    tools:layout_editor_absoluteY="18dp" />
+
+            </androidx.appcompat.widget.Toolbar>
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/userMenu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:scaleType="centerInside"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"
+                app:civ_border_width="1dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="@color/black"
                 app:civ_shadow_radius="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="h,14:16"
+                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pulsa" />
@@ -48,12 +65,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/pulsa_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
     <FrameLayout
+        android:id="@+id/activityContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/activityContainer"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

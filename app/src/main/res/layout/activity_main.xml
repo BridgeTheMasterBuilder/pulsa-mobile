@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize">
+    android:layout_marginTop="?attr/actionBarSize"
+    android:background="#000000">
 
-    <Button
-        android:id="@+id/newpostbtn"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/newPostButton"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:orientation="vertical"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/newpostbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        tools:context=".activities.MainActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="vertical"
+            app:layoutManager="LinearLayoutManager"
+            tools:visibility="visible" />
+
+    </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

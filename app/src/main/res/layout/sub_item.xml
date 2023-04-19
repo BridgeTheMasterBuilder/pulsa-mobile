@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="subItem"
+            type="com.example.pulsa.objects.Sub" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="18dp">
+
+        <TextView
+            android:id="@+id/sub_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:fontFamily="@font/audiowide"
+            android:hint="Sub Item"
+            android:text="@{subItem.name}"
+            android:textAlignment="viewStart"
+            android:textColor="@color/button_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:translationZ="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/image" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:tag="image"
+            android:visibility="visible"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w, 16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

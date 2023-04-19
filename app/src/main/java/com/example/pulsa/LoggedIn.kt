@@ -12,6 +12,7 @@ object LoggedIn {
         return loggedIn
     }
 
+
     fun setUser(user: User) {
         this.user = user
     }

@@ -15,21 +15,27 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navViewMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_drawer_menu"
+        android:background="@color/button_color"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true" />
+        android:layout_marginTop="60dp"
+        android:visibility="visible"
+        app:itemTextColor="@color/header"
+        app:itemTextAppearance="@style/ListItemStyle"
+        app:menu="@menu/nav_drawer_menu" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navViewUser"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_drawer_user"
+        android:background="@color/button_color"
+        app:itemTextColor="@color/header"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:fitsSystemWindows="true" />
+        android:layout_marginTop="60dp"
+        android:fitsSystemWindows="true"
+        app:itemTextAppearance="@style/ListItemStyle"
+        app:menu="@menu/nav_drawer_user" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000000"
+    tools:context=".activities.NewSubActivity">
+
+    <TextView
+        android:id="@+id/newSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="Sub Pulsa Genesis"
+        android:textColor="@color/title"
+        android:textSize="34sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/newSubName" />
+
+    <EditText
+        android:id="@+id/newSubName"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_background"
+        android:hint="Sub Pulsa Name"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColor="@color/header"
+        android:textColorHint="@color/user"
+        android:textSize="8pt"
+        app:layout_constraintTop_toBottomOf="@+id/newSubTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/newSubBanner" />
+
+    <ImageView
+        android:id="@+id/newSubBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        app:layout_constraintTop_toBottomOf="@+id/newSubName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/newSubImage" />
+
+    <Button
+        android:id="@+id/newSubImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image"
+        app:layout_constraintTop_toBottomOf="@id/newSubBanner"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/newSubSubmit" />
+
+    <Button
+        android:id="@+id/newSubSubmit"
+        android:text="Create new sub pulsa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/newSubImage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

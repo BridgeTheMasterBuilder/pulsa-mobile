@@ -11,60 +11,187 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/reply_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:layout_weight="3">
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:text="User"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/reply_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            android:tag="avatar"
+            app:civ_border_color="@color/button_text"
+            app:civ_border_width="2dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/button_text"
+            app:civ_shadow_radius="1dp"
+            app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="245dp" />
+            app:srcCompat="@drawable/pulsa" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/reply_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tftr"
-            app:layout_constraintBottom_toTopOf="@+id/imageAttachment"
-            app:layout_constraintEnd_toStartOf="@+id/replybtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:hint="User"
+            android:tag="user"
+            android:text="@{listItem.creator.username}"
+            android:textColor="@color/user"
+            android:translationZ="2dp"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/reply_vote_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:tag="voteCount"
+            android:text="@{String.valueOf(listItem.vote)}"
+            android:textColor="@color/button_text"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_avatar"
+            app:layout_constraintStart_toEndOf="@+id/reply_username"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0"
+            tools:textColor="@color/button_text" />
 
         <ImageView
-            android:id="@+id/imageAttachment"
+            android:id="@+id/reply_vote_up"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:tag="vote_up"
+            app:tint="@color/indigo"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintEnd_toStartOf="@id/reply_vote_count"
+            app:layout_constraintTop_toTopOf="@id/reply_vote_count"
+            app:srcCompat="@android:drawable/arrow_up_float" />
+
+        <ImageView
+            android:id="@+id/reply_vote_down"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:tag="vote_down"
+            app:tint="@color/title"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/reply_vote_count"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toEndOf="@id/reply_vote_count"
+            app:layout_constraintTop_toTopOf="@id/reply_vote_count"
+            app:srcCompat="@android:drawable/arrow_down_float" />
+
+        <ImageView
+            android:id="@+id/vertical_line"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/baseline_playlist_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reply_avatar" />
+
+        <TextView
+            android:id="@+id/reply_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/replybtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:tag="reply_text"
+            android:text=""
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_avatar"
+            tools:layout_conversion_absoluteHeight="19dp"
+            tools:layout_conversion_absoluteWidth="0dp"
+            tools:text="Reply text"
+            tools:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/reply_image"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:tag="image"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_text"
             app:srcCompat="@drawable/ic_launcher_foreground"
             tools:layout_conversion_absoluteHeight="0dp"
             tools:layout_conversion_absoluteWidth="108dp" />
 
         <Button
-            android:id="@+id/replybtn"
+            android:id="@+id/reply_playaudiobutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="audio"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_image"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/reply_audioVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:tag="audioVisualizer"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/reply_playaudiobutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_playaudiobutton"
+            app:layout_constraintTop_toTopOf="@id/reply_playaudiobutton" />
+
+        <Button
+            android:id="@+id/reply_playrecordingbutton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:tag="recording"
+            android:visibility="gone"
+            app:icon="@drawable/icons8_play_96"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_audioVisualizer"
+            tools:visibility="visible" />
+
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/reply_recordingVisualizer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:tag="recordingVisualizer"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/reply_playrecordingbutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_playrecordingbutton"
+            app:layout_constraintTop_toTopOf="@id/reply_playrecordingbutton" />
+
+        <Button
+            android:id="@+id/postpage_replybutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="Reply"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/username"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/reply_avatar"
+            app:layout_constraintTop_toBottomOf="@id/reply_playrecordingbutton"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

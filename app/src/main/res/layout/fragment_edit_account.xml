@@ -1,106 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/purple_200"
-    tools:context=".EditAccountFragment">
-
-    <TextView
-        android:id="@+id/editaccounttitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:shadowColor="#000000"
-        android:shadowDx="7"
-        android:shadowDy="5"
-        android:shadowRadius="10"
-        android:text="Account Details"
-        android:textColor="@color/purple_500"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/editaccountimage"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:layout_marginTop="?attr/actionBarSize"
+    tools:layout_marginBottom="?attr/actionBarSize"
+    android:background="@color/black"
+    tools:context=".fragments.EditAccountFragment">
 
     <ImageView
-        android:id="@+id/editaccountimage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@drawable/pulsa"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toTopOf="@id/editaccsavebtn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editaccounttitle" />
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cover_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="-75dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:tag="avatar"
+        app:civ_border_width="0dp"
+        app:civ_shadow="true"
+        app:civ_shadow_color="@color/black"
+        app:civ_shadow_radius="1dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        tools:src="@drawable/anonymous" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/audiowide"
+        tools:text="User"
+        android:textColor="@color/indigo"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_avatar" />
+
+    <Button
+        android:id="@+id/userpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="User Page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username" />
 
     <Button
         android:id="@+id/editaccimgbtn"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:text="Change Image"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/editaccountimage"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editaccrealname" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/changeImageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/editaccpassword"
+        app:layout_constraintTop_toBottomOf="@id/editaccpassword" />
+
+    <TextView
+        android:id="@+id/realname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/font_bold"
+        android:text="Real Name:"
+        android:textColor="@color/title"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/editaccrealname"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editaccrealname" />
 
     <EditText
         android:id="@+id/editaccrealname"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Real Name"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/editaccimgbtn"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editaccusername" />
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:autofillHints="name"
+        android:background="@drawable/type_box"
+        android:drawableStart="@drawable/baseline_self_improvement_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:hint="@string/editAccountRealname"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/realname"
+        app:layout_constraintTop_toBottomOf="@id/userpage"
+        tools:text="..." />
+
+    <TextView
+        android:id="@+id/usernameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/font_bold"
+        android:text="Username: "
+        android:textColor="@color/title"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/editaccusername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editaccusername" />
 
     <EditText
         android:id="@+id/editaccusername"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:hint="Username"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:autofillHints="name"
+        android:background="@drawable/type_box"
+        android:drawableStart="@drawable/baseline_person_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:hint="@string/editAccountUsername"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/usernameEdit"
         app:layout_constraintTop_toBottomOf="@id/editaccrealname"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editaccemail" />
+        tools:text="..." />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/font_bold"
+        android:text="Email:    "
+        android:textColor="@color/title"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/editaccemail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editaccemail" />
 
     <EditText
         android:id="@+id/editaccemail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:hint="e-Mail"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:autofillHints="name"
+        android:background="@drawable/type_box"
+        android:drawableStart="@drawable/baseline_email_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:hint="@string/editAccountEmail"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/email"
         app:layout_constraintTop_toBottomOf="@id/editaccusername"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editaccpassword" />
+        tools:text="..." />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/font_bold"
+        android:text="Password: "
+        android:textColor="@color/title"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/editaccpassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editaccpassword" />
+
+    <TextView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/font_bold"
+        android:text="Avatar:   "
+        android:textColor="@color/title"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/editaccimgbtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editaccimgbtn" />
 
     <EditText
         android:id="@+id/editaccpassword"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:hint="Password"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:autofillHints="name"
+        android:background="@drawable/type_box"
+        android:drawableStart="@drawable/baseline_info_24"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:hint="@string/editAccountPassword"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/editaccemail"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/editaccsavebtn" />
+        tools:text="..." />
 
     <Button
         android:id="@+id/editaccsavebtn"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_margin="20dp"
-        android:text="Save"
-        app:layout_constraintTop_toBottomOf="@id/editaccpassword"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/saveButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/editsubmitting"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
