@@ -24,6 +24,7 @@ import com.example.pulsa.utils.UserUtils
 import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
 import io.noties.markwon.Markwon
+import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.movement.MovementMethodPlugin
 
 
@@ -91,7 +92,8 @@ open class GenericRecyclerAdapter<T : Any>(
         context = parent.context
         markwon = Markwon.builder(context)
             // explicit `none` movement method
-            .usePlugin(MovementMethodPlugin.none())
+            .usePlugins(mutableListOf(MovementMethodPlugin.none(),
+                HtmlPlugin.create { plugin -> plugin.excludeDefaults(true) }))
             .build()
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             LayoutInflater.from(context),

@@ -29,6 +29,7 @@ import com.example.pulsa.utils.glideRequestListener
 import com.google.android.material.button.MaterialButton
 import com.google.gson.reflect.TypeToken
 import io.noties.markwon.Markwon
+import io.noties.markwon.html.HtmlPlugin
 
 const val NO_REPLY = -1L
 private const val MEDIA_PLAY = R.drawable.icons8_play_96
@@ -119,7 +120,8 @@ class PostActivity : BaseLayoutActivity(), GestureDetector.OnGestureListener {
             )
         }
 
-        markwon = Markwon.create(this)
+        markwon = Markwon.builder(this)
+            .usePlugin(HtmlPlugin.create { plugin -> plugin.excludeDefaults(true) }).build()
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.postMainLayout.setOnTouchListener(View.OnTouchListener { v, event ->
