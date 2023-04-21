@@ -66,6 +66,7 @@
 - [![JQuery][jquery.com]][jquery-url]
 - [![Kotlin][kotlinlang.org]][kotlin-url]
 - [![Gradle][gradle.org]][gradle-url]
+- [![AndroidStudio][developer.android.com]][android-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -75,71 +76,17 @@
 
 To get a local copy up and running follow these steps:
 
-### Prerequisites
-
-Java version 18 is required. In addition, some dependencies need to be fetched with `npm`.
-
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/Selph/pulsa.git
+   git clone https://github.com/BridgeTheMasterBuilder/pulsa-mobile.git
    ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
+2. Open project in Android Studio
+
 3. Build and run the project
-   ```sh
-   npm run deploy
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-
-## Roadmap
-
-- [ ] Mobile app
-
-See the [open issues](https://github.com/Selph/pulsa/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-
-## Contact
-
-Project Link: [https://github.com/Selph/pulsa](https://github.com/Selph/pulsa)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [contributors-shield]: https://img.shields.io/github/contributors/Selph/pulsa.svg?style=for-the-badge
 [contributors-url]: https://github.com/Selph/pulsa/graphs/contributors
@@ -172,3 +119,5 @@ Project Link: [https://github.com/Selph/pulsa](https://github.com/Selph/pulsa)
 [kotlin-url]: https://kotlinlang.org
 [gradle.org]: https://img.shields.io/badge/Gradle-black?style=for-the-badge&logo=gradle&logoColor=green
 [gradle-url]: https://gradle.org
+[developer.android.com]: https://img.shields.io/badge/AndroidStudio-black?style=for-the-badge&logo=androidstudio
+[android-url]: https://developer.android.com
