@@ -89,15 +89,15 @@ To get a local copy up and running follow these steps:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 [contributors-shield]: https://img.shields.io/github/contributors/Selph/pulsa.svg?style=for-the-badge
-[contributors-url]: https://github.com/Selph/pulsa/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Selph/pulsa.svg?style=for-the-badge
-[forks-url]: https://github.com/Selph/pulsa/network/members
-[stars-shield]: https://img.shields.io/github/stars/Selph/pulsa.svg?style=for-the-badge
-[stars-url]: https://github.com/Selph/pulsa/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Selph/pulsa.svg?style=for-the-badge
-[issues-url]: https://github.com/Selph/pulsa/issues
-[license-shield]: https://img.shields.io/github/license/Selph/pulsa.svg?style=for-the-badge
-[license-url]: https://github.com/Selph/pulsa/blob/master/LICENSE.txt
+[contributors-url]: https://github.com/BridgeTheMasterBuilder/pulsa-mobile/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/BridgeTheMasterBuilder/pulsa-mobile.svg?style=for-the-badge
+[forks-url]: https://github.com/BridgeTheMasterBuilder/pulsa-mobile/network/members
+[stars-shield]: https://img.shields.io/github/stars/BridgeTheMasterBuilder/pulsa-mobile.svg?style=for-the-badge
+[stars-url]: https://github.com/BridgeTheMasterBuilder/pulsa-mobile/stargazers
+[issues-shield]: https://img.shields.io/github/issues/BridgeTheMasterBuilder/pulsa-mobile.svg?style=for-the-badge
+[issues-url]: https://github.com/BridgeTheMasterBuilder/pulsa-mobile/issues
+[license-shield]: https://img.shields.io/github/license/BridgeTheMasterBuilder/pulsa-mobile.svg?style=for-the-badge
+[license-url]: https://github.com/BridgeTheMasterBuilder/pulsa-mobile/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: https://github.com/Selph/pulsa/blob/master/images/screenshot.png
