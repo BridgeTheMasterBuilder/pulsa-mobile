@@ -64,6 +64,8 @@
 - [![Maven][maven.apache.org]][maven.apache-url]
 - [![Postgres][postgres.org]][postgres-url]
 - [![JQuery][jquery.com]][jquery-url]
+- [![Kotlin][kotlinlang.org]][kotlin-url]
+- [![Gradle][gradle.org]][gradle-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -151,7 +153,7 @@ Project Link: [https://github.com/Selph/pulsa](https://github.com/Selph/pulsa)
 [license-url]: https://github.com/Selph/pulsa/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: https://github.com/Selph/pulsa/blob/master/images/screenshot.png
 [spring.io]: https://img.shields.io/badge/Spring-FFFFFF?style=for-the-badge&logo=spring&logoColor=6DB33F
 [spring-url]: https://spring.io/
 [thymeleaf.org]: https://img.shields.io/badge/Thymeleaf-FFF?style=for-the-badge&logo=thymeleaf&logoColor=005F0F
@@ -166,3 +168,7 @@ Project Link: [https://github.com/Selph/pulsa](https://github.com/Selph/pulsa)
 [postgres-url]: https://www.postgresql.org/
 [jquery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [jquery-url]: https://jquery.com
+[kotlinlang.org]: https://img.shields.io/badge/Kotlin-black?style=for-the-badge&logo=kotlin&logoColor=purple
+[kotlin-url]: https://kotlinlang.org
+[gradle.org]: https://img.shields.io/badge/Gradle-black?style=for-the-badge&logo=gradle&logoColor=green
+[gradle-url]: https://gradle.org
