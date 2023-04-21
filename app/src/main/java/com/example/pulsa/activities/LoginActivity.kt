@@ -87,6 +87,6 @@ class LoginActivity : BaseLayoutActivity() {
     }
 
     override fun resolveFailure(response: Response) {
-        Toast.makeText(this, "${response.code} error... Oops", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Incorrect Username/Password. Please Try again.", Toast.LENGTH_SHORT).show()
     }
 }
