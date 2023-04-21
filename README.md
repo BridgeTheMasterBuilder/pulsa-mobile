@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Selph/pulsa">
-    <img src="images/pulsa.png" alt="Logo" width="80" height="80">
+    <img src="github.com/selph/pulsa/images/pulsa.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Pulsa</h3>
